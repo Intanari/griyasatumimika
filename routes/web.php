@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\OdgjReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+
+// ODGJ Report routes (public)
+Route::get('/laporan-odgj', [OdgjReportController::class, 'showForm'])->name('odgj-report.form');
+Route::post('/laporan-odgj', [OdgjReportController::class, 'store'])->name('odgj-report.store');
 
 // Donation routes
 Route::get('/donasi', [DonationController::class, 'showForm'])->name('donation.form');

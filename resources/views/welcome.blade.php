@@ -185,6 +185,7 @@
                     <p class="hero-desc">Setiap orang berhak mendapatkan kesempatan untuk pulih. Bersama kami, donasimu membantu proses rehabilitasi Orang Dengan Gangguan Jiwa (ODGJ) agar kembali bermartabat dan mandiri di masyarakat.</p>
                     <div class="hero-cta">
                         <a href="{{ route('donation.form', ['program' => 'umum']) }}" class="btn-hero-primary">❤️ Donasi Sekarang</a>
+                        <a href="{{ route('odgj-report.form') }}" class="btn-hero-secondary">🚨 Laporan ODGJ</a>
                         <a href="#tentang" class="btn-hero-secondary">Pelajari Lebih Lanjut →</a>
                     </div>
                     <div class="hero-stats">
@@ -346,7 +347,7 @@
                         <a href="#" class="social-btn">▶️</a>
                     </div>
                 </div>
-                <div><div class="footer-col-title">Program</div><div class="footer-links"><a href="{{ route('donation.form', ['program' => 'rawat-inap']) }}">Rawat Inap & Obat</a><a href="{{ route('donation.form', ['program' => 'pelatihan-vokasi']) }}">Pelatihan Vokasi</a><a href="{{ route('donation.form', ['program' => 'rumah-singgah']) }}">Rumah Singgah</a><a href="{{ route('donation.form', ['program' => 'umum']) }}">Donasi Umum</a></div></div>
+                <div><div class="footer-col-title">Program</div><div class="footer-links"><a href="{{ route('donation.form', ['program' => 'rawat-inap']) }}">Rawat Inap & Obat</a><a href="{{ route('donation.form', ['program' => 'pelatihan-vokasi']) }}">Pelatihan Vokasi</a><a href="{{ route('donation.form', ['program' => 'rumah-singgah']) }}">Rumah Singgah</a><a href="{{ route('donation.form', ['program' => 'umum']) }}">Donasi Umum</a><a href="{{ route('odgj-report.form') }}">🚨 Laporan ODGJ</a></div></div>
                 <div><div class="footer-col-title">Organisasi</div><div class="footer-links"><a href="#tentang">Tentang Kami</a><a href="#">Tim Kami</a><a href="#">Laporan Keuangan</a><a href="#">Berita & Artikel</a></div></div>
                 <div><div class="footer-col-title">Kontak</div><div class="footer-links"><a href="#">📧 info@griyasatumimika.web.id</a><a href="#">📞 (021) 1234-5678</a><a href="#">📍 Jakarta, Indonesia</a><a href="#">🕐 Senin–Jumat, 09–17 WIB</a></div></div>
             </div>

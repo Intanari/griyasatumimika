@@ -274,6 +274,10 @@
                 <span class="nav-item-icon">❤️</span>
                 Form Donasi Publik
             </a>
+            <a href="{{ route('odgj-report.form') }}" class="nav-item">
+                <span class="nav-item-icon">🚨</span>
+                Laporan ODGJ
+            </a>
             <a href="{{ route('welcome') }}" class="nav-item">
                 <span class="nav-item-icon">🌐</span>
                 Halaman Utama
@@ -396,6 +400,17 @@
                     </div>
                     <div class="stat-sub">Pegawai rehabilitasi</div>
                 </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-value">{{ number_format($stats['total_laporan_odgj'] ?? 0) }}</div>
+                            <div class="stat-label">Total Laporan ODGJ</div>
+                        </div>
+                        <div class="stat-icon purple">🚨</div>
+                    </div>
+                    <div class="stat-sub">{{ $stats['laporan_odgj_baru'] ?? 0 }} laporan baru</div>
+                </div>
             </div>
 
             {{-- ─── Grid 2 Kolom ─── --}}
@@ -454,6 +469,68 @@
                         <span class="info-val">{{ $user->created_at->locale('id')->translatedFormat('d F Y') }}</span>
                     </div>
                 </div>
+            </div>
+
+            {{-- ─── Tabel Laporan ODGJ ─── --}}
+            <div class="card">
+                <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>🚨 Laporan ODGJ</span>
+                    <a href="{{ route('odgj-report.form') }}" style="font-size:0.8rem;font-weight:600;color:#4f46e5;">+ Buat Laporan</a>
+                </div>
+                @if ($laporan_odgj->isEmpty())
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>Belum ada laporan ODGJ.</p>
+                        <a href="{{ route('odgj-report.form') }}" style="margin-top:0.75rem;display:inline-block;font-size:0.875rem;color:#4f46e5;font-weight:600;">Buat laporan pertama →</a>
+                    </div>
+                @else
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>No. Laporan</th>
+                                    <th>Kategori</th>
+                                    <th>Lokasi</th>
+                                    <th>Kontak</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($laporan_odgj as $index => $laporan)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td style="font-weight:600;font-family:monospace;font-size:0.82rem;">{{ $laporan->nomor_laporan }}</td>
+                                        <td>{{ $laporan->kategori_label }}</td>
+                                        <td>
+                                            @if($laporan->lokasi)
+                                                <div style="font-size:0.85rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $laporan->lokasi }}">{{ $laporan->lokasi }}</div>
+                                            @else
+                                                <span style="color:#9ca3af;">-</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $laporan->kontak) }}" target="_blank" style="color:#16a34a;font-weight:600;">{{ $laporan->kontak }}</a>
+                                        </td>
+                                        <td>
+                                            @if ($laporan->status === 'baru')
+                                                <span class="badge badge-pending">🆕 Baru</span>
+                                            @elseif ($laporan->status === 'diproses')
+                                                <span class="badge badge-paid">⏳ Diproses</span>
+                                            @else
+                                                <span class="badge badge-cancel">✅ Selesai</span>
+                                            @endif
+                                        </td>
+                                        <td style="color:#9ca3af;font-size:0.8rem;">
+                                            {{ $laporan->created_at->locale('id')->translatedFormat('d M Y, H:i') }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
             </div>
 
             {{-- ─── Tabel Donasi Terbaru ─── --}}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
+use App\Models\OdgjReport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,10 @@ class DashboardController extends Controller
             ->orderByDesc('total_amount')
             ->get();
 
-        return view('dashboard', compact('user', 'stats', 'donasi_terbaru', 'donasi_per_program'));
+        $laporan_odgj = OdgjReport::orderByDesc('created_at')->limit(15)->get();
+        $stats['total_laporan_odgj'] = OdgjReport::count();
+        $stats['laporan_odgj_baru'] = OdgjReport::where('status', 'baru')->count();
+
+        return view('dashboard', compact('user', 'stats', 'donasi_terbaru', 'donasi_per_program', 'laporan_odgj'));
     }
 }
