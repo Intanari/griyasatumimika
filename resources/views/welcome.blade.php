@@ -172,16 +172,7 @@
                     <a href="#testimoni">Testimoni</a>
                 </div>
                 <div class="nav-actions">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="btn-outline">Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="btn-outline">Masuk</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="btn-primary">Daftar</a>
-                            @endif
-                        @endauth
-                    @endif
+                    <a href="{{ route('donation.form') }}" class="btn-primary">❤️ Donasi Sekarang</a>
                 </div>
             </div>
         </nav>
