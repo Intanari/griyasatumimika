@@ -64,9 +64,11 @@
                         <th>Kategori</th>
                         <th>Lokasi</th>
                         <th>Deskripsi</th>
-                        <th>Kontak</th>
+                        <th>Email</th>
+                        <th>No. HP</th>
                         <th>Status</th>
                         <th>Tanggal</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,6 +95,13 @@
                                 @endif
                             </td>
                             <td>
+                                @if($laporan->email)
+                                    <a href="mailto:{{ $laporan->email }}" style="font-size:0.82rem;">{{ Str::limit($laporan->email, 25) }}</a>
+                                @else
+                                    <span style="color:var(--text-muted);">-</span>
+                                @endif
+                            </td>
+                            <td>
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $laporan->kontak) }}" target="_blank" style="color:var(--accent-green);font-weight:600;">{{ $laporan->kontak }}</a>
                             </td>
                             <td>
@@ -100,11 +109,29 @@
                                     <span class="badge badge-pending">🆕 Baru</span>
                                 @elseif ($laporan->status === 'diproses')
                                     <span class="badge badge-paid">⏳ Diproses</span>
+                                @elseif ($laporan->status === 'ditolak')
+                                    <span class="badge badge-cancel">❌ Ditolak</span>
                                 @else
                                     <span class="badge badge-cancel">✅ Selesai</span>
                                 @endif
                             </td>
                             <td style="color:var(--text-muted);font-size:0.8rem;">{{ $laporan->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
+                            <td>
+                                @if ($laporan->status === 'baru')
+                                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                        <form action="{{ route('dashboard.laporan.terima', $laporan) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-success" title="Terima laporan dan kirim email ke pelapor">✓ Terima</button>
+                                        </form>
+                                        <form action="{{ route('dashboard.laporan.tolak', $laporan) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menolak laporan ini? Email konfirmasi akan dikirim ke pelapor.');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Tolak laporan dan kirim email ke pelapor">✗ Tolak</button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <span style="color:var(--text-muted);font-size:0.8rem;">-</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

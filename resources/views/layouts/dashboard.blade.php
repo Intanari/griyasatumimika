@@ -125,6 +125,13 @@
             font-size: 0.9rem; color: #047857;
             display: flex; align-items: center; gap: 0.75rem;
         }
+        .alert-error {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border: 1px solid #fecaca;
+            border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+            font-size: 0.9rem; color: #b91c1c;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
         .stat-card {
@@ -216,6 +223,12 @@
             transition: all 0.2s;
         }
         .btn-link:hover { background: rgba(59,130,246,0.1); }
+        .btn { font-family: inherit; cursor: pointer; border: none; border-radius: 10px; font-weight: 600; transition: all 0.2s; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .btn-success { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+        .btn-success:hover { filter: brightness(1.1); box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+        .btn-danger:hover { filter: brightness(1.1); box-shadow: 0 2px 8px rgba(239,68,68,0.4); }
 
         .welcome-banner {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, #38bdf8 100%);
@@ -325,6 +338,9 @@
     <div class="content">
         @if (session('success'))
             <div class="alert-success">✅ {{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="alert-error">⚠️ {{ session('error') }}</div>
         @endif
         @yield('content')
     </div>

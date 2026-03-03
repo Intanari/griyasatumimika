@@ -158,7 +158,12 @@
 
                 <div class="section-divider">Kontak</div>
                 <div class="form-group">
-                    <label class="form-label" for="kontak">Nomor Kontak <span class="req">*</span></label>
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input {{ $errors->has('email') ? 'is-invalid' : '' }}" placeholder="contoh@email.com" value="{{ old('email') }}">
+                    @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="kontak">Nomor HP / WhatsApp <span class="req">*</span></label>
                     <input type="text" id="kontak" name="kontak" class="form-input {{ $errors->has('kontak') ? 'is-invalid' : '' }}" placeholder="08xx-xxxx-xxxx" value="{{ old('kontak') }}">
                     @error('kontak')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>

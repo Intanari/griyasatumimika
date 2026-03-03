@@ -48,6 +48,8 @@ Route::domain(config('app.admin_domain'))->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/donasi', [DashboardController::class, 'donasi'])->name('dashboard.donasi');
         Route::get('/dashboard/laporan', [DashboardController::class, 'laporan'])->name('dashboard.laporan');
+        Route::post('/dashboard/laporan/{laporan}/terima', [DashboardController::class, 'terimaLaporan'])->name('dashboard.laporan.terima');
+        Route::post('/dashboard/laporan/{laporan}/tolak', [DashboardController::class, 'tolakLaporan'])->name('dashboard.laporan.tolak');
     });
 });
 

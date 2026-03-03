@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OdgjReportAcceptedToWarga;
+use App\Mail\OdgjReportRejectedToWarga;
 use App\Models\Donation;
 use App\Models\OdgjReport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -50,6 +53,36 @@ class DashboardController extends Controller
         $laporan_odgj = OdgjReport::orderByDesc('created_at')->paginate(20);
 
         return view('dashboard.laporan', compact('user', 'stats', 'laporan_odgj'));
+    }
+
+    public function terimaLaporan(OdgjReport $laporan)
+    {
+        $laporan->update(['status' => 'diproses']);
+
+        if (!empty($laporan->email)) {
+            try {
+                Mail::to($laporan->email)->send(new OdgjReportAcceptedToWarga($laporan));
+            } catch (\Exception $e) {
+                return redirect()->route('dashboard.laporan')->with('error', 'Status diperbarui, tetapi email gagal dikirim: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('dashboard.laporan')->with('success', 'Laporan diterima. ' . ($laporan->email ? 'Email konfirmasi telah dikirim ke pelapor.' : 'Catatan: Pelapor tidak mengisi email, sehingga tidak ada email yang dikirim.'));
+    }
+
+    public function tolakLaporan(OdgjReport $laporan)
+    {
+        $laporan->update(['status' => 'ditolak']);
+
+        if (!empty($laporan->email)) {
+            try {
+                Mail::to($laporan->email)->send(new OdgjReportRejectedToWarga($laporan));
+            } catch (\Exception $e) {
+                return redirect()->route('dashboard.laporan')->with('error', 'Status diperbarui, tetapi email gagal dikirim: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('dashboard.laporan')->with('success', 'Laporan ditolak. ' . ($laporan->email ? 'Email konfirmasi telah dikirim ke pelapor.' : 'Catatan: Pelapor tidak mengisi email, sehingga tidak ada email yang dikirim.'));
     }
 
     private function getStats(): array

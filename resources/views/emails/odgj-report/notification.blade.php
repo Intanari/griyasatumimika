@@ -67,8 +67,16 @@
                                 </td>
                             </tr>
                             @endif
+                            @if($report->email)
                             <tr>
-                                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f8; color: #8a8aaa;">Kontak</td>
+                                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f8; color: #8a8aaa;">Email</td>
+                                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f8; font-weight: 600; color: #1a1a2e;">
+                                    <a href="mailto:{{ $report->email }}" style="color: #2563eb;">{{ $report->email }}</a>
+                                </td>
+                            </tr>
+                            @endif
+                            <tr>
+                                <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f8; color: #8a8aaa;">No. HP / WhatsApp</td>
                                 <td style="padding: 10px 0; border-bottom: 1px solid #f0f0f8; font-weight: 600; color: #1a1a2e;">
                                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $report->kontak) }}" target="_blank" style="color: #16a34a;">{{ $report->kontak }}</a>
                                 </td>

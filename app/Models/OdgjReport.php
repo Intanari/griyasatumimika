@@ -13,6 +13,7 @@ class OdgjReport extends Model
         'lokasi_lng',
         'deskripsi',
         'gambar',
+        'email',
         'kontak',
         'status',
         'nomor_laporan',
@@ -33,6 +34,7 @@ class OdgjReport extends Model
             'baru' => 'Baru',
             'diproses' => 'Diproses',
             'selesai' => 'Selesai',
+            'ditolak' => 'Ditolak',
             default => $this->status,
         };
     }
