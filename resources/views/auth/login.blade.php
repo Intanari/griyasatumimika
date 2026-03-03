@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Masuk - PeduliJiwa</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
+        :root { --primary: #3b82f6; --primary-dark: #2563eb; --accent: #0ea5e9; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; height: 100%; }
         body {
-            font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-            color: #1a1a2e;
-            background: linear-gradient(160deg, #f0f0ff 0%, #fdf4ff 50%, #fff7f0 100%);
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            color: #0f172a;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -40,12 +41,12 @@
             gap: 10px;
             font-size: 1.25rem;
             font-weight: 700;
-            color: #4f46e5;
+            color: var(--primary-dark);
         }
         .nav-logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -62,7 +63,7 @@
             align-items: center;
             gap: 6px;
         }
-        .nav-back:hover { color: #4f46e5; }
+        .nav-back:hover { color: var(--primary-dark); }
 
         /* Main Content */
         .main {
@@ -80,7 +81,7 @@
             right: -100px;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(79,70,229,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
             border-radius: 50%;
         }
         .main::after {
@@ -90,7 +91,7 @@
             left: -100px;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -98,7 +99,7 @@
         .login-card {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 4px 40px rgba(79,70,229,0.12);
+            box-shadow: 0 4px 40px rgba(59,130,246,0.12);
             padding: 3rem 2.5rem;
             width: 100%;
             max-width: 440px;
@@ -112,14 +113,14 @@
         .card-icon {
             width: 64px;
             height: 64px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.25rem;
             font-size: 1.75rem;
-            box-shadow: 0 4px 20px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.35);
         }
         .card-title {
             font-size: 1.75rem;
@@ -168,9 +169,9 @@
             outline: none;
         }
         .form-input:focus {
-            border-color: #4f46e5;
+            border-color: var(--primary-dark);
             background: white;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
         .form-input.is-invalid {
             border-color: #ef4444;
@@ -204,7 +205,7 @@
         .remember-checkbox {
             width: 16px;
             height: 16px;
-            accent-color: #4f46e5;
+            accent-color: var(--primary-dark);
             cursor: pointer;
         }
         .remember-label {
@@ -216,16 +217,16 @@
         .forgot-link {
             font-size: 0.875rem;
             font-weight: 600;
-            color: #4f46e5;
+            color: var(--primary-dark);
             transition: color 0.2s;
         }
-        .forgot-link:hover { color: #7c3aed; text-decoration: underline; }
+        .forgot-link:hover { color: var(--accent); text-decoration: underline; }
 
         /* Button */
         .btn-login {
             width: 100%;
             padding: 0.875rem;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
             border-radius: 10px;
             color: white;
@@ -234,7 +235,7 @@
             font-family: inherit;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.1s;
-            box-shadow: 0 4px 15px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 15px rgba(59,130,246,0.35);
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
@@ -269,11 +270,11 @@
             color: #6b7280;
         }
         .register-link a {
-            color: #4f46e5;
+            color: var(--primary-dark);
             font-weight: 600;
             transition: color 0.2s;
         }
-        .register-link a:hover { color: #7c3aed; text-decoration: underline; }
+        .register-link a:hover { color: var(--accent); text-decoration: underline; }
 
         /* Footer */
         footer {

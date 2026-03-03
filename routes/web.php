@@ -32,6 +32,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // ============================================================
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/donasi', [DashboardController::class, 'donasi'])->name('dashboard.donasi');
+    Route::get('/dashboard/laporan', [DashboardController::class, 'laporan'])->name('dashboard.laporan');
 });
 
 // ODGJ Report routes (public)

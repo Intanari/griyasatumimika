@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Donasi Berhasil – PeduliJiwa</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
+        :root { --primary: #3b82f6; --primary-dark: #2563eb; --accent: #0ea5e9; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif; color: #1a1a2e; background: linear-gradient(160deg, #f0f0ff 0%, #fdf4ff 50%, #fff7f0 100%); min-height: 100vh; }
-        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e8f0; padding: 0 1.5rem; }
-        .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-        .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 700; color: #4f46e5; text-decoration: none; }
-        .nav-logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+        body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%); min-height: 100vh; }
+        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; padding: 0 1.5rem; }
+        .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); text-decoration: none; }
+        .nav-logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(59,130,246,0.35); }
         .page-wrapper { max-width: 520px; margin: 0 auto; padding: 3rem 1.5rem 5rem; text-align: center; }
         .steps-bar { display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; }
         .step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -26,8 +27,8 @@
         @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .success-title { font-size: 1.75rem; font-weight: 700; color: #0f0f2d; margin-bottom: 0.6rem; line-height: 1.2; }
         .success-subtitle { font-size: 0.95rem; color: #6a6a8a; line-height: 1.65; margin-bottom: 2rem; }
-        .success-subtitle strong { color: #4f46e5; }
-        .receipt-card { background: white; border-radius: 24px; box-shadow: 0 8px 40px rgba(79,70,229,0.09); border: 1px solid #ebebf8; overflow: hidden; margin-bottom: 2rem; text-align: left; }
+        .success-subtitle strong { color: var(--primary-dark); }
+        .receipt-card { background: white; border-radius: 24px; box-shadow: 0 10px 40px rgba(59,130,246,0.09); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 2rem; text-align: left; }
         .receipt-header { background: linear-gradient(135deg, #10b981, #059669); padding: 1.25rem 1.75rem; display: flex; align-items: center; gap: 12px; }
         .receipt-header-icon { font-size: 1.5rem; }
         .receipt-header-text { color: white; }
@@ -39,21 +40,21 @@
         .info-key { color: #8a8aaa; flex-shrink: 0; }
         .info-val { font-weight: 600; color: #1a1a2e; text-align: right; max-width: 65%; }
         .info-val.green { color: #10b981; }
-        .order-id-chip { background: #f0f0ff; border-radius: 8px; padding: 8px 12px; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; }
+        .order-id-chip { background: #eff6ff; border-radius: 8px; padding: 8px 12px; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between; }
         .order-id-label { font-size: 0.72rem; color: #8a8aaa; margin-bottom: 2px; }
         .order-id-val { font-size: 0.82rem; font-weight: 600; font-family: monospace; color: #4a4a6a; }
         .message-card { background: #fffbf0; border: 1.5px solid #fde68a; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; text-align: left; }
         .message-label { font-size: 0.75rem; font-weight: 600; color: #d97706; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
         .message-text { font-size: 0.9rem; color: #78350f; line-height: 1.6; font-style: italic; }
         .actions { display: flex; flex-direction: column; gap: 12px; }
-        .btn-home { display: block; padding: 0.9rem; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 12px; color: white; font-size: 0.95rem; font-weight: 700; text-decoration: none; text-align: center; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(79,70,229,0.3); }
+        .btn-home { display: block; padding: 0.9rem; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 14px; color: white; font-size: 0.95rem; font-weight: 700; text-decoration: none; text-align: center; transition: all 0.2s; box-shadow: 0 4px 16px rgba(59,130,246,0.35); }
         .btn-home:hover { transform: translateY(-2px); }
         .btn-share { display: block; padding: 0.9rem; border: 2px solid #e0e0f0; border-radius: 12px; color: #4a4a6a; font-size: 0.95rem; font-weight: 600; text-align: center; background: white; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-        .btn-share:hover { border-color: #4f46e5; color: #4f46e5; }
-        .impact-note { background: rgba(79,70,229,0.06); border-radius: 16px; padding: 1.5rem; margin-top: 2rem; text-align: center; }
+        .btn-share:hover { border-color: var(--primary); color: var(--primary-dark); }
+        .impact-note { background: rgba(59,130,246,0.06); border-radius: 16px; padding: 1.5rem; margin-top: 2rem; text-align: center; }
         .impact-note-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-        .impact-note-text { font-size: 0.88rem; color: #4a4a6a; line-height: 1.65; }
-        .impact-note-text strong { color: #4f46e5; }
+        .impact-note-text { font-size: 0.88rem; color: #64748b; line-height: 1.65; }
+        .impact-note-text strong { color: var(--primary-dark); }
     </style>
 </head>
 <body>

@@ -5,57 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pembayaran QRIS – PeduliJiwa</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
+        :root { --primary: #3b82f6; --primary-dark: #2563eb; --accent: #0ea5e9; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif; color: #1a1a2e; background: linear-gradient(160deg, #f0f0ff 0%, #fdf4ff 50%, #fff7f0 100%); min-height: 100vh; }
-        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e8e8f0; padding: 0 1.5rem; }
-        .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-        .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 700; color: #4f46e5; text-decoration: none; }
-        .nav-logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1rem; }
+        body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%); min-height: 100vh; }
+        .navbar { background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; padding: 0 1.5rem; }
+        .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); text-decoration: none; }
+        .nav-logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(59,130,246,0.35); }
         .nav-secure { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #6a6a8a; }
         .page-wrapper { max-width: 520px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
         .steps-bar { display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; }
         .step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; }
         .step.done .step-circle { background: #10b981; color: white; }
-        .step.active .step-circle { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; }
+        .step.active .step-circle { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
         .step.pending .step-circle { background: #e8e8f8; color: #aaa; }
         .step-label { font-size: 0.7rem; font-weight: 600; color: #8a8aaa; }
-        .step.done .step-label, .step.active .step-label { color: #4f46e5; }
+        .step.done .step-label, .step.active .step-label { color: var(--primary-dark); }
         .step-line { height: 2px; width: 60px; background: #e0e0f0; margin-bottom: 18px; }
         .step-line.done { background: #10b981; }
-        .payment-card { background: white; border-radius: 24px; box-shadow: 0 8px 40px rgba(79,70,229,0.09); border: 1px solid #ebebf8; overflow: hidden; }
-        .card-header { background: linear-gradient(135deg, #4f46e5, #7c3aed); padding: 1.5rem 2rem; text-align: center; color: white; }
+        .payment-card { background: white; border-radius: 24px; box-shadow: 0 8px 40px rgba(59,130,246,0.09); border: 1px solid #e2e8f0; overflow: hidden; }
+        .card-header { background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 1.5rem 2rem; text-align: center; color: white; }
         .card-header-title { font-size: 0.82rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
         .card-header-amount { font-size: 2rem; font-weight: 700; line-height: 1.1; }
         .card-header-name { font-size: 0.875rem; opacity: 0.85; margin-top: 4px; }
         .card-body { padding: 2rem; }
-        .qris-label { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 600; color: #4f46e5; margin-bottom: 1.25rem; }
+        .qris-label { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 600; color: var(--primary-dark); margin-bottom: 1.25rem; }
         .qris-badge { background: linear-gradient(135deg, #e4253b, #cc1e32); color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
         .qr-container { display: flex; justify-content: center; margin-bottom: 1.5rem; }
-        .qr-frame { background: white; border: 3px solid #4f46e5; border-radius: 20px; padding: 1rem; position: relative; }
+        .qr-frame { background: white; border: 3px solid var(--primary); border-radius: 20px; padding: 1rem; position: relative; }
         .qr-frame img { width: 200px; height: 200px; display: block; border-radius: 8px; }
-        .qr-demo-placeholder { width: 200px; height: 200px; background: linear-gradient(135deg, #f0f0ff, #fdf4ff); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 1rem; }
+        .qr-demo-placeholder { width: 200px; height: 200px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 1rem; }
         .qr-demo-placeholder .qr-icon { font-size: 3rem; }
         .qr-demo-placeholder .qr-text { font-size: 0.78rem; color: #8a8aaa; line-height: 1.4; }
-        .qr-corner { position: absolute; width: 14px; height: 14px; border-color: #4f46e5; border-style: solid; }
+        .qr-corner { position: absolute; width: 14px; height: 14px; border-color: var(--primary); border-style: solid; }
         .qr-corner-tl { top: 6px; left: 6px; border-width: 3px 0 0 3px; border-radius: 2px 0 0 0; }
         .qr-corner-tr { top: 6px; right: 6px; border-width: 3px 3px 0 0; border-radius: 0 2px 0 0; }
         .qr-corner-bl { bottom: 6px; left: 6px; border-width: 0 0 3px 3px; border-radius: 0 0 0 2px; }
         .qr-corner-br { bottom: 6px; right: 6px; border-width: 0 3px 3px 0; border-radius: 0 0 2px 0; }
-        .how-to { background: #f8f8ff; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
-        .how-to-title { font-size: 0.82rem; font-weight: 700; color: #4f46e5; margin-bottom: 0.6rem; }
+        .how-to { background: #eff6ff; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+        .how-to-title { font-size: 0.82rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.6rem; }
         .how-to-steps { display: flex; flex-direction: column; gap: 6px; }
         .how-to-step { display: flex; align-items: flex-start; gap: 8px; font-size: 0.82rem; color: #4a4a6a; }
-        .step-dot { width: 18px; height: 18px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 50%; color: white; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+        .step-dot { width: 18px; height: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; color: white; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
         .timer-wrap { text-align: center; margin-bottom: 1.5rem; }
         .timer-label { font-size: 0.8rem; color: #8a8aaa; margin-bottom: 4px; }
         .timer-display { font-size: 1.5rem; font-weight: 700; color: #0f0f2d; font-variant-numeric: tabular-nums; }
         .timer-display.warning { color: #f59e0b; }
         .timer-display.danger { color: #ef4444; }
         .apps-row { display: flex; justify-content: center; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .app-chip { display: flex; align-items: center; gap: 5px; background: #f0f0ff; border-radius: 100px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: #4f46e5; }
+        .app-chip { display: flex; align-items: center; gap: 5px; background: #eff6ff; border-radius: 100px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: var(--primary-dark); }
         .status-check { text-align: center; padding: 1rem 0 0; }
         .status-pending { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.875rem; color: #f59e0b; font-weight: 600; }
         .status-dot { width: 10px; height: 10px; background: #f59e0b; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
@@ -64,11 +65,11 @@
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.85rem; }
         .info-key { color: #8a8aaa; }
         .info-val { font-weight: 600; color: #1a1a2e; }
-        .info-val.amount-val { font-size: 1rem; color: #4f46e5; }
-        .order-id-wrap { display: flex; align-items: center; justify-content: space-between; background: #f8f8ff; border-radius: 8px; padding: 8px 12px; margin-top: 1rem; }
+        .info-val.amount-val { font-size: 1rem; color: var(--primary-dark); }
+        .order-id-wrap { display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border-radius: 8px; padding: 8px 12px; margin-top: 1rem; }
         .order-id-label { font-size: 0.75rem; color: #8a8aaa; }
         .order-id-val { font-size: 0.82rem; font-weight: 600; color: #4a4a6a; font-family: monospace; }
-        .copy-btn { font-size: 0.75rem; color: #4f46e5; background: none; border: none; cursor: pointer; font-weight: 600; }
+        .copy-btn { font-size: 0.75rem; color: var(--primary-dark); background: none; border: none; cursor: pointer; font-weight: 600; }
     </style>
 </head>
 <body>

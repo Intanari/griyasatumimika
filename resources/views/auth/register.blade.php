@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar Akun Petugas - PeduliJiwa</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
+        :root { --primary: #3b82f6; --primary-dark: #2563eb; --accent: #0ea5e9; }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-            color: #1a1a2e;
-            background: linear-gradient(160deg, #f0f0ff 0%, #fdf4ff 50%, #fff7f0 100%);
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            color: #0f172a;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -37,33 +38,34 @@
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 1.25rem;
-            font-weight: 700;
-            color: #4f46e5;
+            font-weight: 800;
+            color: var(--primary-dark);
         }
         .nav-logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 1.1rem;
+            box-shadow: 0 4px 14px rgba(59,130,246,0.35);
         }
         .nav-badge {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: rgba(79,70,229,0.1);
-            color: #4f46e5;
+            background: rgba(59,130,246,0.1);
+            color: var(--primary-dark);
             font-size: 0.75rem;
             font-weight: 600;
             padding: 4px 10px;
             border-radius: 100px;
-            border: 1px solid rgba(79,70,229,0.2);
+            border: 1px solid rgba(59,130,246,0.2);
         }
 
         /* Main */
@@ -82,7 +84,7 @@
             right: -100px;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(79,70,229,0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -90,7 +92,7 @@
         .register-card {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 4px 40px rgba(79,70,229,0.12);
+            box-shadow: 0 4px 40px rgba(59,130,246,0.12);
             width: 100%;
             max-width: 560px;
             position: relative;
@@ -98,7 +100,7 @@
             overflow: hidden;
         }
         .card-top-banner {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             padding: 2rem 2.5rem;
             color: white;
             position: relative;
@@ -190,7 +192,7 @@
             transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
             outline: none;
         }
-        .form-input:focus { border-color: #4f46e5; background: white; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .form-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
         .form-input.is-invalid { border-color: #ef4444; background: #fef2f2; }
         .form-input.is-invalid:focus { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
         .invalid-feedback { font-size: 0.78rem; color: #dc2626; margin-top: 0.3rem; }
@@ -217,7 +219,7 @@
         .btn-submit {
             width: 100%;
             padding: 0.875rem;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
             border-radius: 10px;
             color: white;
@@ -226,7 +228,7 @@
             font-family: inherit;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.1s;
-            box-shadow: 0 4px 15px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 15px rgba(59,130,246,0.35);
             margin-top: 1.5rem;
             margin-bottom: 1.25rem;
         }
@@ -234,7 +236,7 @@
         .btn-submit:active { transform: scale(0.98); }
 
         .login-link { text-align: center; font-size: 0.875rem; color: #6b7280; }
-        .login-link a { color: #4f46e5; font-weight: 600; }
+        .login-link a { color: var(--primary-dark); font-weight: 600; }
         .login-link a:hover { text-decoration: underline; }
 
         /* Info box */
