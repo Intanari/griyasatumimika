@@ -54,6 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'admin_domain' => env('ADMIN_DOMAIN', 'admin.griyasatumimika.web.id'),
+    'main_domain' => env('APP_MAIN_DOMAIN', 'griyasatumimika.web.id'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
