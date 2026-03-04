@@ -132,6 +132,13 @@
             font-size: 0.9rem; color: #b91c1c;
             display: flex; align-items: center; gap: 0.75rem;
         }
+        .alert-info {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 1px solid #93c5fd;
+            border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+            font-size: 0.9rem; color: #1d4ed8;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
         .stat-card {
@@ -225,10 +232,14 @@
         .btn-link:hover { background: rgba(59,130,246,0.1); }
         .btn { font-family: inherit; cursor: pointer; border: none; border-radius: 10px; font-weight: 600; transition: all 0.2s; }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+        .btn-primary:hover { filter: brightness(1.05); }
         .btn-success { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
         .btn-success:hover { filter: brightness(1.1); box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
         .btn-danger { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
         .btn-danger:hover { filter: brightness(1.1); box-shadow: 0 2px 8px rgba(239,68,68,0.4); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: rgba(59,130,246,0.08); border-color: var(--primary); color: var(--primary); }
 
         .welcome-banner {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, #38bdf8 100%);
@@ -266,6 +277,46 @@
         }
         nav ul.pagination li.disabled span { opacity: 0.5; cursor: not-allowed; }
 
+        /* Respon notifikasi mirip email (setiap tombol) */
+        .toast-inbox {
+            position: fixed; top: 1rem; right: 1rem; z-index: 9999;
+            display: flex; flex-direction: column; gap: 0.75rem;
+            max-width: 380px; width: 100%;
+        }
+        .toast-email {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            animation: toastIn 0.35s ease;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .toast-email-header {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .toast-email-success .toast-email-header { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #047857; }
+        .toast-email-error .toast-email-header { background: linear-gradient(135deg, #fef2f2, #fee2e2); color: #b91c1c; }
+        .toast-email-info .toast-email-header { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: var(--primary-dark); }
+        .toast-email-icon { font-size: 1.1rem; font-weight: 700; }
+        .toast-email-header strong { flex: 1; }
+        .toast-email-close {
+            background: none; border: none; font-size: 1.25rem; line-height: 1;
+            cursor: pointer; opacity: 0.7; padding: 0 4px;
+            color: inherit; font-family: inherit;
+        }
+        .toast-email-close:hover { opacity: 1; }
+        .toast-email-body {
+            padding: 1rem 1rem;
+            font-size: 0.875rem; color: var(--text); line-height: 1.45;
+        }
+
         @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
             .sidebar { display: none; }
@@ -285,7 +336,7 @@
     </a>
     <nav class="sidebar-nav">
         <div class="nav-section-title">Menu Utama</div>
-        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') && !request()->routeIs('dashboard.donasi') && !request()->routeIs('dashboard.laporan') ? 'active' : '' }}">
+        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') && !request()->routeIs('dashboard.donasi') && !request()->routeIs('dashboard.laporan') && !request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
             <span class="nav-item-icon">🏠</span>
             Dashboard
         </a>
@@ -296,6 +347,10 @@
         <a href="{{ route('dashboard.laporan') }}" class="nav-item {{ request()->routeIs('dashboard.laporan') ? 'active' : '' }}">
             <span class="nav-item-icon">🚨</span>
             Data Laporan ODGJ
+        </a>
+        <a href="{{ route('dashboard.patients.index') }}" class="nav-item {{ request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">👥</span>
+            Data Pasien
         </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
@@ -342,10 +397,56 @@
         @if (session('error'))
             <div class="alert-error">⚠️ {{ session('error') }}</div>
         @endif
+        @if (session('info'))
+            <div class="alert-info">ℹ️ {{ session('info') }}</div>
+        @endif
         @yield('content')
+    </div>
+
+    {{-- Respon notifikasi mirip email untuk setiap tombol/aksi --}}
+    <div id="toast-inbox" class="toast-inbox" aria-live="polite">
+        @if (session('success'))
+            <div class="toast-email toast-email-success" data-auto-dismiss>
+                <div class="toast-email-header">
+                    <span class="toast-email-icon">✓</span>
+                    <strong>Berhasil</strong>
+                    <button type="button" class="toast-email-close" onclick="this.closest('.toast-email').remove()" aria-label="Tutup">×</button>
+                </div>
+                <div class="toast-email-body">{{ session('success') }}</div>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="toast-email toast-email-error" data-auto-dismiss>
+                <div class="toast-email-header">
+                    <span class="toast-email-icon">⚠</span>
+                    <strong>Gagal</strong>
+                    <button type="button" class="toast-email-close" onclick="this.closest('.toast-email').remove()" aria-label="Tutup">×</button>
+                </div>
+                <div class="toast-email-body">{{ session('error') }}</div>
+            </div>
+        @endif
+        @if (session('info'))
+            <div class="toast-email toast-email-info" data-auto-dismiss>
+                <div class="toast-email-header">
+                    <span class="toast-email-icon">ℹ</span>
+                    <strong>Info</strong>
+                    <button type="button" class="toast-email-close" onclick="this.closest('.toast-email').remove()" aria-label="Tutup">×</button>
+                </div>
+                <div class="toast-email-body">{{ session('info') }}</div>
+            </div>
+        @endif
     </div>
 </div>
 
 @stack('scripts')
+<script>
+(function() {
+    document.querySelectorAll('#toast-inbox [data-auto-dismiss]').forEach(function(el) {
+        setTimeout(function() {
+            if (el.parentNode) el.remove();
+        }, 6000);
+    });
+})();
+</script>
 </body>
 </html>

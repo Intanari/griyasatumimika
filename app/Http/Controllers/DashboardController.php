@@ -6,6 +6,7 @@ use App\Mail\OdgjReportAcceptedToWarga;
 use App\Mail\OdgjReportRejectedToWarga;
 use App\Models\Donation;
 use App\Models\OdgjReport;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,22 @@ class DashboardController extends Controller
             ->get();
         $laporan_odgj = OdgjReport::orderByDesc('created_at')->limit(8)->get();
 
-        return view('dashboard.index', compact('user', 'stats', 'donasi_terbaru', 'donasi_per_program', 'laporan_odgj'));
+        $patientChartStatus = [
+            'labels' => ['Aktif', 'Selesai', 'Dirujuk'],
+            'data'   => [
+                Patient::where('status', 'aktif')->count(),
+                Patient::where('status', 'selesai')->count(),
+                Patient::where('status', 'dirujuk')->count(),
+            ],
+        ];
+        $patientChartGender = [
+            'labels' => ['Laki-laki', 'Perempuan'],
+            'data'   => [
+                Patient::where('jenis_kelamin', 'L')->count(),
+                Patient::where('jenis_kelamin', 'P')->count(),
+            ],
+        ];
+        return view('dashboard.index', compact('user', 'stats', 'donasi_terbaru', 'donasi_per_program', 'laporan_odgj', 'patientChartStatus', 'patientChartGender'));
     }
 
     public function donasi()
@@ -101,6 +117,13 @@ class DashboardController extends Controller
             'laporan_odgj_baru'   => OdgjReport::where('status', 'baru')->count(),
             'laporan_penjemputan' => OdgjReport::where('kategori', 'penjemputan')->count(),
             'laporan_pengantaran' => OdgjReport::where('kategori', 'pengantaran')->count(),
+            'total_pasien'        => Patient::count(),
+            'pasien_laki_laki'    => Patient::where('jenis_kelamin', 'L')->count(),
+            'pasien_perempuan'    => Patient::where('jenis_kelamin', 'P')->count(),
+            'pasien_aktif'        => Patient::where('status', 'aktif')->count(),
+            'pasien_selesai'      => Patient::where('status', 'selesai')->count(),
+            'pasien_dirujuk'      => Patient::where('status', 'dirujuk')->count(),
         ];
     }
+
 }

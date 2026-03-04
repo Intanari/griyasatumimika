@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\OdgjReportController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,16 @@ Route::domain(config('app.admin_domain'))->group(function () {
         Route::get('/dashboard/laporan', [DashboardController::class, 'laporan'])->name('dashboard.laporan');
         Route::post('/dashboard/laporan/{laporan}/terima', [DashboardController::class, 'terimaLaporan'])->name('dashboard.laporan.terima');
         Route::post('/dashboard/laporan/{laporan}/tolak', [DashboardController::class, 'tolakLaporan'])->name('dashboard.laporan.tolak');
+
+        Route::resource('dashboard/patients', PatientController::class)->parameters(['patients' => 'patient'])->names([
+            'index'   => 'dashboard.patients.index',
+            'create'  => 'dashboard.patients.create',
+            'store'   => 'dashboard.patients.store',
+            'show'    => 'dashboard.patients.show',
+            'edit'    => 'dashboard.patients.edit',
+            'update'  => 'dashboard.patients.update',
+            'destroy' => 'dashboard.patients.destroy',
+        ]);
     });
 });
 
