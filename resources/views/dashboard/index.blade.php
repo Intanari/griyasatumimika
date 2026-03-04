@@ -94,6 +94,69 @@
     </div>
 </div>
 
+{{-- ── Riwayat Pemeriksaan Card ─────────────────────────────────── --}}
+<div class="card exam-dashboard-card">
+    <div class="card-title">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+            <div class="exam-card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M9 3h6"/><path d="M15 3h4a2 2 0 0 1 2 2v4"/><path d="M3 9v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M12 12v6"/><path d="M9 15h6"/></svg>
+            </div>
+            <span>Riwayat Pemeriksaan</span>
+        </div>
+        <a href="{{ route('dashboard.riwayat-pemeriksaan.index') }}" class="btn-link">Lihat Semua →</a>
+    </div>
+
+    {{-- Stats row --}}
+    <div class="exam-stats-row">
+        <div class="exam-stat exam-stat-total">
+            <div class="exam-stat-val">{{ number_format($examStats['total'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Total Pemeriksaan</div>
+        </div>
+        <div class="exam-stat exam-stat-bulan">
+            <div class="exam-stat-val">{{ number_format($examStats['bulan_ini'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Bulan Ini</div>
+            @php $delta = ($examStats['bulan_ini'] ?? 0) - ($examStats['bulan_lalu'] ?? 0); @endphp
+            @if($examStats['bulan_lalu'] > 0)
+            <div class="exam-stat-delta {{ $delta >= 0 ? 'delta-up' : 'delta-down' }}">
+                {{ $delta >= 0 ? '▲' : '▼' }} {{ abs($delta) }} vs bulan lalu
+            </div>
+            @endif
+        </div>
+        <div class="exam-stat exam-stat-lalu">
+            <div class="exam-stat-val">{{ number_format($examStats['bulan_lalu'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Bulan Lalu</div>
+        </div>
+        @if(count($examChartTempat['labels'] ?? []) > 0)
+        <div class="exam-stat exam-stat-tempat">
+            <div class="exam-stat-val" style="font-size:1rem;line-height:1.3;">{{ $examChartTempat['labels'][0] ?? '–' }}</div>
+            <div class="exam-stat-lbl">Tempat Terbanyak</div>
+        </div>
+        @endif
+    </div>
+
+    {{-- Charts --}}
+    <div class="exam-charts-row">
+        <div class="exam-chart-box">
+            <p class="exam-chart-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                Pemeriksaan per Bulan (6 Bulan Terakhir)
+            </p>
+            <div class="exam-chart-canvas-wrap">
+                <canvas id="chartExamBulan"></canvas>
+            </div>
+        </div>
+        <div class="exam-chart-box">
+            <p class="exam-chart-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Top Tempat Pemeriksaan
+            </p>
+            <div class="exam-chart-canvas-wrap">
+                <canvas id="chartExamTempat"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="grid-2">
     <div class="card">
         <div class="card-title">
@@ -232,6 +295,70 @@
     .patient-stat-value { font-size: 1.25rem; }
     .patient-charts-row { grid-template-columns: 1fr; }
 }
+
+/* ── Riwayat Pemeriksaan Card ───────────────────────────── */
+.exam-dashboard-card .card-title { margin-bottom: 1.25rem; }
+.exam-card-icon {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid #bfdbfe; color: #2563eb;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+/* Stats row */
+.exam-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.exam-stat {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+.exam-stat:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.exam-stat-total { border-top: 3px solid #3b82f6; }
+.exam-stat-bulan  { border-top: 3px solid #10b981; }
+.exam-stat-lalu   { border-top: 3px solid #94a3b8; }
+.exam-stat-tempat { border-top: 3px solid #f59e0b; }
+.exam-stat-val  { font-size: 1.6rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 4px; }
+.exam-stat-lbl  { font-size: 0.78rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.exam-stat-delta { font-size: 0.73rem; font-weight: 700; margin-top: 5px; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+.delta-up   { background: #dcfce7; color: #15803d; }
+.delta-down { background: #fee2e2; color: #dc2626; }
+/* Charts */
+.exam-charts-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 1.25rem;
+}
+.exam-chart-box {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+}
+.exam-chart-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.8rem; font-weight: 700; color: #475569;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+.exam-chart-canvas-wrap { position: relative; height: 220px; }
+/* Responsive */
+@media (max-width: 1024px) {
+    .exam-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .exam-charts-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .exam-stats-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .exam-stat { padding: 0.875rem 0.75rem; }
+    .exam-stat-val { font-size: 1.3rem; }
+}
 </style>
 @endpush
 
@@ -281,6 +408,108 @@
             plugins: { legend: { position: 'bottom' } },
         },
     });
+
+    // ── Riwayat Pemeriksaan: Bar per Bulan ───────────────────────────
+    var examBulanLabels = @json($examChartBulan['labels'] ?? []);
+    var examBulanData   = @json($examChartBulan['data'] ?? []);
+
+    new Chart(document.getElementById('chartExamBulan'), {
+        type: 'bar',
+        data: {
+            labels: examBulanLabels,
+            datasets: [{
+                label: 'Pemeriksaan',
+                data: examBulanData,
+                backgroundColor: 'rgba(59,130,246,0.85)',
+                borderRadius: 8,
+                borderSkipped: false,
+                hoverBackgroundColor: 'rgba(37,99,235,0.95)',
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) { return ' ' + ctx.parsed.y + ' pemeriksaan'; }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 }, color: '#64748b' },
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        font: { size: 11 },
+                        color: '#94a3b8',
+                    },
+                    grid: { color: 'rgba(0,0,0,0.04)' },
+                },
+            },
+        },
+    });
+
+    // ── Riwayat Pemeriksaan: Horizontal Bar Tempat ───────────────────
+    var examTempatLabels = @json($examChartTempat['labels'] ?? []);
+    var examTempatData   = @json($examChartTempat['data'] ?? []);
+
+    if (examTempatLabels.length > 0) {
+        new Chart(document.getElementById('chartExamTempat'), {
+            type: 'bar',
+            data: {
+                labels: examTempatLabels,
+                datasets: [{
+                    label: 'Jumlah',
+                    data: examTempatData,
+                    backgroundColor: [
+                        'rgba(16,185,129,0.85)',
+                        'rgba(59,130,246,0.75)',
+                        'rgba(245,158,11,0.75)',
+                        'rgba(139,92,246,0.75)',
+                        'rgba(236,72,153,0.75)',
+                    ],
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }],
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return ' ' + ctx.parsed.x + ' kali'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0, font: { size: 11 }, color: '#94a3b8' },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 }, color: '#374151' },
+                    },
+                },
+            },
+        });
+    } else {
+        var noDataCtx = document.getElementById('chartExamTempat');
+        if (noDataCtx) {
+            noDataCtx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:220px;color:#94a3b8;font-size:0.875rem;">Belum ada data</div>';
+        }
+    }
 })();
 </script>
 @endpush

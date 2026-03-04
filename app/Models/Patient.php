@@ -53,4 +53,9 @@ class Patient extends Model
         }
         return \Illuminate\Support\Facades\Storage::url($this->foto);
     }
+
+    public function examinationHistories()
+    {
+        return $this->hasMany(ExaminationHistory::class);
+    }
 }

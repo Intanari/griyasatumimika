@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\OdgjReportController;
+use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,16 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.patients.edit',
             'update'  => 'dashboard.patients.update',
             'destroy' => 'dashboard.patients.destroy',
+        ]);
+
+        Route::resource('dashboard/riwayat-pemeriksaan', ExaminationHistoryController::class)->parameters(['riwayat_pemeriksaan' => 'examination_history'])->names([
+            'index'   => 'dashboard.riwayat-pemeriksaan.index',
+            'create'  => 'dashboard.riwayat-pemeriksaan.create',
+            'store'   => 'dashboard.riwayat-pemeriksaan.store',
+            'show'    => 'dashboard.riwayat-pemeriksaan.show',
+            'edit'    => 'dashboard.riwayat-pemeriksaan.edit',
+            'update'  => 'dashboard.riwayat-pemeriksaan.update',
+            'destroy' => 'dashboard.riwayat-pemeriksaan.destroy',
         ]);
     });
 });

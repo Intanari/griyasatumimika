@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OdgjReportAcceptedToWarga;
 use App\Mail\OdgjReportRejectedToWarga;
 use App\Models\Donation;
+use App\Models\ExaminationHistory;
 use App\Models\OdgjReport;
 use App\Models\Patient;
 use App\Models\User;
@@ -43,7 +44,50 @@ class DashboardController extends Controller
                 Patient::where('jenis_kelamin', 'P')->count(),
             ],
         ];
-        return view('dashboard.index', compact('user', 'stats', 'donasi_terbaru', 'donasi_per_program', 'laporan_odgj', 'patientChartStatus', 'patientChartGender'));
+
+        // ── Riwayat Pemeriksaan charts ────────────────────────────────────
+        $examStats = [
+            'total'      => ExaminationHistory::count(),
+            'bulan_ini'  => ExaminationHistory::whereMonth('tanggal_pemeriksaan', now()->month)
+                                ->whereYear('tanggal_pemeriksaan', now()->year)->count(),
+            'bulan_lalu' => ExaminationHistory::whereMonth('tanggal_pemeriksaan', now()->subMonth()->month)
+                                ->whereYear('tanggal_pemeriksaan', now()->subMonth()->year)->count(),
+        ];
+
+        // Bar chart – pemeriksaan per bulan (6 bulan terakhir)
+        $bulanRange = collect(range(5, 0))->map(fn ($i) => now()->subMonths($i));
+        $examPerBulan = ExaminationHistory::select(
+                DB::raw("STRFTIME('%Y-%m', tanggal_pemeriksaan) as bulan"),
+                DB::raw('COUNT(*) as total')
+            )
+            ->where('tanggal_pemeriksaan', '>=', now()->subMonths(5)->startOfMonth())
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('total', 'bulan');
+
+        $examChartBulan = [
+            'labels' => $bulanRange->map(fn ($d) => $d->locale('id')->translatedFormat('M Y'))->values()->toArray(),
+            'data'   => $bulanRange->map(fn ($d) => (int) ($examPerBulan[$d->format('Y-m')] ?? 0))->values()->toArray(),
+        ];
+
+        // Horizontal bar – top 5 tempat pemeriksaan
+        $topTempat = ExaminationHistory::select('tempat_pemeriksaan', DB::raw('COUNT(*) as total'))
+            ->groupBy('tempat_pemeriksaan')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        $examChartTempat = [
+            'labels' => $topTempat->pluck('tempat_pemeriksaan')->map(fn ($t) => \Str::limit($t, 25))->values()->toArray(),
+            'data'   => $topTempat->pluck('total')->values()->toArray(),
+        ];
+
+        return view('dashboard.index', compact(
+            'user', 'stats',
+            'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
+            'patientChartStatus', 'patientChartGender',
+            'examStats', 'examChartBulan', 'examChartTempat'
+        ));
     }
 
     public function donasi()

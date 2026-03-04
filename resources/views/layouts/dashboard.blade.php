@@ -352,6 +352,10 @@
             <span class="nav-item-icon">👥</span>
             Data Pasien
         </a>
+        <a href="{{ route('dashboard.riwayat-pemeriksaan.index') }}" class="nav-item {{ request()->routeIs('dashboard.riwayat-pemeriksaan.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">🩺</span>
+            Riwayat Pemeriksaan
+        </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>
