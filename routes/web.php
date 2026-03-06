@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PatientScheduleController;
+use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\OdgjReportController;
 use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientController;
@@ -81,6 +82,18 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.jadwal-pasien.edit',
             'update'  => 'dashboard.jadwal-pasien.update',
             'destroy' => 'dashboard.jadwal-pasien.destroy',
+        ]);
+
+        Route::get('dashboard/petugas/export/excel', [PetugasController::class, 'exportExcel'])->name('dashboard.petugas.export.excel');
+        Route::get('dashboard/petugas/export/pdf', [PetugasController::class, 'exportPdf'])->name('dashboard.petugas.export.pdf');
+        Route::resource('dashboard/petugas', PetugasController::class)->parameters(['petuga' => 'petuga'])->names([
+            'index'   => 'dashboard.petugas.index',
+            'create'  => 'dashboard.petugas.create',
+            'store'   => 'dashboard.petugas.store',
+            'show'    => 'dashboard.petugas.show',
+            'edit'    => 'dashboard.petugas.edit',
+            'update'  => 'dashboard.petugas.update',
+            'destroy' => 'dashboard.petugas.destroy',
         ]);
     });
 });

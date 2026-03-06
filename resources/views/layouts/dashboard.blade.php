@@ -360,6 +360,10 @@
             <span class="nav-item-icon">📅</span>
             Jadwal Pasien
         </a>
+        <a href="{{ route('dashboard.petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.petugas.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">🧑‍⚕️</span>
+            Data Petugas
+        </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>
