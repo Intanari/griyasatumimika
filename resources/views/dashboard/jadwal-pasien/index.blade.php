@@ -102,6 +102,7 @@
                     <tr>
                         <th class="jadwal-th-no">No</th>
                         <th>Pasien</th>
+                        <th>Pembimbing</th>
                         <th class="jadwal-th-date">Tanggal</th>
                         <th>Jam</th>
                         <th>Tempat</th>
@@ -121,9 +122,12 @@
                                 </div>
                             </td>
                             <td>
+                                <span class="jadwal-pembimbing">{{ $j->pembimbingUser->name ?? '–' }}</span>
+                            </td>
+                            <td>
                                 <div class="jadwal-date-cell">
                                     <svg class="jadwal-date-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                    {{ $j->tanggal?->translatedFormat('d M Y') }}
+                                    {{ $j->tanggal?->locale('id')->translatedFormat('d F Y') }}
                                 </div>
                             </td>
                             <td>
@@ -282,6 +286,7 @@
 .jadwal-time { font-size: 0.85rem; font-weight: 500; color: #374151; }
 .jadwal-time-muted { color: #94a3b8; font-size: 0.85rem; }
 .jadwal-place { font-size: 0.855rem; color: #475569; }
+.jadwal-pembimbing { font-size: 0.855rem; color: #334155; font-weight: 500; }
 .jadwal-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; }
 .jadwal-badge-jenis { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
 .jadwal-badge-terjadwal { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }

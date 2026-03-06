@@ -16,7 +16,7 @@ class PatientScheduleController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = PatientSchedule::with('patient');
+        $query = PatientSchedule::with(['patient', 'pembimbingUser']);
 
         if ($request->filled('patient_id')) {
             $query->where('patient_id', $request->patient_id);
@@ -28,7 +28,22 @@ class PatientScheduleController extends Controller
             $query->whereDate('tanggal', '<=', $request->tanggal_sampai);
         }
 
-        $jadwals = $query->orderBy('tanggal')->orderBy('jam_mulai')->paginate(15)->withQueryString();
+        // Hanya jadwal yang punya tanggal yang ditampilkan
+        $query->whereNotNull('tanggal');
+
+        // Jika tidak ada filter tanggal, default ke jadwal mulai hari ini ke depan
+        if (!$request->hasAny(['tanggal_dari', 'tanggal_sampai'])) {
+            $query->whereDate('tanggal', '>=', now()->toDateString());
+        }
+
+        // Urutan tegas: tanggal naik (paling awal di atas), lalu jam mulai naik (tanpa jam di bawah)
+        $jadwals = $query
+            ->orderBy('tanggal', 'asc')
+            ->orderByRaw('CASE WHEN jam_mulai IS NULL THEN 1 ELSE 0 END ASC')
+            ->orderBy('jam_mulai', 'asc')
+            ->orderBy('id', 'asc')
+            ->paginate(15)
+            ->withQueryString();
         $patients = Patient::orderBy('nama_lengkap')->get();
 
         return view('dashboard.jadwal-pasien.index', compact('user', 'jadwals', 'patients'));
@@ -38,13 +53,20 @@ class PatientScheduleController extends Controller
     {
         $user = Auth::user();
         $patients = Patient::orderBy('nama_lengkap')->get();
-        return view('dashboard.jadwal-pasien.create', compact('user', 'patients'));
+        $petugas = User::where('role', User::ROLE_PETUGAS)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('dashboard.jadwal-pasien.create', compact('user', 'patients', 'petugas'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'patient_id'    => 'required|exists:patients,id',
+            'pembimbing_id' => 'nullable|exists:users,id',
+            'reminder_before_minutes' => 'nullable|integer|in:2,5,15,30,60,300,600,1440,2880,4320',
             'tanggal'       => 'required|date',
             'jam_mulai'     => 'nullable|date_format:H:i',
             'jam_selesai'   => 'nullable|date_format:H:i',
@@ -58,10 +80,16 @@ class PatientScheduleController extends Controller
             return redirect()->back()->withInput()->withErrors(['jam_selesai' => 'Jam selesai harus setelah jam mulai.']);
         }
 
+        $pembimbingName = null;
+        if (!empty($validated['pembimbing_id'])) {
+            $pembimbingUser = User::find($validated['pembimbing_id']);
+            $pembimbingName = $pembimbingUser?->name;
+        }
+
         $data = array_merge($validated, [
             'jenis_kegiatan' => $validated['jenis'],
             'lokasi'         => $validated['tempat'] ?? '',
-            'pembimbing'     => '',
+            'pembimbing'     => $pembimbingName,
         ]);
 
         $schedule = PatientSchedule::create($data);
@@ -77,13 +105,20 @@ class PatientScheduleController extends Controller
         $user = Auth::user();
         $patients = Patient::orderBy('nama_lengkap')->get();
         $schedule = $jadwal_pasien;
-        return view('dashboard.jadwal-pasien.edit', compact('user', 'schedule', 'patients'));
+        $petugas = User::where('role', User::ROLE_PETUGAS)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return view('dashboard.jadwal-pasien.edit', compact('user', 'schedule', 'patients', 'petugas'));
     }
 
     public function update(Request $request, PatientSchedule $jadwal_pasien)
     {
         $validated = $request->validate([
             'patient_id'    => 'required|exists:patients,id',
+            'pembimbing_id' => 'nullable|exists:users,id',
+            'reminder_before_minutes' => 'nullable|integer|in:2,5,15,30,60,300,600,1440,2880,4320',
             'tanggal'       => 'required|date',
             'jam_mulai'     => 'nullable|date_format:H:i',
             'jam_selesai'   => 'nullable|date_format:H:i',
@@ -97,10 +132,16 @@ class PatientScheduleController extends Controller
             return redirect()->back()->withInput()->withErrors(['jam_selesai' => 'Jam selesai harus setelah jam mulai.']);
         }
 
+        $pembimbingName = null;
+        if (!empty($validated['pembimbing_id'])) {
+            $pembimbingUser = User::find($validated['pembimbing_id']);
+            $pembimbingName = $pembimbingUser?->name;
+        }
+
         $data = array_merge($validated, [
             'jenis_kegiatan' => $validated['jenis'],
             'lokasi'         => $validated['tempat'] ?? '',
-            'pembimbing'     => '',
+            'pembimbing'     => $pembimbingName,
         ]);
 
         $jadwal_pasien->update($data);

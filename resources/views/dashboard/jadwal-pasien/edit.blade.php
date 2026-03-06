@@ -32,6 +32,19 @@
                 @error('patient_id')<span class="rw-error">{{ $message }}</span>@enderror
             </div>
 
+            <div class="rw-form-group rw-col-full">
+                <label class="rw-label">Pembimbing</label>
+                <select name="pembimbing_id" class="rw-input {{ $errors->has('pembimbing_id') ? 'rw-invalid' : '' }}">
+                    <option value="">-- Pilih Pembimbing --</option>
+                    @foreach($petugas as $p)
+                        <option value="{{ $p->id }}" {{ old('pembimbing_id', $schedule->pembimbing_id) == $p->id ? 'selected' : '' }}>
+                            {{ $p->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('pembimbing_id')<span class="rw-error">{{ $message }}</span>@enderror
+            </div>
+
             <div class="rw-form-group">
                 <label class="rw-label">Tanggal <span class="rw-required">*</span></label>
                 <input type="date" name="tanggal" value="{{ old('tanggal', $schedule->tanggal?->format('Y-m-d')) }}" class="rw-input {{ $errors->has('tanggal') ? 'rw-invalid' : '' }}" required>
@@ -48,6 +61,25 @@
                 <label class="rw-label">Jam Selesai</label>
                 <input type="time" name="jam_selesai" value="{{ old('jam_selesai', $schedule->jam_selesai ? \Carbon\Carbon::parse($schedule->jam_selesai)->format('H:i') : '') }}" class="rw-input {{ $errors->has('jam_selesai') ? 'rw-invalid' : '' }}">
                 @error('jam_selesai')<span class="rw-error">{{ $message }}</span>@enderror
+            </div>
+
+            <div class="rw-form-group">
+                <label class="rw-label">Waktu Pengingat</label>
+                @php $reminderOld = old('reminder_before_minutes', $schedule->reminder_before_minutes); @endphp
+                <select name="reminder_before_minutes" class="rw-input {{ $errors->has('reminder_before_minutes') ? 'rw-invalid' : '' }}">
+                    <option value="">Tanpa pengingat</option>
+                    <option value="2" {{ $reminderOld == 2 ? 'selected' : '' }}>2 menit sebelum</option>
+                    <option value="5" {{ $reminderOld == 5 ? 'selected' : '' }}>5 menit sebelum</option>
+                    <option value="15" {{ $reminderOld == 15 ? 'selected' : '' }}>15 menit sebelum</option>
+                    <option value="30" {{ $reminderOld == 30 ? 'selected' : '' }}>30 menit sebelum</option>
+                    <option value="60" {{ $reminderOld == 60 ? 'selected' : '' }}>1 jam sebelum</option>
+                    <option value="300" {{ $reminderOld == 300 ? 'selected' : '' }}>5 jam sebelum</option>
+                    <option value="600" {{ $reminderOld == 600 ? 'selected' : '' }}>10 jam sebelum</option>
+                    <option value="1440" {{ $reminderOld == 1440 ? 'selected' : '' }}>1 hari sebelum</option>
+                    <option value="2880" {{ $reminderOld == 2880 ? 'selected' : '' }}>2 hari sebelum</option>
+                    <option value="4320" {{ $reminderOld == 4320 ? 'selected' : '' }}>3 hari sebelum</option>
+                </select>
+                @error('reminder_before_minutes')<span class="rw-error">{{ $message }}</span>@enderror
             </div>
 
             <div class="rw-form-group rw-col-full">
