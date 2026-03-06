@@ -26,9 +26,10 @@ class PatientSchedule extends Model
     ];
 
     protected $casts = [
-        'tanggal'                => 'date',
+        'tanggal'                 => 'date',
         'reminder_before_minutes' => 'integer',
-        'reminder_sent_at'       => 'datetime',
+        'reminder_sent_at'        => 'datetime',
+        'start_reminder_sent_at'  => 'datetime',
     ];
 
     public function patient()

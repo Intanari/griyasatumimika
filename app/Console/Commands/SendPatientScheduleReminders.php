@@ -38,7 +38,6 @@ class SendPatientScheduleReminders extends Command
             ->whereNotNull('tanggal')
             ->whereNotNull('jam_mulai')
             ->whereNotNull('reminder_before_minutes')
-            ->whereNull('reminder_sent_at')
             ->where('status', 'terjadwal')
             ->get();
 
@@ -46,18 +45,44 @@ class SendPatientScheduleReminders extends Command
             $startAt = Carbon::parse($schedule->tanggal->format('Y-m-d') . ' ' . $schedule->jam_mulai);
             $reminderAt = $startAt->copy()->subMinutes($schedule->reminder_before_minutes);
 
-            if ($now->greaterThanOrEqualTo($reminderAt) && $schedule->pembimbingUser?->email) {
+            // Pengingat sebelum jadwal (berdasarkan reminder_before_minutes)
+            if (
+                is_null($schedule->reminder_sent_at)
+                && $now->greaterThanOrEqualTo($reminderAt)
+                && $schedule->pembimbingUser?->email
+            ) {
                 try {
                     Mail::to($schedule->pembimbingUser->email)
                         ->send(new PatientScheduleReminderToPembimbing($schedule));
 
                     $schedule->reminder_sent_at = $now;
-                    $schedule->save();
                 } catch (\Throwable $e) {
                     Log::error('Gagal mengirim pengingat jadwal pasien ke pembimbing: ' . $e->getMessage(), [
                         'schedule_id' => $schedule->id,
                     ]);
                 }
+            }
+
+            // Pengingat kedua tepat pada waktu mulai jadwal
+            if (
+                is_null($schedule->start_reminder_sent_at)
+                && $now->greaterThanOrEqualTo($startAt)
+                && $schedule->pembimbingUser?->email
+            ) {
+                try {
+                    Mail::to($schedule->pembimbingUser->email)
+                        ->send(new PatientScheduleReminderToPembimbing($schedule));
+
+                    $schedule->start_reminder_sent_at = $now;
+                } catch (\Throwable $e) {
+                    Log::error('Gagal mengirim pengingat MULAI jadwal pasien ke pembimbing: ' . $e->getMessage(), [
+                        'schedule_id' => $schedule->id,
+                    ]);
+                }
+            }
+
+            if ($schedule->isDirty(['reminder_sent_at', 'start_reminder_sent_at'])) {
+                $schedule->save();
             }
         }
 
