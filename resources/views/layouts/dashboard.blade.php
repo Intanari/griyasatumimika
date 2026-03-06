@@ -356,6 +356,10 @@
             <span class="nav-item-icon">🩺</span>
             Riwayat Pemeriksaan
         </a>
+        <a href="{{ route('dashboard.jadwal-pasien.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-pasien.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">📅</span>
+            Jadwal Pasien
+        </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>

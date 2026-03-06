@@ -58,4 +58,10 @@ class Patient extends Model
     {
         return $this->hasMany(ExaminationHistory::class);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(PatientSchedule::class);
+    }
 }
+

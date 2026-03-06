@@ -5,9 +5,9 @@
 
 @section('content')
 <div class="card">
-    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+    <div class="card-title patients-card-title">
         <span>Data Pasien</span>
-        <a href="{{ route('dashboard.patients.create') }}" class="btn btn-primary">+ Tambah Pasien</a>
+        <a href="{{ route('dashboard.patients.create') }}" class="btn-add-pasien">+ Tambah Pasien</a>
     </div>
 
     <div class="patients-toolbar">
@@ -35,7 +35,7 @@
         <div class="empty-state">
             <div class="empty-icon">📋</div>
             <p>Belum ada data pasien.</p>
-            <a href="{{ route('dashboard.patients.create') }}" style="margin-top:0.75rem;display:inline-block;font-size:0.9rem;color:var(--primary);font-weight:600;">+ Tambah pasien pertama</a>
+            <a href="{{ route('dashboard.patients.create') }}" class="btn-add-pasien" style="margin-top:0.75rem;">+ Tambah pasien pertama</a>
         </div>
     @else
         <div class="table-wrapper">
@@ -110,6 +110,35 @@
 
 @push('styles')
 <style>
+.patients-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.btn-add-pasien {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.55rem 1.25rem;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    transition: all 0.18s ease;
+    border: none;
+    white-space: nowrap;
+}
+.btn-add-pasien:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45);
+    transform: translateY(-1px);
+}
 .patients-toolbar { margin-bottom: 1.25rem; }
 .patients-search-form { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
 .search-input {

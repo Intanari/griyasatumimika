@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\PatientScheduleController;
 use App\Http\Controllers\OdgjReportController;
 use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientController;
@@ -71,6 +72,15 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.riwayat-pemeriksaan.edit',
             'update'  => 'dashboard.riwayat-pemeriksaan.update',
             'destroy' => 'dashboard.riwayat-pemeriksaan.destroy',
+        ]);
+
+        Route::resource('dashboard/jadwal-pasien', PatientScheduleController::class)->parameters(['jadwal-pasien' => 'jadwal_pasien'])->names([
+            'index'   => 'dashboard.jadwal-pasien.index',
+            'create'  => 'dashboard.jadwal-pasien.create',
+            'store'   => 'dashboard.jadwal-pasien.store',
+            'edit'    => 'dashboard.jadwal-pasien.edit',
+            'update'  => 'dashboard.jadwal-pasien.update',
+            'destroy' => 'dashboard.jadwal-pasien.destroy',
         ]);
     });
 });
