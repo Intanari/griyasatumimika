@@ -10,6 +10,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\OdgjReportController;
 use App\Http\Controllers\ExaminationHistoryController;
+use App\Http\Controllers\PatientActivityController;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,18 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.patients.edit',
             'update'  => 'dashboard.patients.update',
             'destroy' => 'dashboard.patients.destroy',
+        ]);
+
+        Route::post('dashboard/patient-activities/store-simple', [PatientActivityController::class, 'storeSimple'])->name('dashboard.patient-activities.store-simple');
+        Route::get('dashboard/patient-activities/{patient_activity}/duplicate', [PatientActivityController::class, 'duplicate'])->name('dashboard.patient-activities.duplicate');
+        Route::resource('dashboard/patient-activities', PatientActivityController::class)->parameters(['patient-activities' => 'patient_activity'])->names([
+            'index'   => 'dashboard.patient-activities.index',
+            'create'  => 'dashboard.patient-activities.create',
+            'store'   => 'dashboard.patient-activities.store',
+            'show'    => 'dashboard.patient-activities.show',
+            'edit'    => 'dashboard.patient-activities.edit',
+            'update'  => 'dashboard.patient-activities.update',
+            'destroy' => 'dashboard.patient-activities.destroy',
         ]);
 
         Route::resource('dashboard/riwayat-pemeriksaan', ExaminationHistoryController::class)->parameters(['riwayat_pemeriksaan' => 'examination_history'])->names([

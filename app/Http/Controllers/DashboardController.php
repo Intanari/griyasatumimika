@@ -7,6 +7,7 @@ use App\Mail\OdgjReportRejectedToWarga;
 use App\Models\Donation;
 use App\Models\ExaminationHistory;
 use App\Models\OdgjReport;
+use App\Models\PatientActivity;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -86,11 +87,20 @@ class DashboardController extends Controller
             'data'   => $topTempat->pluck('total')->values()->toArray(),
         ];
 
+        // ── Aktivitas Pasien stats ─────────────────────────────────────
+        $activityStats = [
+            'total'     => PatientActivity::count(),
+            'bulan_ini' => PatientActivity::whereMonth('tanggal', now()->month)
+                             ->whereYear('tanggal', now()->year)->count(),
+            'hari_ini'  => PatientActivity::whereDate('tanggal', now())->count(),
+        ];
+
         return view('dashboard.index', compact(
             'user', 'stats',
             'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
             'patientChartStatus', 'patientChartGender',
-            'examStats', 'examChartBulan', 'examChartTempat'
+            'examStats', 'examChartBulan', 'examChartTempat',
+            'activityStats'
         ));
     }
 

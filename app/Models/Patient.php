@@ -63,5 +63,10 @@ class Patient extends Model
     {
         return $this->hasMany(PatientSchedule::class);
     }
+
+    public function activities()
+    {
+        return $this->hasMany(PatientActivity::class);
+    }
 }
 
