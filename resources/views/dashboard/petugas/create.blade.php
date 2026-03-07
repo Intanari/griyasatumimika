@@ -135,6 +135,7 @@
                     <label for="role">Role <span class="required">*</span></label>
                     <select id="role" name="role" required>
                         <option value="petugas_rehabilitasi" {{ old('role', 'petugas_rehabilitasi') === 'petugas_rehabilitasi' ? 'selected' : '' }}>Petugas</option>
+                        <option value="manajer" {{ old('role') === 'manajer' ? 'selected' : '' }}>Manajer</option>
                         <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
                     @error('role')<span class="form-error">{{ $message }}</span>@enderror

@@ -364,6 +364,10 @@
             <span class="nav-item-icon">🧑‍⚕️</span>
             Data Petugas
         </a>
+        <a href="{{ route('dashboard.jadwal-petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-petugas.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">📋</span>
+            Jadwal Petugas
+        </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>
@@ -383,7 +387,7 @@
             <div class="user-avatar">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
             <div style="flex:1; min-width:0;">
                 <div class="user-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $user->name }}</div>
-                <div class="user-role">🏥 Petugas Rehabilitasi</div>
+                <div class="user-role">🏥 {{ $user->role_label }}</div>
             </div>
         </div>
         <form method="POST" action="{{ route('logout') }}">

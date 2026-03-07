@@ -4,8 +4,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\JadwalPetugasController;
 use App\Http\Controllers\PatientScheduleController;
 use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\OdgjReportController;
 use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientController;
@@ -82,6 +84,29 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.jadwal-pasien.edit',
             'update'  => 'dashboard.jadwal-pasien.update',
             'destroy' => 'dashboard.jadwal-pasien.destroy',
+        ]);
+
+        Route::resource('dashboard/shifts', ShiftController::class)->parameters(['shifts' => 'shift'])->names([
+            'index'   => 'dashboard.shifts.index',
+            'create'  => 'dashboard.shifts.create',
+            'store'   => 'dashboard.shifts.store',
+            'edit'    => 'dashboard.shifts.edit',
+            'update'  => 'dashboard.shifts.update',
+            'destroy' => 'dashboard.shifts.destroy',
+        ]);
+        Route::get('dashboard/jadwal-petugas/bulk-create', [JadwalPetugasController::class, 'bulkCreate'])->name('dashboard.jadwal-petugas.bulk-create');
+        Route::post('dashboard/jadwal-petugas/bulk-store', [JadwalPetugasController::class, 'bulkStore'])->name('dashboard.jadwal-petugas.bulk-store');
+        Route::post('dashboard/jadwal-petugas/store-libur', [JadwalPetugasController::class, 'storeLibur'])->name('dashboard.jadwal-petugas.store-libur');
+        Route::post('dashboard/jadwal-petugas/store-ganti', [JadwalPetugasController::class, 'storeGanti'])->name('dashboard.jadwal-petugas.store-ganti');
+        Route::get('dashboard/jadwal-petugas/export/pdf', [JadwalPetugasController::class, 'exportPdf'])->name('dashboard.jadwal-petugas.export.pdf');
+        Route::get('dashboard/jadwal-petugas/{jadwal_petuga}/duplicate', [JadwalPetugasController::class, 'duplicate'])->name('dashboard.jadwal-petugas.duplicate');
+        Route::resource('dashboard/jadwal-petugas', JadwalPetugasController::class)->parameters(['jadwal-petugas' => 'jadwal_petuga'])->names([
+            'index'   => 'dashboard.jadwal-petugas.index',
+            'create'  => 'dashboard.jadwal-petugas.create',
+            'store'   => 'dashboard.jadwal-petugas.store',
+            'edit'    => 'dashboard.jadwal-petugas.edit',
+            'update'  => 'dashboard.jadwal-petugas.update',
+            'destroy' => 'dashboard.jadwal-petugas.destroy',
         ]);
 
         Route::get('dashboard/petugas/export/excel', [PetugasController::class, 'exportExcel'])->name('dashboard.petugas.export.excel');

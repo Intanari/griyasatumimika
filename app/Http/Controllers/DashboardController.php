@@ -56,8 +56,12 @@ class DashboardController extends Controller
 
         // Bar chart – pemeriksaan per bulan (6 bulan terakhir)
         $bulanRange = collect(range(5, 0))->map(fn ($i) => now()->subMonths($i));
+        $driver = DB::connection()->getDriverName();
+        $dateFormatExpr = $driver === 'mysql' || $driver === 'mariadb'
+            ? "DATE_FORMAT(tanggal_pemeriksaan, '%Y-%m')"
+            : "STRFTIME('%Y-%m', tanggal_pemeriksaan)";
         $examPerBulan = ExaminationHistory::select(
-                DB::raw("STRFTIME('%Y-%m', tanggal_pemeriksaan) as bulan"),
+                DB::raw("{$dateFormatExpr} as bulan"),
                 DB::raw('COUNT(*) as total')
             )
             ->where('tanggal_pemeriksaan', '>=', now()->subMonths(5)->startOfMonth())

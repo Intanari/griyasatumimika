@@ -13,6 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     public const ROLE_ADMIN = 'admin';
+    public const ROLE_MANAGER = 'manajer';
     public const ROLE_PETUGAS = 'petugas_rehabilitasi';
 
     public const STATUS_AKTIF = 'aktif';
@@ -61,7 +62,7 @@ class User extends Authenticatable
 
     public function scopePetugasYayasan(Builder $query): Builder
     {
-        return $query->whereIn('role', [self::ROLE_ADMIN, self::ROLE_PETUGAS]);
+        return $query->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MANAGER, self::ROLE_PETUGAS]);
     }
 
     public function isPetugasRehabilitasi(): bool
@@ -72,6 +73,11 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isManager(): bool
+    {
+        return $this->role === self::ROLE_MANAGER;
     }
 
     public function getStatusKerjaLabelAttribute(): string
@@ -105,7 +111,12 @@ class User extends Authenticatable
 
     public function getRoleLabelAttribute(): string
     {
-        return $this->role === self::ROLE_ADMIN ? 'Admin' : 'Petugas';
+        return match ($this->role) {
+            self::ROLE_ADMIN => 'Admin',
+            self::ROLE_MANAGER => 'Manajer',
+            self::ROLE_PETUGAS => 'Petugas',
+            default => 'Petugas',
+        };
     }
 
     public function getFotoUrlAttribute(): bool|string
@@ -114,5 +125,15 @@ class User extends Authenticatable
             return false;
         }
         return asset('storage/' . $this->foto);
+    }
+
+    public function jadwalPetugas()
+    {
+        return $this->hasMany(JadwalPetugas::class);
+    }
+
+    public function jadwalLibur()
+    {
+        return $this->hasMany(JadwalLibur::class);
     }
 }

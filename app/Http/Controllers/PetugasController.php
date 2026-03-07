@@ -266,7 +266,7 @@ class PetugasController extends Controller
             'tanggal_bergabung'  => 'nullable|date',
             'status_kerja'       => 'required|in:aktif,cuti,nonaktif',
             'shift_jaga'         => 'nullable|in:pagi,siang,malam',
-            'role'               => 'required|in:admin,petugas_rehabilitasi',
+            'role'               => 'required|in:admin,manajer,petugas_rehabilitasi',
             'foto'               => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ];
 
@@ -292,7 +292,7 @@ class PetugasController extends Controller
 
     private function ensurePetugasYayasan(User $petuga): void
     {
-        if (!in_array($petuga->role, [User::ROLE_ADMIN, User::ROLE_PETUGAS])) {
+        if (!in_array($petuga->role, [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_PETUGAS])) {
             abort(404);
         }
     }
