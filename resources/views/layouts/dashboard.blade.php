@@ -434,6 +434,10 @@
             <span class="nav-item-icon">📋</span>
             Jadwal Petugas
         </a>
+        <a href="{{ route('dashboard.stock.index') }}" class="nav-item {{ request()->routeIs('dashboard.stock.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">📦</span>
+            Stok Barang
+        </a>
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>

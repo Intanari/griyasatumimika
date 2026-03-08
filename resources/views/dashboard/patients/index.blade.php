@@ -155,6 +155,15 @@
 .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
 .btn-outline:hover { background: rgba(59,130,246,0.08); border-color: var(--primary); color: var(--primary); }
 .action-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 768px) {
+    .patients-toolbar { margin-bottom: 1rem; }
+    .patients-search-form { flex-direction: column; align-items: stretch; }
+    .search-input { min-width: 100%; }
+    .filter-select { flex: 1; min-width: 0; }
+    .patients-card-title { flex-direction: column; align-items: flex-start; }
+    .action-buttons { flex-direction: column; }
+    .action-buttons a, .action-buttons button { width: 100%; text-align: center; justify-content: center; }
+}
 .patient-photo-cell { display: inline-block; text-decoration: none; }
 .patient-photo-thumb {
     width: 48px; height: 48px; border-radius: 50%;

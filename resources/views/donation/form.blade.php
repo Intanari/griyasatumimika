@@ -15,6 +15,12 @@
         .nav-logo { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); text-decoration: none; }
         .nav-logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(59,130,246,0.35); }
         .nav-back { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        @media (max-width: 480px) {
+            .nav-inner { height: 64px; flex-wrap: wrap; }
+            .nav-logo { font-size: 1rem; }
+            .nav-logo-icon { width: 36px; height: 36px; }
+            .nav-back { font-size: 0.8rem; }
+        }
         .nav-back:hover { color: var(--primary-dark); }
         .page-wrapper { max-width: 680px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
         .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
@@ -50,7 +56,22 @@
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,130,246,0.45); }
         .trust-row { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #8a8aaa; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .amount-presets { grid-template-columns: repeat(2, 1fr); } .form-title { font-size: 1.5rem; } }
+        @media (max-width: 600px) {
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 64px; }
+            .form-row { grid-template-columns: 1fr; }
+            .amount-presets { grid-template-columns: repeat(2, 1fr); }
+            .form-title { font-size: 1.5rem; }
+            .page-wrapper { padding: 2rem 1rem 3rem; }
+            .form-card { padding: 1.5rem; }
+            .form-badge { font-size: 0.8rem; padding: 5px 12px; }
+            .preset-btn { padding: 0.65rem 0.5rem; font-size: 0.78rem; min-height: 44px; }
+            .trust-row { flex-direction: column; gap: 0.75rem; align-items: center; }
+        }
+        @media (max-width: 400px) {
+            .form-title { font-size: 1.3rem; }
+            .amount-presets { grid-template-columns: 1fr; }
+        }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>

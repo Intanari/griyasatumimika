@@ -286,8 +286,14 @@
 
         /* Responsive */
         @media (max-width: 480px) {
-            .login-card { padding: 2rem 1.5rem; }
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 60px; }
+            .nav-logo { font-size: 1.1rem; }
+            .nav-back { font-size: 0.8rem; }
+            .main { padding: 2rem 1rem; }
+            .login-card { padding: 2rem 1.25rem; }
             .card-title { font-size: 1.5rem; }
+            .form-footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
         }
     </style>
 </head>

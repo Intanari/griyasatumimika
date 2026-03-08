@@ -70,6 +70,23 @@
         .order-id-label { font-size: 0.75rem; color: #8a8aaa; }
         .order-id-val { font-size: 0.82rem; font-weight: 600; color: #4a4a6a; font-family: monospace; }
         .copy-btn { font-size: 0.75rem; color: var(--primary-dark); background: none; border: none; cursor: pointer; font-weight: 600; }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 64px; }
+            .page-wrapper { padding: 2rem 1rem 3rem; }
+            .card-header { padding: 1.25rem 1.5rem; }
+            .card-header-amount { font-size: 1.5rem; }
+            .card-body { padding: 1.5rem; }
+            .qr-frame img, .qr-demo-placeholder { width: 180px; height: 180px; }
+            .steps-bar { margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+            .step-line { width: 40px; }
+            .how-to-steps .how-to-step { font-size: 0.8rem; }
+        }
+        @media (max-width: 400px) {
+            .qr-frame img, .qr-demo-placeholder { width: 160px; height: 160px; }
+            .card-header-amount { font-size: 1.25rem; }
+        }
     </style>
 </head>
 <body>

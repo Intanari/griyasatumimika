@@ -55,6 +55,18 @@
         .impact-note-icon { font-size: 2rem; margin-bottom: 0.5rem; }
         .impact-note-text { font-size: 0.88rem; color: #64748b; line-height: 1.65; }
         .impact-note-text strong { color: var(--primary-dark); }
+
+        @media (max-width: 600px) {
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 64px; }
+            .page-wrapper { padding: 2rem 1rem 3rem; }
+            .success-title { font-size: 1.4rem; }
+            .success-subtitle { font-size: 0.88rem; }
+            .receipt-header, .receipt-body { padding: 1rem 1.25rem; }
+            .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .info-val { text-align: left; max-width: none; }
+            .actions { gap: 0.75rem; }
+        }
     </style>
 </head>
 <body>

@@ -64,7 +64,21 @@
         .alert-success { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 1px solid #86efac; border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #047857; display: flex; align-items: center; gap: 0.75rem; }
         .trust-row { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
-        @media (max-width: 600px) { .kategori-options { grid-template-columns: 1fr; } .lokasi-row { flex-direction: column; } }
+        @media (max-width: 600px) {
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 64px; }
+            .kategori-options { grid-template-columns: 1fr; }
+            .lokasi-row { flex-direction: column; }
+            .btn-serlok { width: 100%; justify-content: center; }
+            .page-wrapper { padding: 2rem 1rem 3rem; }
+            .form-card { padding: 1.5rem; }
+            .form-title { font-size: 1.5rem; }
+            .upload-actions { flex-direction: column; }
+            .btn-upload { min-width: 100%; min-height: 44px; }
+        }
+        @media (max-width: 400px) {
+            .form-title { font-size: 1.3rem; }
+        }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>

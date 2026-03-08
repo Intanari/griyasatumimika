@@ -8,6 +8,7 @@ use App\Models\Donation;
 use App\Models\ExaminationHistory;
 use App\Models\OdgjReport;
 use App\Models\PatientActivity;
+use App\Models\InventoryItem;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -95,12 +96,24 @@ class DashboardController extends Controller
             'hari_ini'  => PatientActivity::whereDate('tanggal', now())->count(),
         ];
 
+        // ── Stok Barang (ringkasan untuk dashboard) ─────────────────────
+        try {
+            $stockStats = [
+                'total_items'    => InventoryItem::count(),
+                'total_quantity' => InventoryItem::sum('quantity'),
+                'out_of_stock'   => InventoryItem::where('quantity', '<=', 0)->count(),
+                'low_stock'      => InventoryItem::whereColumn('quantity', '<=', 'min_stock')->where('quantity', '>', 0)->count(),
+            ];
+        } catch (\Throwable $e) {
+            $stockStats = ['total_items' => 0, 'total_quantity' => 0, 'out_of_stock' => 0, 'low_stock' => 0];
+        }
+
         return view('dashboard.index', compact(
             'user', 'stats',
             'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
             'patientChartStatus', 'patientChartGender',
             'examStats', 'examChartBulan', 'examChartTempat',
-            'activityStats'
+            'activityStats', 'stockStats'
         ));
     }
 

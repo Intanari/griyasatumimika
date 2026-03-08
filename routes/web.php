@@ -13,6 +13,7 @@ use App\Http\Controllers\OdgjReportController;
 use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientActivityController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -135,6 +136,15 @@ Route::domain(config('app.admin_domain'))->group(function () {
 
         Route::get('dashboard/petugas/export/excel', [PetugasController::class, 'exportExcel'])->name('dashboard.petugas.export.excel');
         Route::get('dashboard/petugas/export/pdf', [PetugasController::class, 'exportPdf'])->name('dashboard.petugas.export.pdf');
+        Route::get('dashboard/stock/export/csv', [StockController::class, 'exportCsv'])->name('dashboard.stock.export.csv');
+        Route::post('dashboard/stock/out', [StockController::class, 'stockOut'])->name('dashboard.stock.out');
+        Route::get('dashboard/stock/{stock}', [StockController::class, 'show'])->name('dashboard.stock.show');
+        Route::resource('dashboard/stock', StockController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['stock' => 'stock'])->names([
+            'index' => 'dashboard.stock.index',
+            'store' => 'dashboard.stock.store',
+            'update' => 'dashboard.stock.update',
+            'destroy' => 'dashboard.stock.destroy',
+        ]);
         Route::resource('dashboard/petugas', PetugasController::class)->parameters(['petuga' => 'petuga'])->names([
             'index'   => 'dashboard.petugas.index',
             'create'  => 'dashboard.petugas.create',

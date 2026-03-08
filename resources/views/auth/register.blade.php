@@ -254,8 +254,12 @@
         footer { text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #9ca3af; }
 
         @media (max-width: 560px) {
+            .navbar { padding: 0 1rem; }
+            .nav-inner { height: 60px; }
+            .main { padding: 2rem 1rem; }
             .card-body { padding: 1.5rem; }
             .card-top-banner { padding: 1.5rem; }
+            .banner-title { font-size: 1.25rem; }
             .form-row { grid-template-columns: 1fr; }
         }
     </style>

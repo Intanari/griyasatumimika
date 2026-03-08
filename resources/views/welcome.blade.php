@@ -141,28 +141,94 @@
             .footer-links a { font-size: 0.85rem; transition: color 0.2s; }
             .footer-links a:hover { color: white; }
             .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+            .nav-mobile-toggle {
+                display: none;
+                width: 42px; height: 42px;
+                background: linear-gradient(135deg, var(--primary), var(--accent));
+                border: none; border-radius: 10px;
+                color: white; font-size: 1.2rem;
+                cursor: pointer;
+                align-items: center; justify-content: center;
+            }
+            .nav-mobile-menu {
+                display: none;
+                position: absolute;
+                top: 100%; left: 0; right: 0;
+                background: white;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                z-index: 99;
+            }
+            .nav-mobile-menu.open { display: flex; }
+            .nav-mobile-menu a {
+                padding: 0.75rem 1rem;
+                border-radius: 10px;
+                font-weight: 500;
+            }
+            .nav-mobile-menu a:hover { background: rgba(59,130,246,0.08); }
+
             @media (max-width: 900px) {
                 .nav-links { display: none; }
-                .hero-inner { grid-template-columns: 1fr; }
+                .nav-mobile-toggle { display: flex; }
+                .hero-inner { grid-template-columns: 1fr; padding: 3rem 1rem; }
                 .hero-visual { display: none; }
                 .hero-title { font-size: 2.25rem; }
+                .hero-desc { font-size: 0.95rem; }
+                .hero-cta { flex-direction: column; }
+                .hero-cta a { width: 100%; text-align: center; justify-content: center; }
+                .hero-stats { flex-wrap: wrap; gap: 1.5rem; justify-content: flex-start; }
+                .hero-stat-number { font-size: 1.25rem; }
                 .about-grid { grid-template-columns: 1fr; }
                 .about-img-wrap { display: none; }
                 .programs-grid { grid-template-columns: 1fr; }
-                .impact-grid { grid-template-columns: repeat(2, 1fr); }
-                .steps-grid { grid-template-columns: repeat(2, 1fr); }
+                .impact-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+                .impact-number { font-size: 2rem; }
+                .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
                 .steps-grid::before { display: none; }
                 .testi-grid { grid-template-columns: 1fr; }
-                .footer-grid { grid-template-columns: 1fr 1fr; }
+                .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
                 .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+                .footer-bottom > div:last-child { flex-direction: column; gap: 0.5rem; }
+                .donate-cta { padding: 4rem 1rem; }
                 .donate-cta h2 { font-size: 1.75rem; }
+                .donate-cta p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+                .section { padding: 3rem 1rem; }
+                .section-title { font-size: 1.75rem; }
+            }
+            @media (max-width: 600px) {
+                .nav-inner { height: 64px; padding: 0 1rem; }
+                .hero { padding-top: 64px; }
+                .hero-inner { padding: 2rem 1rem; }
+                .hero-title { font-size: 1.6rem; }
+                .hero-desc { font-size: 0.9rem; margin-bottom: 1.5rem; }
+                .hero-stats { gap: 1rem; }
+                .hero-stat-number { font-size: 1.1rem; }
+                .hero-stat-label { font-size: 0.72rem; }
+                .nav-actions .btn-primary { padding: 0.5rem 1rem; font-size: 0.85rem; }
+                .impact-grid { grid-template-columns: 1fr; gap: 1.25rem; padding: 3rem 1rem; }
+                .impact-number { font-size: 1.75rem; }
+                .impact-label { font-size: 0.85rem; }
+                .section-title { font-size: 1.5rem; }
+                .steps-grid { grid-template-columns: 1fr; }
+                .donate-cta h2 { font-size: 1.4rem; }
+                .footer-grid { grid-template-columns: 1fr; text-align: center; }
+                .footer-desc { margin: 0 auto 1rem; }
+                .footer-socials { justify-content: center; }
+                .footer-links { align-items: center; }
+            }
+            @media (max-width: 400px) {
+                .hero-title { font-size: 1.4rem; }
+                .donate-cta h2 { font-size: 1.2rem; }
             }
         </style>
     </head>
     <body>
         <nav class="navbar">
             <div class="nav-inner">
-                <a href="#" class="nav-logo">
+                <a href="{{ url('/') }}" class="nav-logo">
                     <div class="nav-logo-icon">🧠</div>
                     PeduliJiwa
                 </a>
@@ -173,7 +239,15 @@
                     <a href="#testimoni">Testimoni</a>
                 </div>
                 <div class="nav-actions">
+                    <button type="button" class="nav-mobile-toggle" id="navMobileToggle" aria-label="Menu">☰</button>
                     <a href="{{ route('donation.form') }}" class="btn-primary">❤️ Donasi Sekarang</a>
+                </div>
+                <div class="nav-mobile-menu" id="navMobileMenu">
+                    <a href="#tentang" class="mobile-nav-close">Tentang Kami</a>
+                    <a href="#program" class="mobile-nav-close">Program</a>
+                    <a href="#cara-donasi" class="mobile-nav-close">Cara Donasi</a>
+                    <a href="#testimoni" class="mobile-nav-close">Testimoni</a>
+                    <a href="{{ route('donation.form') }}" class="btn-primary mobile-nav-close" style="margin-top:0.5rem;">❤️ Donasi Sekarang</a>
                 </div>
             </div>
         </nav>
@@ -357,5 +431,21 @@
                 <div style="display:flex;gap:1.5rem;"><a href="#">Kebijakan Privasi</a><a href="#">Syarat & Ketentuan</a></div>
             </div>
         </footer>
+        <script>
+            (function() {
+                var toggle = document.getElementById('navMobileToggle');
+                var menu = document.getElementById('navMobileMenu');
+                if (toggle && menu) {
+                    toggle.addEventListener('click', function() {
+                        menu.classList.toggle('open');
+                        toggle.setAttribute('aria-label', menu.classList.contains('open') ? 'Tutup menu' : 'Menu');
+                        toggle.innerHTML = menu.classList.contains('open') ? '✕' : '☰';
+                    });
+                    document.querySelectorAll('.mobile-nav-close').forEach(function(a) {
+                        a.addEventListener('click', function() { menu.classList.remove('open'); toggle.innerHTML = '☰'; });
+                    });
+                }
+            })();
+        </script>
     </body>
 </html>

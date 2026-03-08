@@ -11,6 +11,28 @@
     </div>
 </div>
 
+@php
+    $stockOut = (int) ($stockStats['out_of_stock'] ?? 0);
+    $stockLow = (int) ($stockStats['low_stock'] ?? 0);
+    $hasStockAlert = $stockOut > 0 || $stockLow > 0;
+@endphp
+@if($hasStockAlert)
+<div class="dashboard-stock-alert-banner">
+    <div class="dashboard-stock-alert-icon">📦</div>
+    <div class="dashboard-stock-alert-text">
+        <strong>Peringatan Stok Barang</strong>
+        @if($stockOut > 0 && $stockLow > 0)
+            Ada <strong>{{ $stockOut }} barang habis</strong> dan <strong>{{ $stockLow }} barang hampir habis</strong>. Segera lakukan restock.
+        @elseif($stockOut > 0)
+            Ada <strong>{{ $stockOut }} barang habis</strong>. Segera lakukan restock.
+        @else
+            Ada <strong>{{ $stockLow }} barang hampir habis</strong>. Perhatikan dan lakukan restock jika perlu.
+        @endif
+    </div>
+    <a href="{{ route('dashboard.stock.index') }}" class="dashboard-stock-alert-btn">Kelola Stok →</a>
+</div>
+@endif
+
 <div class="stats-grid">
     <div class="stat-card purple">
         <div class="stat-header">
@@ -42,6 +64,43 @@
         </div>
         <div class="stat-sub">{{ $stats['laporan_odgj_baru'] ?? 0 }} laporan baru</div>
     </div>
+    <a href="{{ route('dashboard.stock.index') }}" class="stat-card blue stat-card-link">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ number_format($stockStats['total_items'] ?? 0) }}</div>
+                <div class="stat-label">Stok Barang</div>
+            </div>
+            <div class="stat-icon blue">📦</div>
+        </div>
+        <div class="stat-sub">{{ $stockStats['low_stock'] ?? 0 }} hampir habis · Klik untuk kelola</div>
+    </a>
+</div>
+
+{{-- Card Stok Barang (ringkasan + link ke Manajemen Stok) --}}
+<div class="card dashboard-stock-card">
+    <div class="card-title">
+        <span>📦 Stok Barang</span>
+        <a href="{{ route('dashboard.stock.index') }}" class="btn-link">Kelola Stok →</a>
+    </div>
+    <div class="dashboard-stock-stats">
+        <div class="dashboard-stock-stat">
+            <div class="dashboard-stock-stat-value">{{ number_format($stockStats['total_items'] ?? 0) }}</div>
+            <div class="dashboard-stock-stat-label">Jenis Barang</div>
+        </div>
+        <div class="dashboard-stock-stat">
+            <div class="dashboard-stock-stat-value">{{ number_format($stockStats['total_quantity'] ?? 0) }}</div>
+            <div class="dashboard-stock-stat-label">Total Unit</div>
+        </div>
+        <div class="dashboard-stock-stat dashboard-stock-stat-warn">
+            <div class="dashboard-stock-stat-value">{{ $stockStats['low_stock'] ?? 0 }}</div>
+            <div class="dashboard-stock-stat-label">Hampir Habis</div>
+        </div>
+        <div class="dashboard-stock-stat dashboard-stock-stat-danger">
+            <div class="dashboard-stock-stat-value">{{ $stockStats['out_of_stock'] ?? 0 }}</div>
+            <div class="dashboard-stock-stat-label">Habis</div>
+        </div>
+    </div>
+    <p class="dashboard-stock-desc">Ringkasan inventaris barang yayasan. Klik <a href="{{ route('dashboard.stock.index') }}">Kelola Stok</a> untuk daftar barang, restock, dan riwayat transaksi.</p>
 </div>
 
 <div class="card patient-dashboard-card">
@@ -277,6 +336,122 @@
 
 @push('styles')
 <style>
+/* Banner peringatan stok di dashboard (tampil otomatis ketika ada barang habis/hampir habis) */
+.dashboard-stock-alert-banner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #f59e0b;
+    border-radius: 16px;
+    flex-wrap: wrap;
+}
+.dashboard-stock-alert-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(245, 158, 11, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+.dashboard-stock-alert-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9rem;
+    color: #92400e;
+    line-height: 1.4;
+}
+.dashboard-stock-alert-text strong { color: #b45309; }
+.dashboard-stock-alert-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: filter 0.2s;
+}
+.dashboard-stock-alert-btn:hover { filter: brightness(1.1); color: #fff !important; }
+@media (max-width: 640px) {
+    .dashboard-stock-alert-banner { flex-direction: column; align-items: stretch; text-align: center; }
+    .dashboard-stock-alert-icon { margin: 0 auto; }
+}
+
+/* Stat card yang bisa diklik (link ke Manajemen Stok) */
+.stat-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px -10px rgba(59,130,246,0.2);
+}
+
+/* Card Stok Barang di dashboard */
+.dashboard-stock-card { margin-bottom: 1.5rem; }
+.dashboard-stock-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.dashboard-stock-stat {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.dashboard-stock-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.dashboard-stock-stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+.dashboard-stock-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+.dashboard-stock-stat-warn .dashboard-stock-stat-value { color: #b45309; }
+.dashboard-stock-stat-warn { border-top: 3px solid #f59e0b; }
+.dashboard-stock-stat-danger .dashboard-stock-stat-value { color: #dc2626; }
+.dashboard-stock-stat-danger { border-top: 3px solid #ef4444; }
+.dashboard-stock-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+.dashboard-stock-desc a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+.dashboard-stock-desc a:hover { text-decoration: underline; }
+@media (max-width: 640px) {
+    .dashboard-stock-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
 .patient-dashboard-card .card-title { margin-bottom: 1.25rem; }
 .patient-stats-grid {
     display: grid;
