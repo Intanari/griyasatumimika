@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\JadwalPetugasController;
 use App\Http\Controllers\PatientScheduleController;
+use App\Http\Controllers\RehabilitationScheduleController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\OdgjReportController;
@@ -88,6 +89,16 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'edit'    => 'dashboard.riwayat-pemeriksaan.edit',
             'update'  => 'dashboard.riwayat-pemeriksaan.update',
             'destroy' => 'dashboard.riwayat-pemeriksaan.destroy',
+        ]);
+
+        Route::get('dashboard/jadwal-rehabilitasi/export/pdf', [RehabilitationScheduleController::class, 'exportPdf'])->name('dashboard.jadwal-rehabilitasi.export.pdf');
+        Route::resource('dashboard/jadwal-rehabilitasi', RehabilitationScheduleController::class)->except(['show'])->parameters(['jadwal-rehabilitasi' => 'jadwal_rehabilitasi'])->names([
+            'index'   => 'dashboard.jadwal-rehabilitasi.index',
+            'create'  => 'dashboard.jadwal-rehabilitasi.create',
+            'store'   => 'dashboard.jadwal-rehabilitasi.store',
+            'edit'    => 'dashboard.jadwal-rehabilitasi.edit',
+            'update'  => 'dashboard.jadwal-rehabilitasi.update',
+            'destroy' => 'dashboard.jadwal-rehabilitasi.destroy',
         ]);
 
         Route::resource('dashboard/jadwal-pasien', PatientScheduleController::class)->parameters(['jadwal-pasien' => 'jadwal_pasien'])->names([

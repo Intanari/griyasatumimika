@@ -212,6 +212,7 @@
         .empty-state { text-align: center; padding: 3rem 1.5rem; color: var(--text-muted); font-size: 0.9rem; }
         .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .program-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 0.875rem 0; border-bottom: 1px solid #f1f5f9;
@@ -317,19 +318,76 @@
             font-size: 0.875rem; color: var(--text); line-height: 1.45;
         }
 
+        /* Hamburger & Mobile Sidebar */
+        .mobile-menu-btn {
+            display: none;
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none; border-radius: 12px;
+            color: white; font-size: 1.25rem;
+            cursor: pointer;
+            align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(59,130,246,0.35);
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            z-index: 40; backdrop-filter: blur(2px);
+            opacity: 0; transition: opacity 0.25s;
+        }
+        .sidebar-overlay.open { opacity: 1; }
+
         @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
-            .sidebar { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 280px; max-width: 85vw;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay { display: block; pointer-events: none; }
+            .sidebar-overlay.open { pointer-events: auto; }
             .main-content { margin-left: 0; }
+            .topbar {
+                padding: 0 1rem;
+                height: 64px;
+                flex-wrap: wrap;
+            }
+            .topbar-left h1 { font-size: 1rem; }
+            .topbar-left p { font-size: 0.72rem; }
+            .topbar-badge { font-size: 0.7rem; padding: 5px 10px; }
+            .content { padding: 1rem; }
             .stats-grid { grid-template-columns: 1fr; }
             .grid-2 { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .toast-inbox {
+                top: auto; bottom: 1rem; left: 1rem; right: 1rem;
+                max-width: none;
+            }
+            .stat-card { padding: 1.25rem; }
+            .stat-value { font-size: 1.5rem; }
+            .card { padding: 1.25rem; }
+            .card-title { font-size: 0.95rem; flex-wrap: wrap; gap: 0.75rem; }
+            .table-wrapper { margin: 0 -1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .table-wrapper table { min-width: 700px; font-size: 0.8rem; }
+            th, td { padding: 0.65rem 0.75rem; }
+            .welcome-banner { padding: 1.5rem 1.25rem; }
+            .welcome-banner h2 { font-size: 1.25rem; }
+            .welcome-banner p { font-size: 0.85rem; }
+            .btn-sm { padding: 8px 12px; font-size: 0.82rem; }
+        }
+        @media (max-width: 480px) {
+            .topbar { gap: 0.5rem; }
+            .topbar-badge { display: none; }
         }
     </style>
     @stack('styles')
 </head>
 <body>
 
-<div class="sidebar">
+<div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></div>
+<div class="sidebar" id="sidebar">
     <a href="{{ route('dashboard') }}" class="sidebar-logo">
         <div class="sidebar-logo-icon">🧠</div>
         PeduliJiwa
@@ -363,6 +421,10 @@
         <a href="{{ route('dashboard.jadwal-pasien.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-pasien.*') ? 'active' : '' }}">
             <span class="nav-item-icon">📅</span>
             Jadwal Pasien
+        </a>
+        <a href="{{ route('dashboard.jadwal-rehabilitasi.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-rehabilitasi.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">🔄</span>
+            Jadwal Rehabilitasi
         </a>
         <a href="{{ route('dashboard.petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.petugas.*') ? 'active' : '' }}">
             <span class="nav-item-icon">🧑‍⚕️</span>
@@ -403,6 +465,7 @@
 
 <div class="main-content">
     <header class="topbar">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka menu">☰</button>
         <div class="topbar-left">
             <h1>@yield('topbar-title', 'Dashboard')</h1>
             <p>{{ now()->locale('id')->translatedFormat('l, d F Y') }}</p>
@@ -461,6 +524,31 @@
 @stack('scripts')
 <script>
 (function() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    var btn = document.getElementById('mobileMenuBtn');
+    function openMenu() {
+        sidebar.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        btn.setAttribute('aria-label', 'Tutup menu');
+        btn.innerHTML = '✕';
+    }
+    function closeMenu() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        btn.setAttribute('aria-label', 'Buka menu');
+        btn.innerHTML = '☰';
+    }
+    if (btn) btn.addEventListener('click', function() {
+        sidebar.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) closeMenu();
+    });
+
     document.querySelectorAll('#toast-inbox [data-auto-dismiss]').forEach(function(el) {
         setTimeout(function() {
             if (el.parentNode) el.remove();
