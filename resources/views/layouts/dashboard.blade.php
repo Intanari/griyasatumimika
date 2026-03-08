@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" id="html-theme">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
-        :root {
+        /* Tema terang (default) */
+        :root, [data-theme="light"] {
             --primary: #3b82f6;
             --primary-dark: #2563eb;
             --primary-light: #60a5fa;
@@ -22,6 +23,39 @@
             --border: #e2e8f0;
             --shadow: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 40px -10px rgba(59,130,246,0.15);
+            --sidebar-bg: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+            --topbar-bg: rgba(255,255,255,0.9);
+            --user-card-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            --table-header-bg: #f8fafc;
+            --table-row-border: #f1f5f9;
+            --table-row-hover: #fafbff;
+            --nav-hover-bg: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(14,165,233,0.06));
+            --overlay-bg: rgba(0,0,0,0.4);
+        }
+        /* Tema gelap */
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --primary-dark: #93c5fd;
+            --primary-light: #3b82f6;
+            --accent: #38bdf8;
+            --accent-green: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-rose: #fb7185;
+            --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 40px -10px rgba(0,0,0,0.4);
+            --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            --topbar-bg: rgba(30,41,59,0.95);
+            --user-card-bg: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            --table-header-bg: #334155;
+            --table-row-border: #334155;
+            --table-row-hover: rgba(59,130,246,0.1);
+            --nav-hover-bg: linear-gradient(135deg, rgba(96,165,250,0.12), rgba(56,189,248,0.08));
+            --overlay-bg: rgba(0,0,0,0.6);
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; }
@@ -29,7 +63,7 @@
 
         .sidebar {
             position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
-            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+            background: var(--sidebar-bg);
             border-right: 1px solid var(--border);
             display: flex; flex-direction: column; z-index: 50;
             box-shadow: 4px 0 24px rgba(59,130,246,0.06);
@@ -59,7 +93,7 @@
             font-size: 0.9rem; font-weight: 500; color: var(--text-muted);
             transition: all 0.2s ease; margin-bottom: 4px;
         }
-        .nav-item:hover { background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(14,165,233,0.06)); color: var(--primary-dark); }
+        .nav-item:hover { background: var(--nav-hover-bg); color: var(--primary-dark); }
         .nav-item.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: white;
@@ -71,9 +105,9 @@
         .sidebar-footer { padding: 1rem 0.75rem; border-top: 1px solid var(--border); }
         .user-card {
             display: flex; align-items: center; gap: 0.875rem;
-            padding: 1rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 1rem; background: var(--user-card-bg);
             border-radius: 14px; margin-bottom: 0.75rem;
-            border: 1px solid rgba(59,130,246,0.1);
+            border: 1px solid var(--border);
         }
         .user-avatar {
             width: 44px; height: 44px;
@@ -101,7 +135,7 @@
 
         .main-content { margin-left: 280px; min-height: 100vh; }
         .topbar {
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(12px);
+            background: var(--topbar-bg); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             padding: 0 2rem; height: 72px;
             display: flex; align-items: center; justify-content: space-between;
@@ -139,6 +173,54 @@
             font-size: 0.9rem; color: #1d4ed8;
             display: flex; align-items: center; gap: 0.75rem;
         }
+        [data-theme="dark"] .alert-success {
+            background: linear-gradient(135deg, #064e3b, #065f46);
+            border-color: #047857;
+            color: #6ee7b7;
+        }
+        [data-theme="dark"] .alert-error {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+            border-color: #b91c1c;
+            color: #fca5a5;
+        }
+        [data-theme="dark"] .alert-info {
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            border-color: #2563eb;
+            color: #93c5fd;
+        }
+        [data-theme="dark"] .badge-paid { background: #064e3b; color: #6ee7b7; }
+        [data-theme="dark"] .badge-pending { background: #78350f; color: #fcd34d; }
+        [data-theme="dark"] .badge-failed { background: #7f1d1d; color: #fca5a5; }
+        [data-theme="dark"] .badge-cancel { background: #334155; color: #94a3b8; }
+        [data-theme="dark"] .btn-logout {
+            background: #7f1d1d;
+            border-color: #991b1b;
+            color: #fca5a5;
+        }
+        [data-theme="dark"] .btn-logout:hover { background: #991b1b; border-color: #b91c1c; }
+
+        /* Tombol toggle tema */
+        .theme-toggle-wrap { display: flex; align-items: center; gap: 0.75rem; }
+        .theme-toggle {
+            width: 44px; height: 44px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+        .theme-toggle:hover {
+            background: var(--nav-hover-bg);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: inline; }
+        [data-theme="dark"] .theme-toggle .icon-sun { display: inline; }
+        [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
         .stat-card {
@@ -195,11 +277,11 @@
             text-align: left; padding: 0.875rem 1rem;
             font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.06em; color: var(--text-muted);
-            background: #f8fafc; border-bottom: 2px solid var(--border);
+            background: var(--table-header-bg); border-bottom: 2px solid var(--border);
         }
-        td { padding: 0.875rem 1rem; border-bottom: 1px solid #f1f5f9; color: var(--text); }
+        td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--table-row-border); color: var(--text); }
         tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #fafbff; }
+        tr:hover td { background: var(--table-row-hover); }
         .badge {
             display: inline-flex; align-items: center; gap: 4px;
             padding: 4px 12px; border-radius: 8px;
@@ -215,13 +297,13 @@
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .program-item {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0.875rem 0; border-bottom: 1px solid #f1f5f9;
+            padding: 0.875rem 0; border-bottom: 1px solid var(--table-row-border);
         }
         .program-item:last-child { border-bottom: none; }
         .program-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
         .program-count { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
         .program-amount { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
-        .info-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .info-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--table-row-border); font-size: 0.9rem; }
         .info-item:last-child { border-bottom: none; }
         .info-key { color: var(--text-muted); }
         .info-val { font-weight: 600; color: var(--text); text-align: right; }
@@ -331,7 +413,7 @@
         }
         .sidebar-overlay {
             display: none;
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            position: fixed; inset: 0; background: var(--overlay-bg);
             z-index: 40; backdrop-filter: blur(2px);
             opacity: 0; transition: opacity 0.25s;
         }
@@ -380,6 +462,33 @@
         @media (max-width: 480px) {
             .topbar { gap: 0.5rem; }
             .topbar-badge { display: none; }
+        }
+        /* Tombol kembali & deskripsi tabel (semua halaman) */
+        .page-back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 0.875rem; font-weight: 600; color: var(--text);
+            text-decoration: none; margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .page-back-link:hover {
+            background: #f8fafc;
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+        }
+        .page-back-link::before {
+            content: "←";
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .page-table-desc {
+            font-size: 0.875rem; color: var(--text-muted);
+            line-height: 1.5; margin: 0 0 1rem; padding: 0;
         }
     </style>
     @stack('styles')
@@ -474,7 +583,13 @@
             <h1>@yield('topbar-title', 'Dashboard')</h1>
             <p>{{ now()->locale('id')->translatedFormat('l, d F Y') }}</p>
         </div>
-        <div class="topbar-badge">👮 {{ $user->jabatan ?? 'Petugas Rehabilitasi' }}</div>
+        <div class="theme-toggle-wrap">
+            <button type="button" class="theme-toggle" id="themeToggle" aria-label="Ganti tema (terang/gelap)" title="Ganti tema">
+                <span class="icon-sun" aria-hidden="true">☀️</span>
+                <span class="icon-moon" aria-hidden="true">🌙</span>
+            </button>
+            <div class="topbar-badge">👮 {{ $user->jabatan ?? 'Petugas Rehabilitasi' }}</div>
+        </div>
     </header>
 
     <div class="content">
@@ -528,6 +643,30 @@
 @stack('scripts')
 <script>
 (function() {
+    var THEME_KEY = 'dashboard-theme';
+    var html = document.documentElement;
+    function getStoredTheme() {
+        try {
+            return localStorage.getItem(THEME_KEY) || 'light';
+        } catch (e) { return 'light'; }
+    }
+    function setTheme(theme) {
+        theme = theme === 'dark' ? 'dark' : 'light';
+        html.setAttribute('data-theme', theme);
+        try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    }
+    (function initTheme() {
+        var saved = getStoredTheme();
+        html.setAttribute('data-theme', saved);
+    })();
+    var themeBtn = document.getElementById('themeToggle');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function() {
+            var current = html.getAttribute('data-theme') || 'light';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    }
+
     var sidebar = document.getElementById('sidebar');
     var overlay = document.getElementById('sidebarOverlay');
     var btn = document.getElementById('mobileMenuBtn');

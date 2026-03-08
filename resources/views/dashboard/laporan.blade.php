@@ -4,6 +4,7 @@
 @section('topbar-title', 'Data Laporan ODGJ')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="stats-grid">
     <div class="stat-card purple">
         <div class="stat-header">
@@ -48,6 +49,7 @@
         <span>📋 Semua Laporan ODGJ</span>
         <a href="{{ route('odgj-report.form') }}" class="btn-link" target="_blank">+ Buat Laporan Baru</a>
     </div>
+    <p class="page-table-desc">Tabel berikut menampilkan semua laporan ODGJ dari masyarakat (penjemputan/pengantaran). Klik Detail untuk melihat lengkap dan kirim respons ke pelapor. Gunakan tombol di atas untuk membuat laporan baru dari form publik.</p>
     @if ($laporan_odgj->isEmpty())
         <div class="empty-state">
             <div class="empty-icon">📭</div>
@@ -117,8 +119,9 @@
                             </td>
                             <td style="color:var(--text-muted);font-size:0.8rem;">{{ $laporan->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
                             <td>
-                                @if ($laporan->status === 'baru')
-                                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                                    <a href="{{ route('dashboard.laporan.show', $laporan) }}" class="btn btn-sm btn-outline" title="Lihat detail laporan">Detail</a>
+                                    @if ($laporan->status === 'baru')
                                         <form action="{{ route('dashboard.laporan.terima', $laporan) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success" title="Terima laporan dan kirim email ke pelapor">✓ Terima</button>
@@ -127,10 +130,8 @@
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-danger" title="Tolak laporan dan kirim email ke pelapor">✗ Tolak</button>
                                         </form>
-                                    </div>
-                                @else
-                                    <span style="color:var(--text-muted);font-size:0.8rem;">-</span>
-                                @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach

@@ -4,6 +4,7 @@
 @section('topbar-title', 'Tambah Petugas')
 
 @section('content')
+<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Back</a>
 <div class="card petugas-form-card">
     <div class="petugas-form-header">
         <h2 class="petugas-form-title">Form Tambah Petugas Pendamping</h2>

@@ -4,6 +4,7 @@
 @section('topbar-title', 'Data Donasi')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="stats-grid">
     <div class="stat-card purple">
         <div class="stat-header">
@@ -44,10 +45,10 @@
     <div class="stat-card blue">
         <div class="stat-header">
             <div>
-                <div class="stat-value" style="font-size:1.25rem;">Rp {{ number_format($stats['donasi_bulan_ini'], 0, ',', '.') }}</div>
-                <div class="stat-label">Bulan Ini</div>
+                <div class="stat-value" style="font-size:1.25rem;">Rp {{ number_format($stats['total_pengeluaran_donasi'] ?? 0, 0, ',', '.') }}</div>
+                <div class="stat-label">Pengeluaran Donasi</div>
             </div>
-            <div class="stat-icon blue">📅</div>
+            <div class="stat-icon blue">💸</div>
         </div>
     </div>
 </div>
@@ -77,6 +78,7 @@
         <span>📋 Semua Donasi dari User</span>
         <a href="{{ route('donation.form') }}" class="btn-link" target="_blank">+ Form Donasi Publik</a>
     </div>
+    <p class="page-table-desc">Tabel berikut berisi donasi dari user melalui form publik. Menampilkan donatur, program, nominal, status, dan tanggal. Gunakan link di atas untuk membuka form donasi publik.</p>
     @if ($donasi->isEmpty())
         <div class="empty-state">
             <div class="empty-icon">📭</div>
@@ -124,4 +126,93 @@
         @endif
     @endif
 </div>
+
+{{-- Tabel Pengelolaan Pengeluaran Donasi (di bawah tabel donasi dari user) ──────────── --}}
+<div class="card" id="pengeluaran-donasi">
+    <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+        <span>💸 Pengeluaran Donasi</span>
+        <a href="{{ route('dashboard.donasi.pengeluaran.create') }}" class="btn-donasi-pengeluaran">+ Pengelolaan Pengeluaran Donasi</a>
+    </div>
+    <p class="page-table-desc">Tabel berikut mencatat pengeluaran donasi (untuk apa, jumlah, bukti, tanggal). Klik Pengelolaan Pengeluaran Donasi untuk menambah atau mengelola data pengeluaran.</p>
+    @if (session('success'))
+        <div class="donasi-alert success">{{ session('success') }}</div>
+    @endif
+    @if ($pengeluaran->isEmpty())
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <p>Belum ada data pengeluaran donasi.</p>
+            <a href="{{ route('dashboard.donasi.pengeluaran.create') }}" class="btn btn-primary" style="margin-top:0.75rem;">Tambah Pengeluaran Pertama</a>
+        </div>
+    @else
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Digunakan untuk apa</th>
+                        <th>Jumlah</th>
+                        <th>Bukti</th>
+                        <th>Tanggal & Waktu Pengeluaran</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($pengeluaran as $index => $p)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>
+                                <div style="font-weight:600;">{{ $p->keterangan }}</div>
+                            </td>
+                            <td style="font-weight:700;color:var(--primary);">{{ $p->formatted_jumlah }}</td>
+                            <td>
+                                @if($p->bukti_path)
+                                    <a href="{{ $p->bukti_url }}" target="_blank" rel="noopener" class="pengeluaran-bukti-link" title="Lihat bukti">
+                                        <img src="{{ $p->bukti_url }}" alt="Bukti" class="pengeluaran-bukti-thumb">
+                                    </a>
+                                @else
+                                    <span style="color:var(--text-muted);font-size:0.85rem;">–</span>
+                                @endif
+                            </td>
+                            <td style="color:var(--text-muted);font-size:0.9rem;">
+                                {{ $p->tanggal_pengeluaran->locale('id')->translatedFormat('d F Y') }}
+                                <span style="font-size:0.8rem;">{{ $p->created_at->locale('id')->translatedFormat('H:i') }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ route('dashboard.donasi.pengeluaran.edit', $p) }}" class="btn btn-sm btn-outline" title="Edit">Edit</a>
+                                <form action="{{ route('dashboard.donasi.pengeluaran.destroy', $p) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin hapus pengeluaran ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline" style="color:#dc2626;" title="Hapus">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
+
+@push('styles')
+<style>
+.btn-donasi-pengeluaran {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.btn-donasi-pengeluaran:hover { filter: brightness(1.08); color: #fff !important; }
+.pengeluaran-bukti-link { display: inline-block; }
+.pengeluaran-bukti-thumb { max-width: 56px; max-height: 56px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); vertical-align: middle; }
+.pengeluaran-bukti-link:hover .pengeluaran-bukti-thumb { opacity: 0.9; }
+.donasi-alert { padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.9rem; }
+.donasi-alert.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+</style>
+@endpush
 @endsection

@@ -4,6 +4,7 @@
 @section('topbar-title', 'Tambah Pasien')
 
 @section('content')
+<a href="{{ route('dashboard.patients.index') }}" class="page-back-link">Back</a>
 <div class="card">
     <div class="card-title">Form Tambah Pasien</div>
     <form action="{{ route('dashboard.patients.store') }}" method="POST" class="patient-form" enctype="multipart/form-data">

@@ -4,6 +4,7 @@
 @section('topbar-title', 'Jadwal Pasien')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="card jadwal-card">
     {{-- Page Header --}}
     <div class="jadwal-page-header">
@@ -93,6 +94,7 @@
             @endif
         </div>
     @else
+        <p class="page-table-desc">Tabel di bawah menampilkan jadwal kontrol, konseling, dan kunjungan pasien. Gunakan filter tanggal atau pasien untuk menyaring. Klik Tambah Jadwal untuk membuat jadwal baru.</p>
         <div class="jadwal-result-info">
             Menampilkan <strong>{{ $jadwals->firstItem() }}–{{ $jadwals->lastItem() }}</strong> dari <strong>{{ $jadwals->total() }}</strong> jadwal
         </div>
@@ -105,9 +107,6 @@
                         <th>Pembimbing</th>
                         <th class="jadwal-th-date">Tanggal</th>
                         <th>Jam</th>
-                        <th>Tempat</th>
-                        <th>Jenis</th>
-                        <th>Status</th>
                         <th class="jadwal-th-aksi">Aksi</th>
                     </tr>
                 </thead>
@@ -137,11 +136,12 @@
                                     <span class="jadwal-time-muted">–</span>
                                 @endif
                             </td>
-                            <td><span class="jadwal-place">{{ $j->tempat ?? '–' }}</span></td>
-                            <td><span class="jadwal-badge jadwal-badge-jenis">{{ ucfirst(str_replace('_', ' ', $j->jenis)) }}</span></td>
-                            <td><span class="jadwal-badge jadwal-badge-{{ $j->status }}">{{ ucfirst($j->status) }}</span></td>
                             <td>
                                 <div class="jadwal-action-group">
+                                    <a href="{{ route('dashboard.jadwal-pasien.show', $j) }}" class="jadwal-action-btn jadwal-action-detail" title="Detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        Detail
+                                    </a>
                                     <a href="{{ route('dashboard.jadwal-pasien.edit', $j) }}" class="jadwal-action-btn jadwal-action-edit" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                         Edit
@@ -250,7 +250,7 @@
 .jadwal-result-info { padding: 0.875rem 1.75rem; font-size: 0.8rem; color: #64748b; border-bottom: 1px solid var(--border); background: #fff; }
 .jadwal-result-info strong { color: var(--text); }
 .jadwal-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.jadwal-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; min-width: 700px; }
+.jadwal-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; min-width: 520px; }
 .jadwal-table thead th {
     padding: 0.875rem 1.25rem;
     font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
@@ -301,6 +301,10 @@
     text-decoration: none; transition: all 0.16s ease;
     white-space: nowrap;
 }
+.jadwal-action-detail {
+    background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+}
+.jadwal-action-detail:hover { background: #2563eb; color: #fff; border-color: #2563eb; box-shadow: 0 2px 8px rgba(37,99,235,0.3); }
 .jadwal-action-edit {
     background: #f8fafc; color: #374151; border: 1px solid #e2e8f0;
 }

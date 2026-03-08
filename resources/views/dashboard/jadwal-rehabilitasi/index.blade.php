@@ -4,6 +4,7 @@
 @section('topbar-title', 'Jadwal Rehabilitasi')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="jr-page">
     {{-- Breadcrumb --}}
     <nav class="jr-breadcrumb" aria-label="Breadcrumb">
@@ -53,6 +54,7 @@
 
     {{-- Daftar Jadwal --}}
     <section class="jr-section">
+        <p class="page-table-desc">Tabel/kalender di bawah menampilkan jadwal rehabilitasi. Gunakan Tambah Jadwal untuk membuat jadwal baru. Anda dapat beralih antara tampilan Tabel dan Kalender Mingguan.</p>
         <div class="card jr-card">
             <div class="jr-toolbar">
                 <div class="jr-toolbar-primary">

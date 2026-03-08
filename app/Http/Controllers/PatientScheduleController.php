@@ -64,7 +64,8 @@ class PatientScheduleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'patient_id'    => 'required|exists:patients,id',
+            'patient_ids'   => 'required|array|min:1',
+            'patient_ids.*' => 'required|exists:patients,id',
             'pembimbing_id' => 'nullable|exists:users,id',
             'reminder_before_minutes' => 'nullable|integer|in:2,5,15,30,60,300,600,1440,2880,4320',
             'tanggal'       => 'required|date',
@@ -74,6 +75,8 @@ class PatientScheduleController extends Controller
             'jenis'         => 'required|string|max:50',
             'status'        => 'required|string|max:30',
             'catatan'       => 'nullable|string',
+        ], [
+            'patient_ids.required' => 'Pilih minimal satu pasien.',
         ]);
 
         if (!empty($validated['jam_mulai']) && !empty($validated['jam_selesai']) && $validated['jam_selesai'] < $validated['jam_mulai']) {
@@ -86,18 +89,38 @@ class PatientScheduleController extends Controller
             $pembimbingName = $pembimbingUser?->name;
         }
 
-        $data = array_merge($validated, [
+        $baseData = [
+            'pembimbing_id' => $validated['pembimbing_id'] ?? null,
+            'reminder_before_minutes' => $validated['reminder_before_minutes'] ?? null,
+            'tanggal'       => $validated['tanggal'],
+            'jam_mulai'     => $validated['jam_mulai'] ?? null,
+            'jam_selesai'   => $validated['jam_selesai'] ?? null,
+            'tempat'        => $validated['tempat'] ?? null,
+            'jenis'         => $validated['jenis'],
+            'status'        => $validated['status'],
+            'catatan'       => $validated['catatan'] ?? null,
             'jenis_kegiatan' => $validated['jenis'],
             'lokasi'         => $validated['tempat'] ?? '',
             'pembimbing'     => $pembimbingName,
-        ]);
+        ];
 
-        $schedule = PatientSchedule::create($data);
-        $schedule->load('patient');
-        $this->sendScheduleNotificationToPetugas($schedule, 'created');
+        $created = 0;
+        foreach (array_unique($validated['patient_ids']) as $patientId) {
+            $schedule = PatientSchedule::create(array_merge($baseData, ['patient_id' => $patientId]));
+            $schedule->load('patient');
+            $this->sendScheduleNotificationToPetugas($schedule, 'created');
+            $created++;
+        }
 
         return redirect()->route('dashboard.jadwal-pasien.index')
-            ->with('success', 'Jadwal pasien berhasil dibuat.');
+            ->with('success', $created > 1 ? "Jadwal berhasil dibuat untuk {$created} pasien." : 'Jadwal pasien berhasil dibuat.');
+    }
+
+    public function show(PatientSchedule $jadwal_pasien)
+    {
+        $user = Auth::user();
+        $schedule = $jadwal_pasien->load(['patient', 'pembimbingUser']);
+        return view('dashboard.jadwal-pasien.show', compact('user', 'schedule'));
     }
 
     public function edit(PatientSchedule $jadwal_pasien)

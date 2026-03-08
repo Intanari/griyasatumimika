@@ -23,13 +23,17 @@
         <div class="rw-form-grid">
             <div class="rw-form-group rw-col-full">
                 <label class="rw-label">Pasien <span class="rw-required">*</span></label>
-                <select name="patient_id" class="rw-input {{ $errors->has('patient_id') ? 'rw-invalid' : '' }}" required>
-                    <option value="">-- Pilih Pasien --</option>
-                    @foreach($patients as $p)
-                        <option value="{{ $p->id }}" {{ old('patient_id') == $p->id ? 'selected' : '' }}>{{ $p->nama_lengkap }}</option>
-                    @endforeach
-                </select>
-                @error('patient_id')<span class="rw-error">{{ $message }}</span>@enderror
+                <div class="jadwal-checkbox-group">
+                    @forelse($patients as $p)
+                        <label class="jadwal-checkbox-item">
+                            <input type="checkbox" name="patient_ids[]" value="{{ $p->id }}" {{ in_array($p->id, old('patient_ids', [])) ? 'checked' : '' }}>
+                            <span>{{ $p->nama_lengkap }}</span>
+                        </label>
+                    @empty
+                        <p class="jadwal-no-patient">Belum ada data pasien.</p>
+                    @endforelse
+                </div>
+                @error('patient_ids')<span class="rw-error">{{ $message }}</span>@enderror
             </div>
 
             <div class="rw-form-group rw-col-full">
@@ -154,6 +158,10 @@
 .jadwal-btn-submit:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); box-shadow: 0 4px 16px rgba(37,99,235,0.45); transform: translateY(-1px); }
 .jadwal-btn-cancel { display: inline-flex; align-items: center; padding: 0.65rem 1.25rem; background: #fff; color: #64748b; font-size: 0.9rem; font-weight: 600; border: 1.5px solid #cbd5e1; border-radius: 10px; text-decoration: none; transition: all 0.15s; }
 .jadwal-btn-cancel:hover { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
+.jadwal-checkbox-group { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; max-height: 200px; overflow-y: auto; }
+.jadwal-checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; white-space: nowrap; }
+.jadwal-checkbox-item input { width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; }
+.jadwal-no-patient { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
 @media (max-width: 640px) { .jadwal-form .rw-form-grid { grid-template-columns: 1fr; } .jadwal-form .rw-col-full { grid-column: 1; } .jadwal-form, .jadwal-form-actions { padding: 1rem; } }
 </style>
 @endpush

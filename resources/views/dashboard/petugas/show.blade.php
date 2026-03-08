@@ -4,6 +4,7 @@
 @section('topbar-title', 'Detail Petugas')
 
 @section('content')
+<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Back</a>
 <div class="card petugas-profile-card">
     <div class="petugas-profile-header">
         <div class="petugas-profile-avatar-wrap">

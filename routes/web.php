@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DonationExpenseController;
 use App\Http\Controllers\JadwalPetugasController;
 use App\Http\Controllers\PatientScheduleController;
 use App\Http\Controllers\RehabilitationScheduleController;
@@ -56,9 +57,18 @@ Route::domain(config('app.admin_domain'))->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/donasi', [DashboardController::class, 'donasi'])->name('dashboard.donasi');
+        Route::resource('dashboard/donasi/pengeluaran', DonationExpenseController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->parameters(['pengeluaran' => 'donation_expense'])->names([
+            'create'  => 'dashboard.donasi.pengeluaran.create',
+            'store'   => 'dashboard.donasi.pengeluaran.store',
+            'edit'    => 'dashboard.donasi.pengeluaran.edit',
+            'update'  => 'dashboard.donasi.pengeluaran.update',
+            'destroy' => 'dashboard.donasi.pengeluaran.destroy',
+        ]);
         Route::get('/dashboard/laporan', [DashboardController::class, 'laporan'])->name('dashboard.laporan');
+        Route::get('/dashboard/laporan/{laporan}', [DashboardController::class, 'showLaporan'])->name('dashboard.laporan.show');
         Route::post('/dashboard/laporan/{laporan}/terima', [DashboardController::class, 'terimaLaporan'])->name('dashboard.laporan.terima');
         Route::post('/dashboard/laporan/{laporan}/tolak', [DashboardController::class, 'tolakLaporan'])->name('dashboard.laporan.tolak');
+        Route::post('/dashboard/laporan/{laporan}/respon', [DashboardController::class, 'kirimResponLaporan'])->name('dashboard.laporan.respon');
 
         Route::resource('dashboard/patients', PatientController::class)->parameters(['patients' => 'patient'])->names([
             'index'   => 'dashboard.patients.index',
@@ -106,6 +116,7 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'index'   => 'dashboard.jadwal-pasien.index',
             'create'  => 'dashboard.jadwal-pasien.create',
             'store'   => 'dashboard.jadwal-pasien.store',
+            'show'    => 'dashboard.jadwal-pasien.show',
             'edit'    => 'dashboard.jadwal-pasien.edit',
             'update'  => 'dashboard.jadwal-pasien.update',
             'destroy' => 'dashboard.jadwal-pasien.destroy',
@@ -137,6 +148,18 @@ Route::domain(config('app.admin_domain'))->group(function () {
         Route::get('dashboard/petugas/export/excel', [PetugasController::class, 'exportExcel'])->name('dashboard.petugas.export.excel');
         Route::get('dashboard/petugas/export/pdf', [PetugasController::class, 'exportPdf'])->name('dashboard.petugas.export.pdf');
         Route::get('dashboard/stock/export/csv', [StockController::class, 'exportCsv'])->name('dashboard.stock.export.csv');
+        Route::get('dashboard/stock/tambah', [StockController::class, 'createSupply'])->name('dashboard.stock.tambah');
+        Route::post('dashboard/stock/tambah', [StockController::class, 'storeSupply'])->name('dashboard.stock.tambah.store');
+        Route::get('dashboard/stock/persediaan/{stock_supply}', [StockController::class, 'showSupply'])->name('dashboard.stock.persediaan.show');
+        Route::get('dashboard/stock/persediaan/{stock_supply}/edit', [StockController::class, 'editSupply'])->name('dashboard.stock.persediaan.edit');
+        Route::put('dashboard/stock/persediaan/{stock_supply}', [StockController::class, 'updateSupply'])->name('dashboard.stock.persediaan.update');
+        Route::delete('dashboard/stock/persediaan/{stock_supply}', [StockController::class, 'destroySupply'])->name('dashboard.stock.persediaan.destroy');
+        Route::get('dashboard/stock/pengeluaran/create', [StockController::class, 'createExpense'])->name('dashboard.stock.pengeluaran.create');
+        Route::post('dashboard/stock/pengeluaran', [StockController::class, 'storeExpense'])->name('dashboard.stock.pengeluaran.store');
+        Route::get('dashboard/stock/pengeluaran/{stock_expense}', [StockController::class, 'showExpense'])->name('dashboard.stock.pengeluaran.show');
+        Route::get('dashboard/stock/pengeluaran/{stock_expense}/edit', [StockController::class, 'editExpense'])->name('dashboard.stock.pengeluaran.edit');
+        Route::put('dashboard/stock/pengeluaran/{stock_expense}', [StockController::class, 'updateExpense'])->name('dashboard.stock.pengeluaran.update');
+        Route::delete('dashboard/stock/pengeluaran/{stock_expense}', [StockController::class, 'destroyExpense'])->name('dashboard.stock.pengeluaran.destroy');
         Route::post('dashboard/stock/out', [StockController::class, 'stockOut'])->name('dashboard.stock.out');
         Route::get('dashboard/stock/{stock}', [StockController::class, 'show'])->name('dashboard.stock.show');
         Route::resource('dashboard/stock', StockController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['stock' => 'stock'])->names([

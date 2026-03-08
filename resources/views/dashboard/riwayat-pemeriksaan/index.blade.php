@@ -4,7 +4,7 @@
 @section('topbar-title', 'Riwayat Pemeriksaan')
 
 @section('content')
-
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="card rw-card">
 
     {{-- Page Header --}}
@@ -98,7 +98,7 @@
             @endif
         </div>
     @else
-
+        <p class="page-table-desc">Tabel berikut berisi riwayat pemeriksaan pasien (keluhan, hasil pemeriksaan, tindakan/obat). Gunakan filter untuk mencari berdasarkan nama pasien atau rentang tanggal. Klik Tambah Riwayat untuk menambah catatan baru.</p>
         {{-- Result count --}}
         <div class="rw-result-info">
             Menampilkan <strong>{{ $histories->firstItem() }}–{{ $histories->lastItem() }}</strong> dari <strong>{{ $histories->total() }}</strong> riwayat pemeriksaan
@@ -112,9 +112,6 @@
                         <th>Nama Pasien</th>
                         <th class="rw-th-date">Tanggal Pemeriksaan</th>
                         <th>Tempat Pemeriksaan</th>
-                        <th>Keluhan</th>
-                        <th>Hasil Pemeriksaan</th>
-                        <th>Tindakan / Obat</th>
                         <th class="rw-th-aksi">Aksi</th>
                     </tr>
                 </thead>
@@ -142,24 +139,6 @@
                                 <svg class="rw-place-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 <span>{{ $h->tempat_pemeriksaan }}</span>
                             </div>
-                        </td>
-
-                        <td>
-                            <span class="rw-clip" title="{{ $h->keluhan }}">
-                                {{ $h->keluhan ? \Str::limit($h->keluhan, 50) : '–' }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="rw-clip" title="{{ $h->hasil_pemeriksaan }}">
-                                {{ $h->hasil_pemeriksaan ? \Str::limit($h->hasil_pemeriksaan, 50) : '–' }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="rw-clip" title="{{ $h->tindakan_obat }}">
-                                {{ $h->tindakan_obat ? \Str::limit($h->tindakan_obat, 50) : '–' }}
-                            </span>
                         </td>
 
                         <td>
@@ -301,7 +280,7 @@
 
 /* ─── Table ─────────────────────────────────────────── */
 .rw-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.rw-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; min-width: 860px; }
+.rw-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; min-width: 520px; }
 .rw-table thead th {
     padding: 0.875rem 1.25rem;
     font-size: 0.7rem; font-weight: 700; text-transform: uppercase;

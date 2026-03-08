@@ -4,6 +4,7 @@
 @section('topbar-title', 'Aktivitas Pasien')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="card pa-card">
 
     <div class="pa-header">
@@ -35,8 +36,8 @@
             </div>
 
             <div class="pa-form-section">
-                <label class="pa-label" for="deskripsi">Deskripsi Cerita Aktifitas Pasien</label>
-                <textarea name="deskripsi" id="deskripsi" rows="4" class="pa-textarea" placeholder="Tulis deskripsi atau cerita aktivitas pasien...">{{ old('deskripsi') }}</textarea>
+                <label class="pa-label" for="deskripsi">Deskripsi</label>
+                <textarea name="deskripsi" id="deskripsi" rows="4" class="pa-textarea" placeholder="Tulis deskripsi...">{{ old('deskripsi') }}</textarea>
                 @error('deskripsi')<span class="pa-error">{{ $message }}</span>@enderror
             </div>
 
@@ -70,21 +71,23 @@
         </form>
     </div>
 
-    {{-- Tabel Aktivitas --}}
-    @if ($groups->isEmpty())
-        <div class="pa-empty">
-            <p class="pa-empty-title">Belum ada aktivitas pasien</p>
-            <p class="pa-empty-desc">Klik tombol &ldquo;Tambah Aktifitas Pasien&rdquo; untuk mencatat aktivitas.</p>
-        </div>
-    @else
-        <div class="pa-table-wrap">
-            <table class="pa-table">
+    {{-- Tabel Aktivitas (hanya ditampilkan di luar bagian Tambah Aktifitas Pasien) --}}
+    <div class="pa-data-section">
+        <p class="page-table-desc">Tabel di bawah menampilkan aktivitas pasien (tanggal, nama pasien, deskripsi, gambar). Gunakan tombol Tambah Aktifitas Pasien di atas untuk menambah catatan aktivitas baru.</p>
+        @if ($groups->isEmpty())
+            <div class="pa-empty">
+                <p class="pa-empty-title">Belum ada aktivitas pasien</p>
+                <p class="pa-empty-desc">Klik tombol &ldquo;Tambah Aktifitas Pasien&rdquo; untuk mencatat aktivitas.</p>
+            </div>
+        @else
+            <div class="pa-table-wrap">
+                <table class="pa-table">
                 <thead>
                     <tr>
                         <th class="pa-th-no">No</th>
                         <th>Tanggal Waktu</th>
                         <th>Nama Pasien</th>
-                        <th>Deskripsi Aktifitas Pasien</th>
+                        <th>Deskripsi</th>
                         <th class="pa-th-gambar">Gambar</th>
                     </tr>
                 </thead>
@@ -117,12 +120,13 @@
             </table>
         </div>
 
-        @if ($groups->hasPages())
-            <div class="pa-pagination">
-                {{ $groups->links('pagination::default') }}
-            </div>
+            @if ($groups->hasPages())
+                <div class="pa-pagination">
+                    {{ $groups->links('pagination::default') }}
+                </div>
+            @endif
         @endif
-    @endif
+    </div>
 </div>
 
 @push('styles')
@@ -133,7 +137,10 @@
 .pa-btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1.25rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 8px rgba(37,99,235,0.3); transition: all 0.2s; }
 .pa-btn-add:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); box-shadow: 0 4px 14px rgba(37,99,235,0.4); transform: translateY(-1px); }
 .pa-form-wrap { padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--border); background: #f8fafc; }
+.pa-form-wrap[hidden] { display: none !important; }
 .pa-form { max-width: 640px; }
+/* Bagian data tabel: hanya di luar form Tambah Aktifitas Pasien */
+.pa-data-section { padding: 1.5rem 1.75rem; }
 .pa-form-section { margin-bottom: 1.25rem; }
 .pa-label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
 .pa-required { color: #dc2626; }

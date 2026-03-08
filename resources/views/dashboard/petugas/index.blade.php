@@ -4,6 +4,7 @@
 @section('topbar-title', 'Data Petugas')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 {{-- Section spacing wrapper --}}
 <div class="petugas-page">
 
@@ -68,10 +69,6 @@
                 </summary>
                 <div class="petugas-export-dropdown">
                     @php $exportQuery = request()->getQueryString() ? '?' . request()->getQueryString() : ''; @endphp
-                    <a href="{{ route('dashboard.petugas.export.excel') }}{{ $exportQuery }}" class="petugas-export-item" target="_blank" rel="noopener">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
-                        Export Excel
-                    </a>
                     <a href="{{ route('dashboard.petugas.export.pdf') }}{{ $exportQuery }}" class="petugas-export-item" target="_blank" rel="noopener">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                         Export PDF
@@ -130,6 +127,7 @@
 {{-- 3. Tabel Data Petugas --}}
 <section class="petugas-section">
 <div class="card petugas-card petugas-card-table">
+    <p class="page-table-desc">Tabel berikut berisi daftar petugas yayasan. Gunakan filter atau pencarian untuk mempersempit hasil, dan gunakan Tombol Tambah Petugas untuk menambah data baru.</p>
     @if ($petugas->isEmpty())
         <div class="petugas-empty">
             <div class="petugas-empty-icon">👥</div>
@@ -211,16 +209,6 @@
         @if ($petugas->hasPages())
             <div class="petugas-pagination">{{ $petugas->links('pagination::default') }}</div>
         @endif
-    @endif
-
-    {{-- Grafik --}}
-    @if($stats['total'] > 0)
-        <div class="petugas-chart-section">
-            <h3 class="petugas-chart-title">Grafik Status Kerja Petugas</h3>
-            <div class="petugas-chart-wrap">
-                <canvas id="chartPetugasStatus" height="220"></canvas>
-            </div>
-        </div>
     @endif
 </div>
 </section>
@@ -586,9 +574,6 @@
 .petugas-empty-btn { margin-top: 1rem; display: inline-block; }
 
 /* Chart section */
-.petugas-chart-section { margin-top: 2rem; padding: 1.5rem 1.5rem 1.5rem; border-top: 1px solid var(--border); }
-.petugas-chart-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
-.petugas-chart-wrap { max-width: 360px; margin: 0 auto; }
 
 /* Responsive: Tablet */
 @media (max-width: 1024px) {
@@ -633,33 +618,4 @@
 </style>
 @endpush
 
-@push('scripts')
-@if($stats['total'] > 0 && isset($chartData))
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script>
-(function() {
-    var ctx = document.getElementById('chartPetugasStatus');
-    if (!ctx) return;
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Aktif', 'Cuti', 'Nonaktif'],
-            datasets: [{
-                data: [{{ $chartData['aktif'] }}, {{ $chartData['cuti'] }}, {{ $chartData['nonaktif'] }}],
-                backgroundColor: ['#10b981', '#f59e0b', '#94a3b8'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
-    });
-})();
-</script>
-@endif
-@endpush
 @endsection

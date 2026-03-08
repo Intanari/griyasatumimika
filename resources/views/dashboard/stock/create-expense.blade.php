@@ -1,0 +1,58 @@
+@extends('layouts.dashboard')
+
+@section('title', 'Pengeluaran Stok Barang')
+@section('topbar-title', 'Pengeluaran Stok Barang')
+
+@section('content')
+<a href="{{ route('dashboard.stock.index') }}" class="page-back-link">Back</a>
+
+<div class="card">
+    <div class="card-title">Pengeluaran Stok Barang</div>
+    <p class="page-table-desc">Isi nama stok barang, jumlah, dan gambar. Waktu tercatat otomatis saat disimpan.</p>
+    <form action="{{ route('dashboard.stock.pengeluaran.store') }}" method="POST" enctype="multipart/form-data" class="stock-form">
+        @csrf
+        <div class="form-group">
+            <label for="nama">Nama stok barang <span class="required">*</span></label>
+            <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required maxlength="255" placeholder="Contoh: Beras, Obat A" list="nama-list-expense">
+            @if($existingNames->isNotEmpty())
+            <datalist id="nama-list-expense">
+                @foreach($existingNames as $n)
+                <option value="{{ $n }}">
+                @endforeach
+            </datalist>
+            @endif
+            @error('nama')<span class="form-error">{{ $message }}</span>@enderror
+        </div>
+        <div class="form-group">
+            <label for="jumlah">Jumlah stok barang <span class="required">*</span></label>
+            <input type="number" id="jumlah" name="jumlah" value="{{ old('jumlah') }}" required min="1" placeholder="Jumlah">
+            @error('jumlah')<span class="form-error">{{ $message }}</span>@enderror
+        </div>
+        <div class="form-group">
+            <label for="gambar">Gambar stok barang</label>
+            <input type="file" id="gambar" name="gambar" accept="image/jpeg,image/jpg,image/png,image/webp">
+            <span class="form-hint">JPG, PNG atau WebP, maks. 2 MB</span>
+            @error('gambar')<span class="form-error">{{ $message }}</span>@enderror
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{{ route('dashboard.stock.index') }}" class="btn btn-outline">Batal</a>
+        </div>
+    </form>
+</div>
+
+@push('styles')
+<style>
+.stock-form { max-width: 480px; }
+.stock-form .form-group { margin-bottom: 1.25rem; }
+.stock-form .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+.stock-form .form-group input[type="text"],
+.stock-form .form-group input[type="number"],
+.stock-form .form-group input[type="file"] { width: 100%; padding: 0.6rem 0.875rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
+.stock-form .form-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.25rem; }
+.stock-form .form-hint { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+.stock-form .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.stock-form .required { color: #dc2626; }
+</style>
+@endpush
+@endsection

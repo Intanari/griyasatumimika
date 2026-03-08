@@ -4,6 +4,7 @@
 @section('topbar-title', 'Edit Pasien')
 
 @section('content')
+<a href="{{ route('dashboard.patients.index') }}" class="page-back-link">Back</a>
 <div class="card">
     <div class="card-title">Edit Data Pasien — {{ $patient->nama_lengkap }}</div>
     <form action="{{ route('dashboard.patients.update', $patient) }}" method="POST" class="patient-form" enctype="multipart/form-data">

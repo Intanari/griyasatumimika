@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\OdgjReportAcceptedToWarga;
 use App\Mail\OdgjReportRejectedToWarga;
+use App\Mail\OdgjReportResponToWarga;
 use App\Models\Donation;
+use App\Models\DonationExpense;
 use App\Models\ExaminationHistory;
 use App\Models\OdgjReport;
 use App\Models\PatientActivity;
@@ -129,7 +131,9 @@ class DashboardController extends Controller
             ->orderByDesc('total_amount')
             ->get();
 
-        return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'donasi_per_program'));
+        $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->get();
+
+        return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'donasi_per_program', 'pengeluaran'));
     }
 
     public function laporan()
@@ -172,6 +176,34 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.laporan')->with('success', 'Laporan ditolak. ' . ($laporan->email ? 'Email konfirmasi telah dikirim ke pelapor.' : 'Catatan: Pelapor tidak mengisi email, sehingga tidak ada email yang dikirim.'));
     }
 
+    public function showLaporan(OdgjReport $laporan)
+    {
+        $user = Auth::user();
+        $stats = $this->getStats();
+        return view('dashboard.laporan-show', compact('user', 'stats', 'laporan'));
+    }
+
+    public function kirimResponLaporan(Request $request, OdgjReport $laporan)
+    {
+        $validated = $request->validate([
+            'pesan_respon' => 'required|string|max:2000',
+        ], [
+            'pesan_respon.required' => 'Pesan respons wajib diisi.',
+        ]);
+
+        if (empty($laporan->email)) {
+            return redirect()->route('dashboard.laporan.show', $laporan)->with('error', 'Pelapor tidak mengisi email. Respon tidak dapat dikirim.');
+        }
+
+        try {
+            Mail::to($laporan->email)->send(new OdgjReportResponToWarga($laporan, $validated['pesan_respon']));
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.laporan.show', $laporan)->with('error', 'Gagal mengirim email: ' . $e->getMessage());
+        }
+
+        return redirect()->route('dashboard.laporan.show', $laporan)->with('success', 'Respon laporan telah dikirim ke email pelapor.');
+    }
+
     private function getStats(): array
     {
         return [
@@ -180,10 +212,17 @@ class DashboardController extends Controller
             'donasi_pending'      => Donation::where('status', 'pending')->count(),
             'total_terkumpul'     => Donation::where('status', 'paid')->sum('amount'),
             'total_petugas'       => User::where('role', 'petugas_rehabilitasi')->where('is_active', true)->count(),
+            'total_petugas_yayasan' => User::petugasYayasan()->count(),
+            'petugas_aktif'       => User::petugasYayasan()->where('status_kerja', User::STATUS_AKTIF)->count(),
+            'petugas_cuti'        => User::petugasYayasan()->where('status_kerja', User::STATUS_CUTI)->count(),
+            'petugas_nonaktif'    => User::petugasYayasan()->where('status_kerja', User::STATUS_NONAKTIF)->count(),
+            'petugas_laki_laki'   => User::petugasYayasan()->where('jenis_kelamin', 'L')->count(),
+            'petugas_perempuan'   => User::petugasYayasan()->where('jenis_kelamin', 'P')->count(),
             'donasi_bulan_ini'    => Donation::where('status', 'paid')
                 ->whereMonth('paid_at', now()->month)
                 ->whereYear('paid_at', now()->year)
                 ->sum('amount'),
+            'total_pengeluaran_donasi' => DonationExpense::sum('jumlah'),
             'total_laporan_odgj'  => OdgjReport::count(),
             'laporan_odgj_baru'   => OdgjReport::where('status', 'baru')->count(),
             'laporan_penjemputan' => OdgjReport::where('kategori', 'penjemputan')->count(),

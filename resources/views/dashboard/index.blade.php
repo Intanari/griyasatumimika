@@ -153,6 +153,57 @@
     </div>
 </div>
 
+{{-- Kotak Data Petugas (format sama dengan Data Pasien) ───────────────── --}}
+<div class="card patient-dashboard-card">
+    <div class="card-title">
+        <span>👤 Data Petugas</span>
+        <a href="{{ route('dashboard.petugas.index') }}" class="btn-link">Lihat Semua →</a>
+    </div>
+    <div class="patient-stats-grid">
+        <div class="patient-stat-item patient-stat-total">
+            <div class="patient-stat-icon">👤</div>
+            <div class="patient-stat-value">{{ number_format($stats['total_petugas_yayasan'] ?? 0) }}</div>
+            <div class="patient-stat-label">Total Petugas</div>
+        </div>
+        <div class="patient-stat-item patient-stat-male">
+            <div class="patient-stat-icon">♂</div>
+            <div class="patient-stat-value">{{ number_format($stats['petugas_laki_laki'] ?? 0) }}</div>
+            <div class="patient-stat-label">Laki-laki</div>
+        </div>
+        <div class="patient-stat-item patient-stat-female">
+            <div class="patient-stat-icon">♀</div>
+            <div class="patient-stat-value">{{ number_format($stats['petugas_perempuan'] ?? 0) }}</div>
+            <div class="patient-stat-label">Perempuan</div>
+        </div>
+        <div class="patient-stat-item patient-stat-aktif">
+            <div class="patient-stat-icon">✓</div>
+            <div class="patient-stat-value">{{ number_format($stats['petugas_aktif'] ?? 0) }}</div>
+            <div class="patient-stat-label">Aktif</div>
+        </div>
+        <div class="patient-stat-item patient-stat-selesai">
+            <div class="patient-stat-icon">📅</div>
+            <div class="patient-stat-value">{{ number_format($stats['petugas_cuti'] ?? 0) }}</div>
+            <div class="patient-stat-label">Cuti</div>
+        </div>
+        <div class="patient-stat-item patient-stat-dirujuk">
+            <div class="patient-stat-icon">○</div>
+            <div class="patient-stat-value">{{ number_format($stats['petugas_nonaktif'] ?? 0) }}</div>
+            <div class="patient-stat-label">Nonaktif</div>
+        </div>
+    </div>
+    <p class="patient-stats-sub">Ringkasan jumlah petugas yayasan. Grafik di bawah menampilkan distribusi status kerja dan jenis kelamin.</p>
+    <div class="patient-charts-row">
+        <div class="patient-chart-wrap">
+            <p class="patient-chart-title">Status Kerja</p>
+            <canvas id="chartPetugasStatus" height="220"></canvas>
+        </div>
+        <div class="patient-chart-wrap">
+            <p class="patient-chart-title">Jenis Kelamin</p>
+            <canvas id="chartPetugasGender" height="220"></canvas>
+        </div>
+    </div>
+</div>
+
 {{-- ── Riwayat Pemeriksaan Card ─────────────────────────────────── --}}
 <div class="card exam-dashboard-card">
     <div class="card-title">
@@ -610,6 +661,55 @@
             plugins: { legend: { position: 'bottom' } },
         },
     });
+
+    // ── Data Petugas: Status Kerja & Jenis Kelamin ─────────────────────
+    var petugasChartStatusEl = document.getElementById('chartPetugasStatus');
+    var petugasChartGenderEl = document.getElementById('chartPetugasGender');
+    if (petugasChartStatusEl) {
+        new Chart(petugasChartStatusEl, {
+            type: 'doughnut',
+            data: {
+                labels: ['Aktif', 'Cuti', 'Nonaktif'],
+                datasets: [{
+                    data: [
+                        {{ (int) ($stats['petugas_aktif'] ?? 0) }},
+                        {{ (int) ($stats['petugas_cuti'] ?? 0) }},
+                        {{ (int) ($stats['petugas_nonaktif'] ?? 0) }},
+                    ],
+                    backgroundColor: colors.status,
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { position: 'bottom' } },
+            },
+        });
+    }
+    if (petugasChartGenderEl) {
+        new Chart(petugasChartGenderEl, {
+            type: 'doughnut',
+            data: {
+                labels: ['Laki-laki', 'Perempuan'],
+                datasets: [{
+                    data: [
+                        {{ (int) ($stats['petugas_laki_laki'] ?? 0) }},
+                        {{ (int) ($stats['petugas_perempuan'] ?? 0) }},
+                    ],
+                    backgroundColor: colors.gender,
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { position: 'bottom' } },
+            },
+        });
+    }
 
     // ── Riwayat Pemeriksaan: Bar per Bulan ───────────────────────────
     var examBulanLabels = @json($examChartBulan['labels'] ?? []);

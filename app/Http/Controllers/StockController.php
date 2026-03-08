@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Mail\StockAlertToPetugas;
 use App\Models\InventoryItem;
+use App\Models\StockExpense;
+use App\Models\StockSupply;
 use App\Models\StockTransaction;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,94 +19,157 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class StockController extends Controller
 {
     /**
-     * Dashboard manajemen stok.
+     * Dashboard manajemen stok: card sisa, tabel persediaan, tabel pengeluaran.
      */
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = InventoryItem::query();
+        $supplies = StockSupply::orderByDesc('created_at')->get();
+        $expenses = StockExpense::orderByDesc('created_at')->get();
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
-        if ($request->filled('status')) {
-            if ($request->status === 'habis') {
-                $query->where('quantity', '<=', 0);
-            } elseif ($request->status === 'low') {
-                $query->whereColumn('quantity', '<=', 'min_stock')->where('quantity', '>', 0);
-            } elseif ($request->status === 'aman') {
-                $query->whereColumn('quantity', '>', 'min_stock');
+        // Card sisa: per nama = total persediaan - total pengeluaran
+        $totalByNamaSupply = $supplies->groupBy('nama')->map(fn ($rows) => $rows->sum('jumlah'));
+        $totalByNamaExpense = $expenses->groupBy('nama')->map(fn ($rows) => $rows->sum('jumlah'));
+        $allNames = $totalByNamaSupply->keys()->merge($totalByNamaExpense->keys())->unique()->sort()->values();
+        $cardSisa = $allNames->map(fn ($nama) => [
+            'nama' => $nama,
+            'sisa' => ($totalByNamaSupply[$nama] ?? 0) - ($totalByNamaExpense[$nama] ?? 0),
+        ])->values();
+
+        return view('dashboard.stock.index', compact('user', 'supplies', 'expenses', 'cardSisa'));
+    }
+
+    public function createSupply()
+    {
+        $user = Auth::user();
+        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
+            StockExpense::select('nama')->distinct()->pluck('nama')
+        )->unique()->sort()->values();
+        return view('dashboard.stock.create-supply', compact('user', 'existingNames'));
+    }
+
+    public function storeSupply(Request $request)
+    {
+        $valid = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'harga' => 'nullable|numeric|min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ]);
+        $valid['jumlah'] = (int) $valid['jumlah'];
+        $valid['gambar'] = $request->hasFile('gambar') ? $request->file('gambar')->store('stock-supplies', 'public') : null;
+        StockSupply::create($valid);
+        return redirect()->route('dashboard.stock.index')->with('success', 'Persediaan stok barang berhasil ditambah.');
+    }
+
+    public function showSupply(StockSupply $stock_supply)
+    {
+        $user = Auth::user();
+        return view('dashboard.stock.show-supply', compact('user', 'stock_supply'));
+    }
+
+    public function editSupply(StockSupply $stock_supply)
+    {
+        $user = Auth::user();
+        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
+            StockExpense::select('nama')->distinct()->pluck('nama')
+        )->unique()->sort()->values();
+        return view('dashboard.stock.edit-supply', compact('user', 'stock_supply', 'existingNames'));
+    }
+
+    public function updateSupply(Request $request, StockSupply $stock_supply)
+    {
+        $valid = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'harga' => 'nullable|numeric|min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ]);
+        $stock_supply->nama = $valid['nama'];
+        $stock_supply->jumlah = (int) $valid['jumlah'];
+        $stock_supply->harga = $valid['harga'] ?? null;
+        if ($request->hasFile('gambar')) {
+            if ($stock_supply->gambar) {
+                Storage::disk('public')->delete($stock_supply->gambar);
             }
+            $stock_supply->gambar = $request->file('gambar')->store('stock-supplies', 'public');
         }
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+        $stock_supply->save();
+        return redirect()->route('dashboard.stock.index')->with('success', 'Persediaan stok berhasil diperbarui.');
+    }
+
+    public function destroySupply(StockSupply $stock_supply)
+    {
+        if ($stock_supply->gambar) {
+            Storage::disk('public')->delete($stock_supply->gambar);
         }
-        if ($request->filled('supplier')) {
-            $query->where('supplier', 'like', '%' . $request->supplier . '%');
+        $stock_supply->delete();
+        return redirect()->route('dashboard.stock.index')->with('success', 'Persediaan stok berhasil dihapus.');
+    }
+
+    public function createExpense()
+    {
+        $user = Auth::user();
+        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
+            StockExpense::select('nama')->distinct()->pluck('nama')
+        )->unique()->sort()->values();
+        return view('dashboard.stock.create-expense', compact('user', 'existingNames'));
+    }
+
+    public function storeExpense(Request $request)
+    {
+        $valid = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ]);
+        $valid['jumlah'] = (int) $valid['jumlah'];
+        $valid['gambar'] = $request->hasFile('gambar') ? $request->file('gambar')->store('stock-expenses', 'public') : null;
+        StockExpense::create($valid);
+        return redirect()->route('dashboard.stock.index')->with('success', 'Pengeluaran stok barang berhasil ditambah.');
+    }
+
+    public function showExpense(StockExpense $stock_expense)
+    {
+        $user = Auth::user();
+        return view('dashboard.stock.show-expense', compact('user', 'stock_expense'));
+    }
+
+    public function editExpense(StockExpense $stock_expense)
+    {
+        $user = Auth::user();
+        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
+            StockExpense::select('nama')->distinct()->pluck('nama')
+        )->unique()->sort()->values();
+        return view('dashboard.stock.edit-expense', compact('user', 'stock_expense', 'existingNames'));
+    }
+
+    public function updateExpense(Request $request, StockExpense $stock_expense)
+    {
+        $valid = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlah' => 'required|integer|min:1',
+            'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ]);
+        $stock_expense->nama = $valid['nama'];
+        $stock_expense->jumlah = (int) $valid['jumlah'];
+        if ($request->hasFile('gambar')) {
+            if ($stock_expense->gambar) {
+                Storage::disk('public')->delete($stock_expense->gambar);
+            }
+            $stock_expense->gambar = $request->file('gambar')->store('stock-expenses', 'public');
         }
+        $stock_expense->save();
+        return redirect()->route('dashboard.stock.index')->with('success', 'Pengeluaran stok berhasil diperbarui.');
+    }
 
-        $items = $query->orderBy('name')->get();
-
-        $totalItems = InventoryItem::count();
-        $totalQuantity = InventoryItem::sum('quantity');
-        $outOfStock = InventoryItem::where('quantity', '<=', 0)->count();
-        $lowStock = InventoryItem::whereColumn('quantity', '<=', 'min_stock')->where('quantity', '>', 0)->count();
-        $totalValue = InventoryItem::selectRaw('SUM(quantity * COALESCE(unit_price, 0)) as total')->value('total') ?? 0;
-
-        $lowStockItems = InventoryItem::whereColumn('quantity', '<=', 'min_stock')->where('quantity', '>', 0)->orderBy('quantity')->get();
-        $expiredItems = InventoryItem::whereNotNull('expiry_date')->where('expiry_date', '<', now())->orderBy('expiry_date')->get();
-        $expiringSoon = InventoryItem::whereNotNull('expiry_date')->where('expiry_date', '>=', now())->where('expiry_date', '<=', now()->addDays(30))->orderBy('expiry_date')->get();
-
-        $recommendRestock = InventoryItem::whereColumn('quantity', '<=', 'min_stock')->orderBy('quantity')->get();
-
-        $transactions = StockTransaction::with('item')->orderByDesc('created_at')->limit(50)->get();
-
-        $chartByCategory = InventoryItem::select('category', DB::raw('COUNT(*) as total'))
-            ->groupBy('category')
-            ->orderByDesc('total')
-            ->get();
-        $chartCategoryLabels = $chartByCategory->map(fn ($r) => InventoryItem::categories()[$r->category] ?? $r->category)->values()->toArray();
-        $chartCategoryData = $chartByCategory->pluck('total')->values()->toArray();
-
-        $usageWeeks = collect(range(5, 0))->map(fn ($i) => now()->subWeeks($i));
-        $usageOut = [];
-        foreach ($usageWeeks as $weekStart) {
-            $usageOut[] = StockTransaction::where('type', 'out')
-                ->whereBetween('created_at', [$weekStart->startOfWeek(), $weekStart->copy()->endOfWeek()])
-                ->sum('quantity');
+    public function destroyExpense(StockExpense $stock_expense)
+    {
+        if ($stock_expense->gambar) {
+            Storage::disk('public')->delete($stock_expense->gambar);
         }
-        $chartUsageLabels = $usageWeeks->map(fn ($d) => 'Minggu ' . $d->weekOfYear . ' ' . $d->format('M'))->values()->toArray();
-
-        $stockStatusCounts = [
-            'aman' => InventoryItem::whereColumn('quantity', '>', 'min_stock')->count(),
-            'low' => $lowStock,
-            'habis' => $outOfStock,
-        ];
-
-        $chartStockPie = [
-            'labels' => ['Aman', 'Hampir Habis', 'Habis'],
-            'data' => [$stockStatusCounts['aman'], $stockStatusCounts['low'], $stockStatusCounts['habis']],
-        ];
-
-        return view('dashboard.stock.index', compact(
-            'user',
-            'items',
-            'totalItems',
-            'totalQuantity',
-            'outOfStock',
-            'lowStock',
-            'totalValue',
-            'lowStockItems',
-            'expiredItems',
-            'expiringSoon',
-            'recommendRestock',
-            'transactions',
-            'chartCategoryLabels',
-            'chartCategoryData',
-            'chartUsageLabels',
-            'usageOut',
-            'chartStockPie'
-        ));
+        $stock_expense->delete();
+        return redirect()->route('dashboard.stock.index')->with('success', 'Pengeluaran stok berhasil dihapus.');
     }
 
     /**

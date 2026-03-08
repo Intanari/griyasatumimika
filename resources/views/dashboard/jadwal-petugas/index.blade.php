@@ -4,6 +4,7 @@
 @section('topbar-title', 'Jadwal Petugas')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="jp-page jp-page-layout">
     {{-- Breadcrumb --}}
     <nav class="jp-breadcrumb" aria-label="Breadcrumb">
@@ -61,6 +62,7 @@
     {{-- Daftar Jadwal --}}
     <section class="jp-section" aria-labelledby="jp-list-heading">
         <h2 id="jp-list-heading" class="jp-section-label jp-section-label-main">Daftar Jadwal</h2>
+        <p class="page-table-desc">Tabel di bawah menampilkan jadwal jaga petugas (shift pagi/siang/malam). Gunakan Tambah Jadwal untuk menambah jadwal, atau Kelola Shift untuk mengatur waktu shift. Export PDF tersedia untuk unduhan.</p>
         <div class="card jp-card">
             <div class="jp-toolbar">
                 <div class="jp-toolbar-primary">

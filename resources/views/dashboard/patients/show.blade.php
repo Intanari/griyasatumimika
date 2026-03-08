@@ -4,6 +4,7 @@
 @section('topbar-title', 'Detail Pasien')
 
 @section('content')
+<a href="{{ route('dashboard.patients.index') }}" class="page-back-link">Back</a>
 <div class="card patient-detail-card">
     <div class="patient-detail-header">
         <div class="patient-detail-foto-wrap">

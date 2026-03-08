@@ -4,6 +4,7 @@
 @section('topbar-title', 'Edit Petugas')
 
 @section('content')
+<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Back</a>
 <div class="card petugas-form-card">
     <div class="petugas-form-header">
         <h2 class="petugas-form-title">Edit Petugas — {{ $petuga->name }}</h2>

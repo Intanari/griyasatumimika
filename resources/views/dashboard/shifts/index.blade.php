@@ -31,6 +31,7 @@
             </a>
         </div>
 
+        <p class="page-table-desc">Tabel berikut berisi daftar shift (nama dan jam mulai–selesai). Shift digunakan untuk penjadwalan petugas. Klik Tambah Shift untuk menambah shift baru.</p>
         <div class="sf-body">
             @if($shifts->isEmpty())
                 <div class="sf-empty">

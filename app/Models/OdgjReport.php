@@ -38,4 +38,12 @@ class OdgjReport extends Model
             default => $this->status,
         };
     }
+
+    public function getGambarUrlAttribute(): ?string
+    {
+        if (empty($this->gambar)) {
+            return null;
+        }
+        return asset('storage/' . $this->gambar);
+    }
 }

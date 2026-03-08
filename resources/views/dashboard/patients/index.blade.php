@@ -4,12 +4,13 @@
 @section('topbar-title', 'Data Pasien')
 
 @section('content')
+<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 <div class="card">
     <div class="card-title patients-card-title">
         <span>Data Pasien</span>
         <a href="{{ route('dashboard.patients.create') }}" class="btn-add-pasien">+ Tambah Pasien</a>
     </div>
-
+    <p class="page-table-desc">Tabel berikut menampilkan daftar pasien rehabilitasi. Gunakan filter untuk mencari dan klik Tambah Pasien untuk menambah data baru.</p>
     <div class="patients-toolbar">
         <form method="GET" action="{{ route('dashboard.patients.index') }}" class="patients-search-form">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau tempat lahir..." class="search-input">
