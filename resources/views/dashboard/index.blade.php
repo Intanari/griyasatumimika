@@ -100,6 +100,36 @@
             <div class="dashboard-stock-stat-label">Habis</div>
         </div>
     </div>
+    @php
+        $chart = $stockChart ?? ['masuk' => 0, 'keluar' => 0, 'sisa' => 0];
+        $maxVal = max(1, $chart['masuk'], $chart['keluar'], $chart['sisa']);
+    @endphp
+    <div class="dashboard-stock-chart">
+        <div class="dashboard-stock-chart-title">Grafik Stok Barang (Masuk / Keluar / Sisa)</div>
+        <div class="dashboard-stock-chart-bars">
+            <div class="dashboard-stock-chart-row">
+                <span class="dashboard-stock-chart-label">Stok Masuk</span>
+                <div class="dashboard-stock-chart-bar-wrap">
+                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-masuk" style="width: {{ $maxVal > 0 ? round($chart['masuk'] / $maxVal * 100) : 0 }}%;"></div>
+                </div>
+                <span class="dashboard-stock-chart-value">{{ number_format($chart['masuk']) }}</span>
+            </div>
+            <div class="dashboard-stock-chart-row">
+                <span class="dashboard-stock-chart-label">Stok Keluar</span>
+                <div class="dashboard-stock-chart-bar-wrap">
+                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-keluar" style="width: {{ $maxVal > 0 ? round($chart['keluar'] / $maxVal * 100) : 0 }}%;"></div>
+                </div>
+                <span class="dashboard-stock-chart-value">{{ number_format($chart['keluar']) }}</span>
+            </div>
+            <div class="dashboard-stock-chart-row">
+                <span class="dashboard-stock-chart-label">Sisa Stok</span>
+                <div class="dashboard-stock-chart-bar-wrap">
+                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-sisa" style="width: {{ $maxVal > 0 ? round($chart['sisa'] / $maxVal * 100) : 0 }}%;"></div>
+                </div>
+                <span class="dashboard-stock-chart-value">{{ number_format($chart['sisa']) }}</span>
+            </div>
+        </div>
+    </div>
     <p class="dashboard-stock-desc">Ringkasan inventaris barang yayasan. Klik <a href="{{ route('dashboard.stock.index') }}">Kelola Stok</a> untuk daftar barang, restock, dan riwayat transaksi.</p>
 </div>
 
@@ -486,6 +516,48 @@
 .dashboard-stock-stat-warn { border-top: 3px solid #f59e0b; }
 .dashboard-stock-stat-danger .dashboard-stock-stat-value { color: #dc2626; }
 .dashboard-stock-stat-danger { border-top: 3px solid #ef4444; }
+
+/* Grafik stok barang (CSS bar chart) */
+.dashboard-stock-chart {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+}
+.dashboard-stock-chart-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+}
+.dashboard-stock-chart-bars { display: flex; flex-direction: column; gap: 0.65rem; }
+.dashboard-stock-chart-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+}
+.dashboard-stock-chart-label { width: 90px; flex-shrink: 0; font-weight: 600; color: var(--text); }
+.dashboard-stock-chart-bar-wrap {
+    flex: 1;
+    min-width: 0;
+    height: 24px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.dashboard-stock-chart-bar {
+    height: 100%;
+    border-radius: 8px;
+    min-width: 4px;
+    transition: width 0.3s ease;
+}
+.dashboard-stock-chart-bar-masuk { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.dashboard-stock-chart-bar-keluar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.dashboard-stock-chart-bar-sisa { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.dashboard-stock-chart-value { font-weight: 700; color: var(--text); min-width: 4rem; text-align: right; }
+
 .dashboard-stock-desc {
     font-size: 0.875rem;
     color: var(--text-muted);

@@ -6,6 +6,19 @@
 @section('content')
 <a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
 
+@if(session('success'))
+    <div class="stock-alert stock-alert-success" role="alert">
+        <span class="stock-alert-icon">✓</span>
+        <span class="stock-alert-text">{{ session('success') }}</span>
+    </div>
+@endif
+@if(session('error'))
+    <div class="stock-alert stock-alert-error" role="alert">
+        <span class="stock-alert-icon">!</span>
+        <span class="stock-alert-text">{{ session('error') }}</span>
+    </div>
+@endif
+
 <div class="stock-page">
     {{-- Toolbar: judul + aksi --}}
     <div class="card stock-toolbar-card">
@@ -128,14 +141,14 @@
     </div>
 </div>
 
-@if(session('success'))
-    <script> document.addEventListener('DOMContentLoaded', function(){ alert('{{ session('success') }}'); }); </script>
-@endif
-@if(session('error'))
-    <script> document.addEventListener('DOMContentLoaded', function(){ alert('{{ session('error') }}'); }); </script>
-@endif
-
 <style>
+/* Notifikasi sukses/error (CSS, bukan popup JS) */
+.stock-alert { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1.25rem; margin-bottom: 1rem; border-radius: 12px; font-size: 0.9rem; font-weight: 500; border: 1px solid transparent; }
+.stock-alert-icon { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; }
+.stock-alert-success { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+.stock-alert-success .stock-alert-icon { background: #059669; color: #fff; }
+.stock-alert-error { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+.stock-alert-error .stock-alert-icon { background: #dc2626; color: #fff; }
 /* Toolbar card: rapi & terstruktur */
 .stock-page .stock-toolbar-card { padding: 0; overflow: hidden; }
 .stock-page .stock-toolbar-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.25rem 1.5rem; }

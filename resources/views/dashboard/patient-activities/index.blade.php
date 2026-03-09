@@ -5,17 +5,18 @@
 
 @section('content')
 <a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
-<div class="card pa-card">
 
+{{-- Kartu terpisah: Tambah Aktifitas Pasien (tidak digabung dengan tabel) --}}
+<div class="card pa-card pa-card-form">
     <div class="pa-header">
-        <h1 class="pa-title">Aktivitas Pasien</h1>
+        <h1 class="pa-title">Tambah Aktifitas Pasien</h1>
         <button type="button" class="pa-btn-add" id="btnTambahAktivitas" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah Aktifitas Pasien
         </button>
     </div>
 
-    {{-- Form Tambah Aktifitas (collapse) --}}
+    {{-- Form Tambah Aktifitas (collapse) — kotak ini terpisah dari tabel di bawah --}}
     <div class="pa-form-wrap" id="formTambahAktivitas" hidden>
         <form action="{{ route('dashboard.patient-activities.store-simple') }}" method="POST" class="pa-form" enctype="multipart/form-data">
             @csrf
@@ -70,8 +71,13 @@
             </div>
         </form>
     </div>
+</div>
 
-    {{-- Tabel Aktivitas (hanya ditampilkan di luar bagian Tambah Aktifitas Pasien) --}}
+{{-- Kartu terpisah: Tabel Aktivitas Pasien --}}
+<div class="card pa-card pa-card-table">
+    <div class="pa-table-header">
+        <h2 class="pa-title">Data Aktivitas Pasien</h2>
+    </div>
     <div class="pa-data-section">
         <p class="page-table-desc">Tabel di bawah menampilkan aktivitas pasien (tanggal, nama pasien, deskripsi, gambar). Gunakan tombol Tambah Aktifitas Pasien di atas untuk menambah catatan aktivitas baru.</p>
         @if ($groups->isEmpty())
@@ -127,11 +133,14 @@
             @endif
         @endif
     </div>
-</div>
+</div>{{-- akhir kartu tabel --}}
 
 @push('styles')
 <style>
 .pa-card { padding: 0; overflow: hidden; }
+.pa-card-table { margin-top: 1.5rem; }
+.pa-table-header { padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); }
+.pa-table-header .pa-title { font-size: 1.05rem; }
 .pa-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--border); }
 .pa-title { font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 0; }
 .pa-btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1.25rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 8px rgba(37,99,235,0.3); transition: all 0.2s; }

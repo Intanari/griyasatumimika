@@ -53,26 +53,6 @@
     </div>
 </div>
 
-<div class="grid-2">
-    <div class="card">
-        <div class="card-title">📊 Rekap Per Program</div>
-        @if ($donasi_per_program->isEmpty())
-            <div class="empty-state"><div class="empty-icon">📭</div><p>Belum ada data.</p></div>
-        @else
-            @php $progLabels = ['rawat-inap' => 'Rawat Inap & Obat', 'pelatihan-vokasi' => 'Pelatihan Vokasi', 'rumah-singgah' => 'Rumah Singgah', 'umum' => 'Donasi Umum']; @endphp
-            @foreach ($donasi_per_program as $item)
-                <div class="program-item">
-                    <div>
-                        <div class="program-name">{{ $progLabels[$item->program] ?? $item->program }}</div>
-                        <div class="program-count">{{ $item->total }} donatur</div>
-                    </div>
-                    <div class="program-amount">Rp {{ number_format($item->total_amount, 0, ',', '.') }}</div>
-                </div>
-            @endforeach
-        @endif
-    </div>
-</div>
-
 <div class="card">
     <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
         <span>📋 Semua Donasi dari User</span>
@@ -101,7 +81,7 @@
                     @php $programLabels = ['rawat-inap' => 'Rawat Inap & Obat', 'pelatihan-vokasi' => 'Pelatihan Vokasi', 'rumah-singgah' => 'Rumah Singgah', 'umum' => 'Donasi Umum']; @endphp
                     @foreach ($donasi as $index => $d)
                         <tr>
-                            <td>{{ $donasi->firstItem() + $index }}</td>
+                            <td>{{ $index + 1 }}</td>
                             <td>
                                 <div style="font-weight:600;">{{ $d->donor_name }}</div>
                                 <div style="font-size:0.78rem;color:var(--text-muted);">{{ $d->donor_email }}</div>
@@ -121,9 +101,7 @@
                 </tbody>
             </table>
         </div>
-        @if ($donasi->hasPages())
-            <div style="margin-top:1.5rem;display:flex;justify-content:center;">{{ $donasi->links('pagination::default') }}</div>
-        @endif
+        <p class="page-table-desc" style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);">Menampilkan 10 donasi terbaru. Data lain tidak ditampilkan di sini.</p>
     @endif
 </div>
 
@@ -190,6 +168,7 @@
                 </tbody>
             </table>
         </div>
+        <p class="page-table-desc" style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);">Menampilkan 10 pengeluaran donasi terbaru. Data lain tidak ditampilkan di sini.</p>
     @endif
 </div>
 

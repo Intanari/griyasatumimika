@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -110,18 +111,19 @@ class StockController extends Controller
     public function createExpense()
     {
         $user = Auth::user();
-        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
-            StockExpense::select('nama')->distinct()->pluck('nama')
-        )->unique()->sort()->values();
-        return view('dashboard.stock.create-expense', compact('user', 'existingNames'));
+        $supplyNames = StockSupply::select('nama')->distinct()->orderBy('nama')->pluck('nama');
+        return view('dashboard.stock.create-expense', compact('user', 'supplyNames'));
     }
 
     public function storeExpense(Request $request)
     {
+        $supplyNamas = StockSupply::pluck('nama')->toArray();
         $valid = $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => ['required', 'string', 'max:255', Rule::in($supplyNamas)],
             'jumlah' => 'required|integer|min:1',
             'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ], [
+            'nama.in' => 'Nama barang harus dipilih dari daftar stok barang (tambah stok barang).',
         ]);
         $valid['jumlah'] = (int) $valid['jumlah'];
         $valid['gambar'] = $request->hasFile('gambar') ? $request->file('gambar')->store('stock-expenses', 'public') : null;
@@ -138,18 +140,23 @@ class StockController extends Controller
     public function editExpense(StockExpense $stock_expense)
     {
         $user = Auth::user();
-        $existingNames = StockSupply::select('nama')->distinct()->pluck('nama')->merge(
-            StockExpense::select('nama')->distinct()->pluck('nama')
-        )->unique()->sort()->values();
-        return view('dashboard.stock.edit-expense', compact('user', 'stock_expense', 'existingNames'));
+        $supplyNames = StockSupply::select('nama')->distinct()->orderBy('nama')->pluck('nama');
+        if ($stock_expense->nama && !$supplyNames->contains($stock_expense->nama)) {
+            $supplyNames = $supplyNames->push($stock_expense->nama)->sort()->values();
+        }
+        return view('dashboard.stock.edit-expense', compact('user', 'stock_expense', 'supplyNames'));
     }
 
     public function updateExpense(Request $request, StockExpense $stock_expense)
     {
+        $supplyNamas = StockSupply::pluck('nama')->toArray();
+        $allowedNamas = array_unique(array_merge($supplyNamas, [$stock_expense->nama]));
         $valid = $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => ['required', 'string', 'max:255', Rule::in($allowedNamas)],
             'jumlah' => 'required|integer|min:1',
             'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
+        ], [
+            'nama.in' => 'Nama barang harus dipilih dari daftar stok barang (tambah stok barang).',
         ]);
         $stock_expense->nama = $valid['nama'];
         $stock_expense->jumlah = (int) $valid['jumlah'];

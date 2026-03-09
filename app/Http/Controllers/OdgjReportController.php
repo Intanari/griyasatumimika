@@ -21,37 +21,38 @@ class OdgjReportController extends Controller
     {
         $validated = $request->validate([
             'kategori'   => 'required|in:penjemputan,pengantaran',
-            'lokasi'     => 'nullable|string|max:500',
+            'lokasi'     => 'required|string|max:500',
             'lokasi_lat' => 'nullable|numeric|between:-90,90',
             'lokasi_lng' => 'nullable|numeric|between:-180,180',
-            'deskripsi'  => 'nullable|string|max:2000',
-            'gambar'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'email'      => 'nullable|email|max:255',
+            'deskripsi'  => 'required|string|max:2000',
+            'gambar'     => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'email'      => 'required|email|max:255',
             'kontak'     => 'required|string|max:50',
         ], [
             'kategori.required' => 'Pilih kategori laporan (Penjemputan atau Pengantaran).',
             'kategori.in'       => 'Kategori tidak valid.',
-            'email.email'       => 'Format email tidak valid.',
-            'kontak.required'   => 'Nomor HP / WhatsApp wajib diisi.',
+            'lokasi.required'   => 'Alamat / lokasi wajib diisi.',
+            'deskripsi.required'=> 'Deskripsi kejadian wajib diisi.',
+            'gambar.required'   => 'Upload foto wajib.',
             'gambar.image'      => 'File harus berupa gambar.',
             'gambar.max'        => 'Ukuran gambar maksimal 5 MB.',
+            'email.required'    => 'Email wajib diisi.',
+            'email.email'       => 'Format email tidak valid.',
+            'kontak.required'   => 'Nomor HP / WhatsApp wajib diisi.',
         ]);
 
         $nomorLaporan = 'ODGJ-' . strtoupper(Str::random(6)) . '-' . now()->format('Ymd');
 
-        $gambarPath = null;
-        if ($request->hasFile('gambar')) {
-            $gambarPath = $request->file('gambar')->store('odgj-reports', 'public');
-        }
+        $gambarPath = $request->file('gambar')->store('odgj-reports', 'public');
 
         $report = OdgjReport::create([
             'kategori'       => $validated['kategori'],
-            'lokasi'         => $validated['lokasi'] ?? null,
+            'lokasi'         => $validated['lokasi'],
             'lokasi_lat'     => $validated['lokasi_lat'] ?? null,
             'lokasi_lng'     => $validated['lokasi_lng'] ?? null,
-            'deskripsi'      => $validated['deskripsi'] ?? null,
+            'deskripsi'      => $validated['deskripsi'],
             'gambar'         => $gambarPath,
-            'email'          => $validated['email'] ?? null,
+            'email'          => $validated['email'],
             'kontak'         => $validated['kontak'],
             'nomor_laporan'  => $nomorLaporan,
         ]);

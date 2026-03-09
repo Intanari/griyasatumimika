@@ -12,6 +12,8 @@ use App\Models\OdgjReport;
 use App\Models\PatientActivity;
 use App\Models\InventoryItem;
 use App\Models\Patient;
+use App\Models\StockExpense;
+use App\Models\StockSupply;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -110,12 +112,26 @@ class DashboardController extends Controller
             $stockStats = ['total_items' => 0, 'total_quantity' => 0, 'out_of_stock' => 0, 'low_stock' => 0];
         }
 
+        // Grafik stok: masuk (Supply), keluar (Expense), sisa (masuk - keluar)
+        try {
+            $totalMasuk = (int) StockSupply::sum('jumlah');
+            $totalKeluar = (int) StockExpense::sum('jumlah');
+            $sisaStok = $totalMasuk - $totalKeluar;
+            $stockChart = [
+                'masuk'  => $totalMasuk,
+                'keluar' => $totalKeluar,
+                'sisa'   => max(0, $sisaStok),
+            ];
+        } catch (\Throwable $e) {
+            $stockChart = ['masuk' => 0, 'keluar' => 0, 'sisa' => 0];
+        }
+
         return view('dashboard.index', compact(
             'user', 'stats',
             'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
             'patientChartStatus', 'patientChartGender',
             'examStats', 'examChartBulan', 'examChartTempat',
-            'activityStats', 'stockStats'
+            'activityStats', 'stockStats', 'stockChart'
         ));
     }
 
@@ -124,16 +140,10 @@ class DashboardController extends Controller
         $user = Auth::user();
         $stats = $this->getStats();
 
-        $donasi = Donation::orderByDesc('created_at')->paginate(20);
-        $donasi_per_program = Donation::where('status', 'paid')
-            ->select('program', DB::raw('count(*) as total'), DB::raw('sum(amount) as total_amount'))
-            ->groupBy('program')
-            ->orderByDesc('total_amount')
-            ->get();
+        $donasi = Donation::orderByDesc('created_at')->take(10)->get();
+        $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->take(10)->get();
 
-        $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->get();
-
-        return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'donasi_per_program', 'pengeluaran'));
+        return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'pengeluaran'));
     }
 
     public function laporan()
@@ -210,7 +220,7 @@ class DashboardController extends Controller
             'total_donasi'        => Donation::count(),
             'donasi_sukses'       => Donation::where('status', 'paid')->count(),
             'donasi_pending'      => Donation::where('status', 'pending')->count(),
-            'total_terkumpul'     => Donation::where('status', 'paid')->sum('amount'),
+            'total_terkumpul'     => max(0, (int) Donation::where('status', 'paid')->sum('amount') - (int) DonationExpense::sum('jumlah')),
             'total_petugas'       => User::where('role', 'petugas_rehabilitasi')->where('is_active', true)->count(),
             'total_petugas_yayasan' => User::petugasYayasan()->count(),
             'petugas_aktif'       => User::petugasYayasan()->where('status_kerja', User::STATUS_AKTIF)->count(),

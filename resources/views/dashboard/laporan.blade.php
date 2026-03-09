@@ -62,11 +62,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>No. Laporan</th>
-                        <th>Kategori</th>
-                        <th>Lokasi</th>
-                        <th>Deskripsi</th>
                         <th>Email</th>
+                        <th>Deskripsi</th>
                         <th>No. HP</th>
                         <th>Status</th>
                         <th>Tanggal</th>
@@ -77,14 +74,9 @@
                     @foreach ($laporan_odgj as $index => $laporan)
                         <tr>
                             <td>{{ $laporan_odgj->firstItem() + $index }}</td>
-                            <td style="font-weight:600;font-family:monospace;font-size:0.82rem;">{{ $laporan->nomor_laporan }}</td>
-                            <td>{{ $laporan->kategori_label }}</td>
                             <td>
-                                @if($laporan->lokasi)
-                                    <div style="font-size:0.85rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $laporan->lokasi }}">{{ $laporan->lokasi }}</div>
-                                    @if($laporan->lokasi_lat && $laporan->lokasi_lng)
-                                        <a href="https://www.google.com/maps?q={{ $laporan->lokasi_lat }},{{ $laporan->lokasi_lng }}" target="_blank" style="font-size:0.72rem;color:var(--primary);">📍 Maps</a>
-                                    @endif
+                                @if($laporan->email)
+                                    <a href="mailto:{{ $laporan->email }}" style="font-size:0.82rem;">{{ Str::limit($laporan->email, 25) }}</a>
                                 @else
                                     <span style="color:var(--text-muted);">-</span>
                                 @endif
@@ -97,20 +89,13 @@
                                 @endif
                             </td>
                             <td>
-                                @if($laporan->email)
-                                    <a href="mailto:{{ $laporan->email }}" style="font-size:0.82rem;">{{ Str::limit($laporan->email, 25) }}</a>
-                                @else
-                                    <span style="color:var(--text-muted);">-</span>
-                                @endif
-                            </td>
-                            <td>
                                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $laporan->kontak) }}" target="_blank" style="color:var(--accent-green);font-weight:600;">{{ $laporan->kontak }}</a>
                             </td>
                             <td>
                                 @if ($laporan->status === 'baru')
                                     <span class="badge badge-pending">🆕 Baru</span>
                                 @elseif ($laporan->status === 'diproses')
-                                    <span class="badge badge-paid">⏳ Diproses</span>
+                                    <span class="badge badge-paid">✅ Diterima</span>
                                 @elseif ($laporan->status === 'ditolak')
                                     <span class="badge badge-cancel">❌ Ditolak</span>
                                 @else

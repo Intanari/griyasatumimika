@@ -13,13 +13,14 @@
         @csrf
         <div class="form-group">
             <label for="nama">Nama stok barang <span class="required">*</span></label>
-            <input type="text" id="nama" name="nama" value="{{ old('nama') }}" required maxlength="255" placeholder="Contoh: Beras, Obat A" list="nama-list-expense">
-            @if($existingNames->isNotEmpty())
-            <datalist id="nama-list-expense">
-                @foreach($existingNames as $n)
-                <option value="{{ $n }}">
+            <select id="nama" name="nama" class="stock-select" required>
+                <option value="">— Pilih barang dari data tambah stok —</option>
+                @foreach($supplyNames as $n)
+                <option value="{{ $n }}" {{ old('nama') === $n ? 'selected' : '' }}>{{ $n }}</option>
                 @endforeach
-            </datalist>
+            </select>
+            @if($supplyNames->isEmpty())
+            <span class="form-hint">Belum ada data stok barang. Silakan tambah stok barang terlebih dahulu.</span>
             @endif
             @error('nama')<span class="form-error">{{ $message }}</span>@enderror
         </div>
@@ -48,7 +49,9 @@
 .stock-form .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
 .stock-form .form-group input[type="text"],
 .stock-form .form-group input[type="number"],
-.stock-form .form-group input[type="file"] { width: 100%; padding: 0.6rem 0.875rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
+.stock-form .form-group input[type="file"],
+.stock-form .form-group .stock-select { width: 100%; padding: 0.6rem 0.875rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; }
+.stock-form .form-group .stock-select { background: #fff; cursor: pointer; }
 .stock-form .form-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.25rem; }
 .stock-form .form-hint { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
 .stock-form .form-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }

@@ -131,9 +131,9 @@
 
                 <div class="section-divider">Lokasi</div>
                 <div class="form-group">
-                    <label class="form-label" for="lokasi">Lokasi / Alamat</label>
+                    <label class="form-label" for="lokasi">Lokasi / Alamat <span class="req">*</span></label>
                     <div class="lokasi-row">
-                        <input type="text" id="lokasi" name="lokasi" class="form-input {{ $errors->has('lokasi') ? 'is-invalid' : '' }}" placeholder="Masukkan alamat atau lokasi kejadian" value="{{ old('lokasi') }}">
+                        <input type="text" id="lokasi" name="lokasi" class="form-input {{ $errors->has('lokasi') ? 'is-invalid' : '' }}" placeholder="Masukkan alamat atau lokasi kejadian" value="{{ old('lokasi') }}" required>
                         <button type="button" id="btnSerlok" class="btn-serlok">
                             📍 Serlok Lokasi
                         </button>
@@ -146,17 +146,17 @@
 
                 <div class="section-divider">Deskripsi</div>
                 <div class="form-group">
-                    <label class="form-label" for="deskripsi">Deskripsi Kejadian</label>
-                    <textarea id="deskripsi" name="deskripsi" class="form-input {{ $errors->has('deskripsi') ? 'is-invalid' : '' }}" placeholder="Jelaskan kondisi lengkap kejadian, lokasi detail, dan informasi lain yang diperlukan petugas..." maxlength="2000">{{ old('deskripsi') }}</textarea>
+                    <label class="form-label" for="deskripsi">Deskripsi Kejadian <span class="req">*</span></label>
+                    <textarea id="deskripsi" name="deskripsi" class="form-input {{ $errors->has('deskripsi') ? 'is-invalid' : '' }}" placeholder="Jelaskan kondisi lengkap kejadian, lokasi detail, dan informasi lain yang diperlukan petugas..." maxlength="2000" required>{{ old('deskripsi') }}</textarea>
                     <div style="font-size:0.75rem;color:#aaa;margin-top:4px;text-align:right;"><span id="charCount">0</span>/2000</div>
                     @error('deskripsi')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
 
-                <div class="section-divider">Gambar (Opsional)</div>
+                <div class="section-divider">Upload Foto</div>
                 <div class="form-group">
-                    <label class="form-label">Upload Foto</label>
+                    <label class="form-label">Upload Foto <span class="req">*</span></label>
                     <div style="font-size:0.78rem;color:#8a8aaa;margin-bottom:0.5rem;">Gambar > 800 KB akan otomatis dikompresi untuk menghindari error upload.</div>
-                    <input type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display:none;">
+                    <input type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" style="display:none;" required>
                     <div class="upload-actions">
                         <button type="button" class="btn-upload camera" id="btnCamera" title="Ambil foto dengan kamera">
                             📷 Ambil Foto
@@ -172,8 +172,8 @@
 
                 <div class="section-divider">Kontak</div>
                 <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-input {{ $errors->has('email') ? 'is-invalid' : '' }}" placeholder="contoh@email.com" value="{{ old('email') }}">
+                    <label class="form-label" for="email">Email <span class="req">*</span></label>
+                    <input type="email" id="email" name="email" class="form-input {{ $errors->has('email') ? 'is-invalid' : '' }}" placeholder="contoh@email.com" value="{{ old('email') }}" required>
                     @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group">
