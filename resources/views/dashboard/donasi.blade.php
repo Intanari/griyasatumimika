@@ -75,6 +75,7 @@
                         <th>Nominal</th>
                         <th>Status</th>
                         <th>Tanggal</th>
+                        <th>Detail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,6 +97,11 @@
                                 @endif
                             </td>
                             <td style="color:var(--text-muted);font-size:0.8rem;">{{ $d->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
+                            <td>
+                                <a href="{{ route('donation.payment', $d) }}" target="_blank" class="btn btn-sm btn-outline" title="Lihat detail donasi">
+                                    Detail
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

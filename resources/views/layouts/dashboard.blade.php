@@ -9,28 +9,37 @@
     <style>
         /* Tema terang (default) */
         :root, [data-theme="light"] {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
             --primary-light: #60a5fa;
             --accent: #0ea5e9;
-            --accent-green: #10b981;
+            --accent-green: #16a34a;
             --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
-            --bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
-            --card: #ffffff;
+            --accent-rose: #f97373;
+            --success: #16a34a;
+            --success-soft: #e5f9f0;
+            --warning: #d97706;
+            --warning-soft: #fff7e6;
+            --danger: #dc2626;
+            --danger-soft: #fde2e2;
+            --neutral-soft: #eef2f7;
+            /* Latar belakang dashboard dibuat lebih kalem dan lembut */
+            --bg: linear-gradient(135deg, #e0f2fe 0%, #e5e7eb 45%, #eef2ff 100%);
+            /* Kartu tidak putih pekat, sedikit abu lembut */
+            --card: #f9fafb;
             --text: #0f172a;
-            --text-muted: #64748b;
+            --text-muted: #6b7280;
             --border: #e2e8f0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-lg: 0 10px 40px -10px rgba(59,130,246,0.15);
-            --sidebar-bg: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
-            --topbar-bg: rgba(255,255,255,0.9);
-            --user-card-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            --table-header-bg: #f8fafc;
-            --table-row-border: #f1f5f9;
-            --table-row-hover: #fafbff;
-            --nav-hover-bg: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(14,165,233,0.06));
-            --overlay-bg: rgba(0,0,0,0.4);
+            --shadow: 0 1px 3px rgba(15,23,42,0.04);
+            --shadow-lg: 0 18px 45px rgba(15,23,42,0.12);
+            --sidebar-bg: linear-gradient(180deg, #f9fafb 0%, #e0f2fe 100%);
+            --topbar-bg: rgba(249,250,251,0.95);
+            --user-card-bg: linear-gradient(135deg, #e5edff 0%, #eff6ff 100%);
+            --table-header-bg: #edf2ff;
+            --table-row-border: #e5e7eb;
+            --table-row-hover: #f3f4ff;
+            --nav-hover-bg: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(14,165,233,0.06));
+            --overlay-bg: rgba(15,23,42,0.35);
         }
         /* Tema gelap */
         [data-theme="dark"] {
@@ -41,6 +50,13 @@
             --accent-green: #34d399;
             --accent-amber: #fbbf24;
             --accent-rose: #fb7185;
+            --success: #22c55e;
+            --success-soft: #064e3b;
+            --warning: #fbbf24;
+            --warning-soft: #78350f;
+            --danger: #f97316;
+            --danger-soft: #7f1d1d;
+            --neutral-soft: #1f2937;
             --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
             --card: #1e293b;
             --text: #f1f5f9;
@@ -358,10 +374,10 @@
             padding: 4px 12px; border-radius: 8px;
             font-size: 0.75rem; font-weight: 600;
         }
-        .badge-paid { background: #d1fae5; color: #047857; }
-        .badge-pending { background: #fef3c7; color: #b45309; }
-        .badge-failed { background: #fee2e2; color: #dc2626; }
-        .badge-cancel { background: #f1f5f9; color: #64748b; }
+        .badge-paid { background: var(--success-soft); color: var(--success); }
+        .badge-pending { background: var(--warning-soft); color: var(--warning); }
+        .badge-failed { background: var(--danger-soft); color: var(--danger); }
+        .badge-cancel { background: var(--neutral-soft); color: var(--text-muted); }
         .empty-state { text-align: center; padding: 3rem 1.5rem; color: var(--text-muted); font-size: 0.9rem; }
         .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }

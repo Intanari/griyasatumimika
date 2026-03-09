@@ -64,7 +64,6 @@
                         <th>#</th>
                         <th>Email</th>
                         <th>Deskripsi</th>
-                        <th>No. HP</th>
                         <th>Status</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
@@ -87,9 +86,6 @@
                                 @else
                                     <span style="color:var(--text-muted);">-</span>
                                 @endif
-                            </td>
-                            <td>
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $laporan->kontak) }}" target="_blank" style="color:var(--accent-green);font-weight:600;">{{ $laporan->kontak }}</a>
                             </td>
                             <td>
                                 @if ($laporan->status === 'baru')

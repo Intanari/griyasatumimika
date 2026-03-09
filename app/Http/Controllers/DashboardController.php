@@ -100,13 +100,54 @@ class DashboardController extends Controller
             'hari_ini'  => PatientActivity::whereDate('tanggal', now())->count(),
         ];
 
-        // ── Stok Barang (ringkasan untuk dashboard) ─────────────────────
+        // ── Stok Barang (ringkasan untuk dashboard, ambil dari data stok barang) ──
+        // Menggunakan tabel tambah/pengeluaran stok (StockSupply & StockExpense),
+        // lalu hitung sisa per nama barang seperti di halaman Manajemen Stok.
         try {
+            $supplies = StockSupply::select('nama', DB::raw('SUM(jumlah) as total_masuk'))
+                ->groupBy('nama')
+                ->get()
+                ->keyBy('nama');
+            $expenses = StockExpense::select('nama', DB::raw('SUM(jumlah) as total_keluar'))
+                ->groupBy('nama')
+                ->get()
+                ->keyBy('nama');
+
+            $allNames = $supplies->keys()
+                ->merge($expenses->keys())
+                ->unique()
+                ->values();
+
+            $totalItems = 0;
+            $totalQuantity = 0;
+            $outOfStock = 0;
+            $lowStock = 0;
+
+            foreach ($allNames as $nama) {
+                $masuk = (int) ($supplies[$nama]->total_masuk ?? 0);
+                $keluar = (int) ($expenses[$nama]->total_keluar ?? 0);
+                $sisa = $masuk - $keluar;
+
+                if ($masuk === 0 && $keluar === 0) {
+                    continue;
+                }
+
+                $totalItems++;
+                if ($sisa <= 0) {
+                    $outOfStock++;
+                } else {
+                    $totalQuantity += $sisa;
+                    if ($sisa < 3) {
+                        $lowStock++;
+                    }
+                }
+            }
+
             $stockStats = [
-                'total_items'    => InventoryItem::count(),
-                'total_quantity' => InventoryItem::sum('quantity'),
-                'out_of_stock'   => InventoryItem::where('quantity', '<=', 0)->count(),
-                'low_stock'      => InventoryItem::whereColumn('quantity', '<=', 'min_stock')->where('quantity', '>', 0)->count(),
+                'total_items'    => $totalItems,
+                'total_quantity' => $totalQuantity,
+                'out_of_stock'   => $outOfStock,
+                'low_stock'      => $lowStock,
             ];
         } catch (\Throwable $e) {
             $stockStats = ['total_items' => 0, 'total_quantity' => 0, 'out_of_stock' => 0, 'low_stock' => 0];
@@ -126,12 +167,73 @@ class DashboardController extends Controller
             $stockChart = ['masuk' => 0, 'keluar' => 0, 'sisa' => 0];
         }
 
+        // ── Stok Barang per Item (untuk kotak & grafik di dashboard) ─────
+        try {
+            $stockItems = InventoryItem::orderByDesc('quantity')
+                ->orderBy('name')
+                ->limit(8)
+                ->get();
+
+            // Kelompokkan stok masuk & keluar berdasarkan nama barang
+            $stokMasukPerNama = StockSupply::select('nama', DB::raw('SUM(jumlah) as total'))
+                ->groupBy('nama')
+                ->pluck('total', 'nama');
+            $stokKeluarPerNama = StockExpense::select('nama', DB::raw('SUM(jumlah) as total'))
+                ->groupBy('nama')
+                ->pluck('total', 'nama');
+
+            $perItemLabels = [];
+            $perItemJumlah = [];
+            $perItemMasuk = [];
+            $perItemKeluar = [];
+            $perItemSisa = [];
+
+            foreach ($stockItems as $item) {
+                $label = $item->name;
+                $masuk = (int) ($stokMasukPerNama[$label] ?? 0);
+                $keluar = (int) ($stokKeluarPerNama[$label] ?? 0);
+                $sisa = max(0, $masuk - $keluar);
+
+                $perItemLabels[] = $label;
+                // Jumlah item = total unit saat ini di tabel inventaris
+                $perItemJumlah[] = (int) $item->quantity;
+                $perItemMasuk[] = $masuk;
+                $perItemKeluar[] = $keluar;
+                $perItemSisa[] = $sisa;
+            }
+
+            $stockPerItemChart = [
+                'labels' => $perItemLabels,
+                'jumlah' => $perItemJumlah,
+                'masuk'  => $perItemMasuk,
+                'keluar' => $perItemKeluar,
+                'sisa'   => $perItemSisa,
+            ];
+
+            // Peta sisa stok per nama barang (menggunakan data dari tabel stok barang)
+            $stockPerItemSisaByName = [];
+            foreach ($perItemLabels as $index => $label) {
+                $stockPerItemSisaByName[$label] = (int) ($perItemSisa[$index] ?? 0);
+            }
+        } catch (\Throwable $e) {
+            $stockItems = collect();
+            $stockPerItemChart = [
+                'labels' => [],
+                'jumlah' => [],
+                'masuk'  => [],
+                'keluar' => [],
+                'sisa'   => [],
+            ];
+            $stockPerItemSisaByName = [];
+        }
+
         return view('dashboard.index', compact(
             'user', 'stats',
             'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
             'patientChartStatus', 'patientChartGender',
             'examStats', 'examChartBulan', 'examChartTempat',
-            'activityStats', 'stockStats', 'stockChart'
+            'activityStats', 'stockStats', 'stockChart',
+            'stockItems', 'stockPerItemChart', 'stockPerItemSisaByName'
         ));
     }
 

@@ -6,8 +6,8 @@
 @section('content')
 <div class="welcome-banner">
     <div>
-        <h2>Selamat datang, {{ $user->name }}! 👋</h2>
-        <p>Ringkasan data donasi dan laporan ODGJ. Klik menu di sidebar untuk detail lengkap.</p>
+        <h2>Selamat datang, {{ $user->name }}.</h2>
+        <p>Dashboard ini merangkum donasi, laporan ODGJ, data pasien, petugas, dan stok barang untuk mendukung pelayanan rehabilitasi yang aman dan terkoordinasi.</p>
     </div>
 </div>
 
@@ -132,6 +132,66 @@
     </div>
     <p class="dashboard-stock-desc">Ringkasan inventaris barang yayasan. Klik <a href="{{ route('dashboard.stock.index') }}">Kelola Stok</a> untuk daftar barang, restock, dan riwayat transaksi.</p>
 </div>
+
+{{-- Kotak Stok per Item + Grafik per Item --}}
+@if(($stockItems ?? collect())->isNotEmpty())
+<div class="card dashboard-stock-items-card">
+    <div class="card-title">
+        <span>📦 Detail Stok per Item</span>
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;justify-content:flex-end;">
+            <small style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Menampilkan beberapa item stok dengan sisa stok tertinggi</small>
+            <a href="{{ route('dashboard.stock.index') }}" class="btn-link">Kelola Stok →</a>
+        </div>
+    </div>
+    <div class="dashboard-stock-items-grid">
+        @foreach($stockItems as $item)
+            <div class="dashboard-stock-item-box">
+                <div class="dashboard-stock-item-header">
+                    <div class="dashboard-stock-item-name" title="{{ $item->name }}">{{ $item->name }}</div>
+                    <span class="dashboard-stock-item-badge dashboard-stock-item-badge-{{ $item->stock_status }}">
+                        @if($item->stock_status === 'habis')
+                            Habis
+                        @elseif($item->stock_status === 'low')
+                            Hampir habis
+                        @else
+                            Aman
+                        @endif
+                    </span>
+                </div>
+                <div class="dashboard-stock-item-meta">
+                    @php
+                        $sisaMap = $stockPerItemSisaByName ?? [];
+                        $currentSisa = (int) ($sisaMap[$item->name] ?? $item->quantity);
+                    @endphp
+                    <span class="dashboard-stock-item-qty">{{ number_format($currentSisa) }} {{ $item->unit }}</span>
+                    <span class="dashboard-stock-item-category">{{ $item->category_label }}</span>
+                </div>
+                @if($item->min_stock > 0)
+                    <div class="dashboard-stock-item-progress-wrap">
+                        @php
+                            $progressSafe = max(0, min(100, $currentSisa > 0 ? round(($currentSisa / max(1, $item->min_stock)) * 100) : 0));
+                        @endphp
+                        <div class="dashboard-stock-item-progress-bar">
+                            <div class="dashboard-stock-item-progress-fill" style="width: {{ $progressSafe }}%;"></div>
+                        </div>
+                        <div class="dashboard-stock-item-progress-label">
+                            <span>Min. stok: {{ number_format($item->min_stock) }}</span>
+                            <span>{{ $progressSafe }}%</span>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+
+    <div class="dashboard-stock-items-chart-wrap">
+        <p class="dashboard-stock-items-chart-title">Grafik Stok per Item (Jumlah, Masuk, Keluar, Sisa)</p>
+        <div class="dashboard-stock-items-chart">
+            <canvas id="chartStockPerItem" height="260"></canvas>
+        </div>
+    </div>
+</div>
+@endif
 
 <div class="card patient-dashboard-card">
     <div class="card-title">
@@ -571,6 +631,128 @@
     text-decoration: none;
 }
 .dashboard-stock-desc a:hover { text-decoration: underline; }
+/* Grid item stok per barang */
+.dashboard-stock-items-card { margin-bottom: 1.5rem; }
+.dashboard-stock-items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.dashboard-stock-item-box {
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 1rem 1rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.dashboard-stock-item-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+.dashboard-stock-item-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dashboard-stock-item-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.dashboard-stock-item-badge-aman {
+    background: #dcfce7;
+    color: #166534;
+}
+.dashboard-stock-item-badge-low {
+    background: #fef3c7;
+    color: #92400e;
+}
+.dashboard-stock-item-badge-habis {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+.dashboard-stock-item-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.dashboard-stock-item-qty {
+    font-weight: 700;
+    color: var(--text);
+}
+.dashboard-stock-item-category {
+    font-size: 0.78rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+}
+.dashboard-stock-item-progress-wrap {
+    margin-top: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.dashboard-stock-item-progress-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    overflow: hidden;
+}
+.dashboard-stock-item-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+.dashboard-stock-item-progress-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+.dashboard-stock-items-chart-wrap {
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+}
+.dashboard-stock-items-chart-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+.dashboard-stock-items-chart {
+    position: relative;
+    height: 260px;
+}
+@media (max-width: 1024px) {
+    .dashboard-stock-items-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 640px) {
+    .dashboard-stock-items-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
 @media (max-width: 640px) {
     .dashboard-stock-stats { grid-template-columns: repeat(2, 1fr); }
 }
@@ -695,6 +877,12 @@
         primary: ['#3b82f6', '#0ea5e9', '#06b6d4'],
         status: ['#f59e0b', '#10b981', '#6366f1'],
         gender: ['#3b82f6', '#ec4899'],
+        stock: {
+            jumlah: '#3b82f6',
+            masuk: '#22c55e',
+            keluar: '#f97316',
+            sisa: '#0ea5e9',
+        },
     };
     if (typeof Chart === 'undefined') return;
 
@@ -883,6 +1071,92 @@
         if (noDataCtx) {
             noDataCtx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:220px;color:#94a3b8;font-size:0.875rem;">Belum ada data</div>';
         }
+    }
+
+    // ── Grafik Stok per Item: Jumlah, Masuk, Keluar, Sisa ───────────────
+    var stockPerItemLabels = @json($stockPerItemChart['labels'] ?? []);
+    var stockPerItemJumlah = @json($stockPerItemChart['jumlah'] ?? []);
+    var stockPerItemMasuk  = @json($stockPerItemChart['masuk'] ?? []);
+    var stockPerItemKeluar = @json($stockPerItemChart['keluar'] ?? []);
+    var stockPerItemSisa   = @json($stockPerItemChart['sisa'] ?? []);
+
+    var stockPerItemEl = document.getElementById('chartStockPerItem');
+    if (stockPerItemEl && stockPerItemLabels.length > 0) {
+        new Chart(stockPerItemEl, {
+            type: 'bar',
+            data: {
+                labels: stockPerItemLabels,
+                datasets: [
+                    {
+                        label: 'Jumlah Item (Saat Ini)',
+                        data: stockPerItemJumlah,
+                        backgroundColor: colors.stock.jumlah,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    },
+                    {
+                        label: 'Stok Masuk',
+                        data: stockPerItemMasuk,
+                        backgroundColor: colors.stock.masuk,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    },
+                    {
+                        label: 'Stok Keluar',
+                        data: stockPerItemKeluar,
+                        backgroundColor: colors.stock.keluar,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    },
+                    {
+                        label: 'Sisa Stok (Masuk - Keluar)',
+                        data: stockPerItemSisa,
+                        backgroundColor: colors.stock.sisa,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 11 } },
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                return ' ' + ctx.dataset.label + ': ' + (ctx.parsed.y ?? 0).toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 10 },
+                            color: '#64748b',
+                            maxRotation: 45,
+                            minRotation: 0,
+                            autoSkip: true,
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: { size: 11 },
+                            color: '#94a3b8',
+                        },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                    },
+                },
+            },
+        });
+    } else if (stockPerItemEl) {
+        stockPerItemEl.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:0.875rem;">Belum ada data stok per item</div>';
     }
 })();
 </script>

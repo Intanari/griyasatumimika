@@ -25,10 +25,10 @@
                 <tr>
                     <td style="background:linear-gradient(135deg,#4f46e5,#6366f1); padding:26px 32px; color:#fff;">
                         <div style="font-size:14px; text-transform:uppercase; letter-spacing:0.12em; opacity:0.85; margin-bottom:6px;">
-                            Pengingat Jadwal Pasien
+                            Pengingat Pendampingan Pasien
                         </div>
                         <div style="font-size:22px; font-weight:700; line-height:1.3; margin-bottom:4px;">
-                            Jadwal akan dimulai sekitar 30 menit lagi
+                            Jadwal pendampingan akan segera dimulai
                         </div>
                         <div style="font-size:14px; opacity:0.9;">
                             Pasien: <strong>{{ $schedule->patient->nama_lengkap ?? '-' }}</strong>
@@ -38,7 +38,7 @@
                 <tr>
                     <td style="padding:24px 30px 10px 30px;">
                         <p style="font-size:14px; color:#111827; margin:0 0 12px 0;">
-                            Yth. Pembimbing,
+                            Yth. Bapak/Ibu Pembimbing,
                         </p>
                         <p style="font-size:14px; color:#4b5563; margin:0 0 18px 0; line-height:1.5;">
                             Ini adalah pengingat otomatis bahwa Anda terjadwal untuk mendampingi pasien berikut:
@@ -74,10 +74,10 @@
                         </table>
 
                         <p style="font-size:13px; color:#6b7280; margin:0 0 8px 0;">
-                            Mohon menyiapkan diri sebelum jadwal dimulai dan pastikan pasien menerima pendampingan sesuai kebutuhan.
+                            Mohon menyiapkan diri sebelum jadwal dimulai dan pastikan pasien menerima pendampingan yang tenang, aman, dan sesuai kebutuhan.
                         </p>
                         <p style="font-size:12px; color:#9ca3af; margin:0;">
-                            Email ini dikirim otomatis oleh sistem {{ config('app.name', 'PeduliJiwa') }} sebagai pengingat 30 menit sebelum jadwal.
+                            Email ini dikirim otomatis oleh sistem {{ config('app.name', 'PeduliJiwa') }} sebagai pengingat jadwal pendampingan pasien.
                         </p>
                     </td>
                 </tr>

@@ -4,14 +4,14 @@
 @section('topbar-title', 'Tambah Pasien')
 
 @section('content')
-<a href="{{ route('dashboard.patients.index') }}" class="page-back-link">Back</a>
+<a href="{{ route('dashboard.patients.index') }}" class="page-back-link">Kembali ke Data Pasien</a>
 <div class="card">
     <div class="card-title">Form Tambah Pasien</div>
     <form action="{{ route('dashboard.patients.store') }}" method="POST" class="patient-form" enctype="multipart/form-data">
         @csrf
         <div class="patient-form-top">
             <div class="form-group form-group-foto">
-                <label>Foto Identitas Pasien (Wajah)</label>
+                <label>Foto identitas pasien (wajah)</label>
                 <div class="foto-upload-zone" id="fotoPreviewWrap" role="button" tabindex="0" aria-label="Pilih foto">
                     <div class="foto-placeholder" id="fotoPlaceholder">
                         <span class="foto-placeholder-icon">👤</span>
@@ -27,12 +27,12 @@
         <div class="form-grid">
             <div class="form-group">
                 <label for="nama_lengkap">Nama Lengkap <span class="required">*</span></label>
-                <input type="text" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required maxlength="255" placeholder="Nama lengkap pasien">
+                <input type="text" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}" required maxlength="255" placeholder="Contoh: Yohanes Daeli">
                 @error('nama_lengkap')<span class="form-error">{{ $message }}</span>@enderror
             </div>
             <div class="form-group">
                 <label for="tempat_lahir">Tempat Lahir</label>
-                <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}" maxlength="100" placeholder="Kota/kabupaten">
+                <input type="text" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir') }}" maxlength="100" placeholder="Contoh: Mimika, Jayapura">
                 @error('tempat_lahir')<span class="form-error">{{ $message }}</span>@enderror
             </div>
             <div class="form-group">
