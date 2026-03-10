@@ -149,6 +149,40 @@
         .nav-item.active .nav-item-icon {
             background: rgba(255,255,255,0.22);
         }
+        .nav-item-label {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .nav-badge-super {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(139,92,246,0.2);
+            color: #7c3aed;
+            border: 1px solid rgba(124,58,237,0.25);
+        }
+        .nav-item.active .nav-badge-super {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            border-color: rgba(255,255,255,0.4);
+        }
+        [data-theme="dark"] .nav-badge-super {
+            background: rgba(139,92,246,0.3);
+            color: #a78bfa;
+            border-color: rgba(167,139,250,0.35);
+        }
+        [data-theme="dark"] .nav-item.active .nav-badge-super {
+            background: rgba(255,255,255,0.22);
+            color: white;
+            border-color: rgba(255,255,255,0.35);
+        }
         .sidebar-footer {
             padding: 1rem 0.85rem 1.25rem;
             border-top: 1px solid var(--border);
@@ -382,6 +416,73 @@
         .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        /* Tema form dashboard (input, select, label, error) */
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-group label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.45rem;
+        }
+        .form-group .required { color: var(--danger); }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.65rem 0.95rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+        [data-theme="dark"] .form-group input:focus,
+        [data-theme="dark"] .form-group select:focus,
+        [data-theme="dark"] .form-group textarea:focus {
+            box-shadow: 0 0 0 3px rgba(96,165,250,0.2);
+        }
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.9rem center;
+            padding-right: 2.25rem;
+        }
+        .form-group .form-error {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--danger);
+            margin-top: 0.35rem;
+        }
+        .form-actions {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .form-actions .btn { padding: 0.65rem 1.35rem; font-size: 0.9rem; }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
         .program-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 0.875rem 0; border-bottom: 1px solid var(--table-row-border);
@@ -562,6 +663,17 @@
             .welcome-banner h2 { font-size: 1.25rem; }
             .welcome-banner p { font-size: 0.85rem; }
             .btn-sm { padding: 8px 12px; font-size: 0.82rem; }
+            /* Halaman edit akun: card form full width di mobile */
+            .card.card-form { max-width: none; }
+            .admin-account-card { padding: 1.25rem 1rem; }
+            .admin-account-header { margin-bottom: 1.25rem; padding-bottom: 1rem; }
+            .admin-account-title { font-size: 1rem; }
+            .admin-account-edit-section { padding-top: 1.25rem; margin-top: 1.25rem; }
+            .admin-edit-header { margin-bottom: 1.25rem; gap: 0.5rem; }
+            .admin-edit-email { font-size: 0.95rem; word-break: break-all; }
+            .admin-edit-footer { margin-top: 1.25rem; padding-top: 0.875rem; }
+            .admin-edit-footer .btn { width: 100%; justify-content: center; }
+            .card.card-form .form-actions .btn { min-height: 44px; padding: 0.75rem 1.25rem; }
         }
         @media (max-width: 480px) {
             .topbar { gap: 0.5rem; }
@@ -591,9 +703,338 @@
             font-weight: 700;
             opacity: 0.85;
         }
+        /* Tema halaman edit akun / admin-users */
+        .admin-edit-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+        .admin-edit-email {
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        .admin-edit-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        .admin-account-badge-super {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(168,85,247,0.15));
+            color: #7c3aed;
+            border: 1px solid rgba(124,58,237,0.3);
+        }
+        [data-theme="dark"] .admin-account-badge-super {
+            background: rgba(139,92,246,0.25);
+            color: #a78bfa;
+            border-color: rgba(167,139,250,0.4);
+        }
+        .card.card-form { max-width: 560px; width: 100%; margin-left: auto; margin-right: auto; }
+        /* Card & header (sama seperti halaman Manajemen Akun / tabel) */
+        .admin-account-card {
+            box-shadow: 0 4px 24px rgba(15,23,42,0.06);
+            border-radius: 16px;
+            padding: 1.75rem 2rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+        }
+        .admin-account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-account-header-text { flex: 1; min-width: 0; }
+        .admin-account-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.35rem;
+        }
+        .admin-account-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+        .admin-account-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .admin-account-btn-add {
+            flex-shrink: 0;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.85rem;
+        }
+        /* Section dalam halaman edit (Profil, Password, Role) */
+        .admin-account-edit-section {
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .admin-account-edit-section:first-of-type { padding-top: 0; margin-top: 0; border-top: none; }
+        .admin-account-edit-section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+        /* Jadwal Pasien: card & header (create, edit, show) */
+        .jadwal-form-card {
+            padding: 0;
+            overflow: hidden;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(15,23,42,0.06);
+        }
+        .jadwal-form-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.02);
+        }
+        [data-theme="dark"] .jadwal-form-header { background: rgba(255,255,255,0.03); }
+        .jadwal-back-link {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            text-decoration: none;
+        }
+        .jadwal-back-link:hover { color: var(--primary); }
+        .jadwal-form-header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .jadwal-form-header-left { display: flex; align-items: center; gap: 1rem; }
+        .jadwal-form-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(14,165,233,0.08));
+            border: 1px solid rgba(59,130,246,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        .jadwal-form-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+        .jadwal-form-subtitle { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+        .jadwal-btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.65rem 1.25rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            font-family: inherit;
+            box-shadow: 0 2px 10px rgba(59,130,246,0.35);
+            transition: all 0.18s ease;
+        }
+        .jadwal-btn-submit:hover { filter: brightness(1.06); box-shadow: 0 4px 16px rgba(59,130,246,0.45); }
+        .jadwal-form-icon-edit { background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(34,197,94,0.08)); border-color: rgba(34,197,94,0.25); color: var(--accent-green); }
+        /* Jadwal form body (create, edit) */
+        .jadwal-form { max-width: 860px; padding: 1.5rem 1.75rem; }
+        .jadwal-form .rw-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .jadwal-form .rw-col-full { grid-column: 1 / -1; }
+        .jadwal-form .rw-form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+        .jadwal-form .rw-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+        .jadwal-form .rw-required { color: var(--danger); }
+        .jadwal-form .rw-input { padding: 0.55rem 0.875rem; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-family: inherit; background: var(--card); width: 100%; color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; }
+        .jadwal-form .rw-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59,130,246,0.12); }
+        .jadwal-form .rw-invalid { border-color: var(--danger) !important; }
+        .jadwal-form .rw-error { font-size: 0.8rem; color: var(--danger); }
+        .jadwal-form-actions { display: flex; gap: 0.875rem; flex-wrap: wrap; padding: 1.5rem 1.75rem; border-top: 1px solid var(--border); background: rgba(0,0,0,0.02); }
+        [data-theme="dark"] .jadwal-form-actions { background: rgba(255,255,255,0.03); }
+        .jadwal-btn-cancel { display: inline-flex; align-items: center; padding: 0.65rem 1.25rem; background: var(--card); color: var(--text-muted); font-size: 0.9rem; font-weight: 600; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; transition: all 0.2s; }
+        .jadwal-btn-cancel:hover { background: var(--neutral-soft); color: var(--text); border-color: var(--text-muted); }
+        @media (max-width: 768px) { .jadwal-form { padding: 1.25rem 1rem; } .jadwal-form-actions { padding: 1.25rem 1rem; } }
+        @media (max-width: 640px) { .jadwal-form .rw-form-grid { grid-template-columns: 1fr; } .jadwal-form .rw-col-full { grid-column: 1; } }
+        /* Detail jadwal: daftar info */
+        .jadwal-show-body { padding: 1.5rem 1.75rem; }
+        .jadwal-show-dl { margin: 0; display: grid; grid-template-columns: 140px 1fr; gap: 0.75rem 1.5rem; align-items: baseline; max-width: 640px; }
+        .jadwal-show-dl dt { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .jadwal-show-dl dd { margin: 0; font-size: 0.95rem; color: var(--text); line-height: 1.45; }
+        .jadwal-show-dl .jadwal-badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; }
+        .jadwal-badge-terjadwal { background: rgba(59,130,246,0.12); color: var(--primary); border: 1px solid rgba(59,130,246,0.25); }
+        .jadwal-badge-selesai { background: var(--success-soft); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
+        .jadwal-badge-batal { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(220,38,38,0.25); }
+        .jadwal-show-catatan { white-space: pre-wrap; word-break: break-word; }
+        @media (max-width: 768px) {
+            .jadwal-form-header { padding: 1rem 1.25rem; }
+            .jadwal-show-body { padding: 1.25rem 1rem; }
+            .jadwal-show-dl { grid-template-columns: 1fr; gap: 0.5rem 1rem; }
+        }
+        @media (max-width: 520px) { .jadwal-show-dl { grid-template-columns: 1fr; } }
         .page-table-desc {
             font-size: 0.875rem; color: var(--text-muted);
             line-height: 1.5; margin: 0 0 1rem; padding: 0;
+        }
+
+        /* ─── Modal konfirmasi/alert (satu komponen untuk semua) ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            max-width: 420px;
+            width: 100%;
+            min-width: 0;
+            max-height: calc(100vh - 2rem);
+            margin: auto;
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+        .modal-overlay.open .modal-box {
+            transform: scale(1);
+        }
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+        .modal-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            overflow-y: auto;
+            max-height: 50vh;
+            word-break: break-word;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        .modal-actions .btn {
+            min-width: 100px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        .modal-actions .modal-btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .modal-actions .modal-btn-cancel:hover {
+            background: var(--neutral-soft);
+            border-color: var(--text-muted);
+        }
+        .modal-actions .modal-btn-confirm,
+        .modal-actions .modal-btn-ok {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+        }
+        .modal-actions .modal-btn-confirm:hover,
+        .modal-actions .modal-btn-ok:hover {
+            filter: brightness(1.06);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+        }
+        @media (max-width: 768px) {
+            .modal-overlay {
+                padding: 0.75rem;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+                align-items: flex-start;
+            }
+            .modal-box {
+                max-width: 100%;
+                padding: 1.25rem 1.5rem;
+                max-height: calc(100vh - 4rem);
+            }
+            .modal-title { font-size: 0.95rem; margin-bottom: 0.6rem; }
+            .modal-message { font-size: 0.875rem; margin-bottom: 1rem; max-height: 45vh; }
+            .modal-actions {
+                gap: 0.65rem;
+                justify-content: stretch;
+            }
+            .modal-actions .btn {
+                flex: 1;
+                min-width: 0;
+                min-height: 44px;
+                padding: 0.65rem 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .modal-overlay {
+                padding: 0.5rem;
+                padding-top: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            .modal-box {
+                padding: 1.25rem 1.25rem;
+                border-radius: 14px;
+            }
+            .modal-title { font-size: 0.9rem; }
+            .modal-message { font-size: 0.85rem; max-height: 40vh; }
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+            .modal-actions .btn {
+                width: 100%;
+                min-height: 48px;
+                font-size: 0.9rem;
+            }
         }
     </style>
     @stack('styles')
@@ -607,23 +1048,34 @@
         PeduliJiwa
     </a>
     <nav class="sidebar-nav">
+        @php
+            $role = $user->role ?? null;
+            $isAdmin = $user->isAdmin();
+            $isManager = $user->isManager();
+            $isAdminOrManager = $isAdmin || $isManager;
+            $isSuperAdmin = $isAdmin && $user->email === 'admin@gmail.com';
+        @endphp
         <div class="nav-section-title">Menu Utama</div>
         <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') && !request()->routeIs('dashboard.donasi') && !request()->routeIs('dashboard.laporan') && !request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
             <span class="nav-item-icon">🏠</span>
             Dashboard
         </a>
-        <a href="{{ route('dashboard.donasi') }}" class="nav-item {{ request()->routeIs('dashboard.donasi') ? 'active' : '' }}">
-            <span class="nav-item-icon">❤️</span>
-            Data Donasi
-        </a>
+        @if($isAdminOrManager)
+            <a href="{{ route('dashboard.donasi') }}" class="nav-item {{ request()->routeIs('dashboard.donasi') ? 'active' : '' }}">
+                <span class="nav-item-icon">❤️</span>
+                Data Donasi
+            </a>
+        @endif
         <a href="{{ route('dashboard.laporan') }}" class="nav-item {{ request()->routeIs('dashboard.laporan') ? 'active' : '' }}">
             <span class="nav-item-icon">🚨</span>
             Data Laporan ODGJ
         </a>
-        <a href="{{ route('dashboard.patients.index') }}" class="nav-item {{ request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
-            <span class="nav-item-icon">👥</span>
-            Data Pasien
-        </a>
+        @if($isAdminOrManager)
+            <a href="{{ route('dashboard.patients.index') }}" class="nav-item {{ request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
+                <span class="nav-item-icon">👥</span>
+                Data Pasien
+            </a>
+        @endif
         <a href="{{ route('dashboard.riwayat-pemeriksaan.index') }}" class="nav-item {{ request()->routeIs('dashboard.riwayat-pemeriksaan.*') ? 'active' : '' }}">
             <span class="nav-item-icon">🩺</span>
             Riwayat Pemeriksaan
@@ -632,18 +1084,20 @@
             <span class="nav-item-icon">📋</span>
             Aktivitas Pasien
         </a>
-        <a href="{{ route('dashboard.jadwal-pasien.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-pasien.*') ? 'active' : '' }}">
-            <span class="nav-item-icon">📅</span>
-            Jadwal Pasien
-        </a>
-        <a href="{{ route('dashboard.jadwal-rehabilitasi.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-rehabilitasi.*') ? 'active' : '' }}">
-            <span class="nav-item-icon">🔄</span>
-            Jadwal Rehabilitasi
-        </a>
-        <a href="{{ route('dashboard.petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.petugas.*') ? 'active' : '' }}">
-            <span class="nav-item-icon">🧑‍⚕️</span>
-            Data Petugas
-        </a>
+        @if($isAdminOrManager)
+            <a href="{{ route('dashboard.jadwal-pasien.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-pasien.*') ? 'active' : '' }}">
+                <span class="nav-item-icon">📅</span>
+                Jadwal Pasien
+            </a>
+            <a href="{{ route('dashboard.jadwal-rehabilitasi.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-rehabilitasi.*') ? 'active' : '' }}">
+                <span class="nav-item-icon">🔄</span>
+                Jadwal Rehabilitasi
+            </a>
+            <a href="{{ route('dashboard.petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.petugas.*') ? 'active' : '' }}">
+                <span class="nav-item-icon">🧑‍⚕️</span>
+                Data Petugas
+            </a>
+        @endif
         <a href="{{ route('dashboard.jadwal-petugas.index') }}" class="nav-item {{ request()->routeIs('dashboard.jadwal-petugas.*') ? 'active' : '' }}">
             <span class="nav-item-icon">📋</span>
             Jadwal Petugas
@@ -652,6 +1106,17 @@
             <span class="nav-item-icon">📦</span>
             Stok Barang
         </a>
+        @if($isAdmin)
+            <a href="{{ route('dashboard.admin-users.index') }}" class="nav-item {{ request()->routeIs('dashboard.admin-users.*') ? 'active' : '' }}">
+                <span class="nav-item-icon">🔐</span>
+                <span class="nav-item-label">
+                    Manajemen Akun
+                    @if($isSuperAdmin)
+                        <span class="nav-badge-super">Super Admin</span>
+                    @endif
+                </span>
+            </a>
+        @endif
         <div class="nav-section-title">Aksi Cepat</div>
         <a href="{{ route('donation.form') }}" class="nav-item" target="_blank">
             <span class="nav-item-icon">📝</span>
@@ -664,6 +1129,10 @@
         <a href="{{ route('welcome') }}" class="nav-item">
             <span class="nav-item-icon">🌐</span>
             Halaman Utama
+        </a>
+        <a href="{{ route('dashboard.about') }}" class="nav-item {{ request()->routeIs('dashboard.about') ? 'active' : '' }}">
+            <span class="nav-item-icon">ℹ️</span>
+            Tentang Sistem
         </a>
     </nav>
     <div class="sidebar-footer">
@@ -708,6 +1177,21 @@
             <div class="alert-info">ℹ️ {{ session('info') }}</div>
         @endif
         @yield('content')
+    </div>
+
+    {{-- Modal konfirmasi/alert (satu untuk semua tombol) --}}
+    <div id="confirmModal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+        <div class="modal-box">
+            <h3 id="confirmModalTitle" class="modal-title">Konfirmasi</h3>
+            <p id="confirmModalMessage" class="modal-message"></p>
+            <div id="confirmModalActions" class="modal-actions">
+                <button type="button" class="btn btn-outline modal-btn-cancel">Batal</button>
+                <button type="button" class="btn btn-primary modal-btn-confirm">Ya, lanjutkan</button>
+            </div>
+            <div id="confirmModalAlertActions" class="modal-actions" style="display:none;">
+                <button type="button" class="btn btn-primary modal-btn-ok">OK</button>
+            </div>
+        </div>
     </div>
 
     {{-- Respon notifikasi mirip email untuk setiap tombol/aksi --}}
@@ -802,6 +1286,71 @@
             if (el.parentNode) el.remove();
         }, 6000);
     });
+
+    // Modal konfirmasi/alert (menggantikan confirm() dan alert())
+    (function() {
+        var overlay = document.getElementById('confirmModal');
+        var titleEl = document.getElementById('confirmModalTitle');
+        var messageEl = document.getElementById('confirmModalMessage');
+        var actionsConfirm = document.getElementById('confirmModalActions');
+        var actionsAlert = document.getElementById('confirmModalAlertActions');
+        var btnCancel = overlay && overlay.querySelector('.modal-btn-cancel');
+        var btnConfirm = overlay && overlay.querySelector('.modal-btn-confirm');
+        var btnOk = overlay && overlay.querySelector('.modal-btn-ok');
+        var pendingForm = null;
+
+        function openModal(opts) {
+            if (!overlay) return;
+            opts = opts || {};
+            titleEl.textContent = opts.title || 'Konfirmasi';
+            messageEl.textContent = opts.message || '';
+            if (opts.alert) {
+                actionsConfirm.style.display = 'none';
+                actionsAlert.style.display = 'flex';
+            } else {
+                actionsConfirm.style.display = 'flex';
+                actionsAlert.style.display = 'none';
+            }
+            pendingForm = opts.form || null;
+            overlay.classList.add('open');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+        function closeModal() {
+            if (!overlay) return;
+            overlay.classList.remove('open');
+            overlay.setAttribute('aria-hidden', 'true');
+            pendingForm = null;
+        }
+        if (btnCancel) btnCancel.addEventListener('click', closeModal);
+        if (btnConfirm) btnConfirm.addEventListener('click', function() {
+            if (pendingForm) { pendingForm.submit(); }
+            closeModal();
+        });
+        if (btnOk) btnOk.addEventListener('click', closeModal);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay && overlay.classList.contains('open')) closeModal();
+        });
+
+        window.showConfirmModal = openModal;
+        window.showAlert = function(message, title) {
+            openModal({ title: title || 'Info', message: message || '', alert: true });
+        };
+
+        document.addEventListener('submit', function(e) {
+            var form = e.target;
+            if (form && form.getAttribute && form.getAttribute('data-confirm')) {
+                e.preventDefault();
+                openModal({
+                    title: 'Konfirmasi',
+                    message: form.getAttribute('data-confirm'),
+                    form: form
+                });
+            }
+        }, true);
+    })();
 })();
 </script>
 </body>

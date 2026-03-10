@@ -176,7 +176,9 @@ document.getElementById('jp-create-form').addEventListener('submit', function(e)
     });
     if (!hasAny) {
         e.preventDefault();
-        alert('Pilih minimal satu shift pada satu atau lebih hari. Hari tanpa centang = Libur.');
+        if (typeof window.showAlert === 'function') {
+            window.showAlert('Pilih minimal satu shift pada satu atau lebih hari. Hari tanpa centang = Libur.', 'Perhatian');
+        }
         return false;
     }
 });

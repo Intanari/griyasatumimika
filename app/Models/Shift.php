@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Shift extends Model
 {
+    use HasUuids;
     protected $fillable = ['nama', 'jam_mulai', 'jam_selesai'];
 
     public function jadwalPetugas()

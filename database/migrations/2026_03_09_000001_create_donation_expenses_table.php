@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('donation_expenses', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('keterangan'); // donasi digunakan untuk apa
             $table->unsignedBigInteger('jumlah'); // berapa banyak (rupiah)
             $table->string('bukti_path')->nullable(); // bukti gambar

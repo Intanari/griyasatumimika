@@ -80,7 +80,7 @@
                             <div class="stock-row-actions">
                                 <a href="{{ route('dashboard.stock.persediaan.show', $s) }}" class="stock-row-btn stock-row-btn-view" title="Detail">Detail</a>
                                 <a href="{{ route('dashboard.stock.persediaan.edit', $s) }}" class="stock-row-btn stock-row-btn-edit" title="Edit">Edit</a>
-                                <form action="{{ route('dashboard.stock.persediaan.destroy', $s) }}" method="post" class="stock-row-form" onsubmit="return confirm('Yakin hapus data persediaan ini?');">
+                                <form action="{{ route('dashboard.stock.persediaan.destroy', $s) }}" method="post" class="stock-row-form" data-confirm="Yakin hapus data persediaan ini?">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="stock-row-btn stock-row-btn-delete" title="Hapus">Hapus</button>
@@ -122,7 +122,7 @@
                             <div class="stock-row-actions">
                                 <a href="{{ route('dashboard.stock.pengeluaran.show', $e) }}" class="stock-row-btn stock-row-btn-view" title="Detail">Detail</a>
                                 <a href="{{ route('dashboard.stock.pengeluaran.edit', $e) }}" class="stock-row-btn stock-row-btn-edit" title="Edit">Edit</a>
-                                <form action="{{ route('dashboard.stock.pengeluaran.destroy', $e) }}" method="post" class="stock-row-form" onsubmit="return confirm('Yakin hapus data pengeluaran ini?');">
+                                <form action="{{ route('dashboard.stock.pengeluaran.destroy', $e) }}" method="post" class="stock-row-form" data-confirm="Yakin hapus data pengeluaran ini?">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="stock-row-btn stock-row-btn-delete" title="Hapus">Hapus</button>

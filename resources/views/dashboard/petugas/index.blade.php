@@ -185,7 +185,7 @@
                                         Edit
                                     </a>
                                     @if ($p->id !== $user->id)
-                                        <form action="{{ route('dashboard.petugas.destroy', $p) }}" method="POST" class="petugas-action-form" onsubmit="return confirm('Yakin ingin menghapus petugas {{ $p->name }}?');">
+                                        <form action="{{ route('dashboard.petugas.destroy', $p) }}" method="POST" class="petugas-action-form" data-confirm="Yakin ingin menghapus petugas {{ $p->name }}?">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="petugas-action-btn petugas-action-delete" title="Hapus">

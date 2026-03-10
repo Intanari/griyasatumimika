@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('kode_pasien', 30)->unique();
             $table->string('nama_lengkap');
             $table->string('tempat_lahir')->nullable();

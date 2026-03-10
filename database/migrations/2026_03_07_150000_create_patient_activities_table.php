@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patient_activities', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('patient_id')->constrained('patients')->cascadeOnDelete();
             $table->date('tanggal');
             $table->string('jenis_aktivitas'); // terapi, senam, keterampilan, ibadah, rekreasi, lainnya
             $table->text('deskripsi')->nullable();

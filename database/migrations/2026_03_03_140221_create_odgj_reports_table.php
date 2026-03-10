@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('odgj_reports', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('kategori', 50); // penjemputan | pengantaran
             $table->string('lokasi')->nullable();
             $table->decimal('lokasi_lat', 10, 8)->nullable();

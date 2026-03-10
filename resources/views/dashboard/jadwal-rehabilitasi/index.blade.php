@@ -190,7 +190,7 @@
                                         <td>
                                             <div class="jr-action-group">
                                                 <a href="{{ route('dashboard.jadwal-rehabilitasi.edit', $j) }}" class="jr-action-btn jr-action-edit">Edit</a>
-                                                <form action="{{ route('dashboard.jadwal-rehabilitasi.destroy', $j) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus jadwal ini? Semua petugas akan menerima notifikasi email.');">
+                                                <form action="{{ route('dashboard.jadwal-rehabilitasi.destroy', $j) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus jadwal ini? Semua petugas akan menerima notifikasi email.">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="jr-action-btn jr-action-hapus">Hapus</button>

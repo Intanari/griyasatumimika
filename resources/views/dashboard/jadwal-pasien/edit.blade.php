@@ -4,16 +4,19 @@
 @section('topbar-title', 'Edit Jadwal Pasien')
 
 @section('content')
+<a href="{{ route('dashboard.jadwal-pasien.index') }}" class="page-back-link">Kembali</a>
+
 <div class="card jadwal-form-card">
     <div class="jadwal-form-header">
-        <a href="{{ route('dashboard.jadwal-pasien.index') }}" class="jadwal-back-link">← Kembali</a>
         <div class="jadwal-form-header-main">
-            <div class="jadwal-form-icon jadwal-form-icon-edit">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            </div>
-            <div>
-                <h2 class="jadwal-form-title">Edit Jadwal Pasien</h2>
-                <p class="jadwal-form-subtitle">{{ $schedule->patient->nama_lengkap ?? 'Pasien' }} · {{ $schedule->tanggal?->translatedFormat('d M Y') }}</p>
+            <div class="jadwal-form-header-left">
+                <div class="jadwal-form-icon jadwal-form-icon-edit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h2 class="jadwal-form-title">Edit Jadwal Pasien</h2>
+                    <p class="jadwal-form-subtitle">{{ $schedule->patient->nama_lengkap ?? 'Pasien' }} · {{ $schedule->tanggal?->translatedFormat('d F Y') }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -84,7 +87,7 @@
 
             <div class="rw-form-group rw-col-full">
                 <label class="rw-label">Tempat</label>
-                <input type="text" name="tempat" value="{{ old('tempat', $schedule->tempat) }}" class="rw-input {{ $errors->has('tempat') ? 'rw-invalid' : '' }}">
+                <input type="text" name="tempat" value="{{ old('tempat', $schedule->tempat) }}" class="rw-input {{ $errors->has('tempat') ? 'rw-invalid' : '' }}" placeholder="Contoh: Puskesmas, Klinik, Rumah Pasien">
                 @error('tempat')<span class="rw-error">{{ $message }}</span>@enderror
             </div>
 
@@ -128,7 +131,7 @@
 
             <div class="rw-form-group rw-col-full">
                 <label class="rw-label">Catatan</label>
-                <textarea name="catatan" rows="3" class="rw-input {{ $errors->has('catatan') ? 'rw-invalid' : '' }}" style="resize:vertical;">{{ old('catatan', $schedule->catatan) }}</textarea>
+                <textarea name="catatan" rows="3" class="rw-input {{ $errors->has('catatan') ? 'rw-invalid' : '' }}" placeholder="Catatan tambahan (opsional)" style="resize:vertical;">{{ old('catatan', $schedule->catatan) }}</textarea>
                 @error('catatan')<span class="rw-error">{{ $message }}</span>@enderror
             </div>
         </div>
@@ -139,34 +142,4 @@
         </div>
     </form>
 </div>
-
-@push('styles')
-<style>
-.jadwal-form-card { padding: 0; overflow: hidden; }
-.jadwal-form-header { padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); background: #f8fafc; }
-.jadwal-back-link { display: inline-block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 0.75rem; text-decoration: none; }
-.jadwal-back-link:hover { color: var(--primary); }
-.jadwal-form-header-main { display: flex; align-items: center; gap: 1rem; }
-.jadwal-form-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: var(--primary); }
-.jadwal-form-icon-edit { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: #bbf7d0; color: #16a34a; }
-.jadwal-form-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 2px; }
-.jadwal-form-subtitle { font-size: 0.82rem; color: #64748b; margin: 0; }
-.jadwal-form { max-width: 860px; padding: 1.5rem 1.75rem; }
-.jadwal-form .rw-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-.jadwal-form .rw-col-full { grid-column: 1 / -1; }
-.jadwal-form .rw-form-group { display: flex; flex-direction: column; gap: 0.35rem; }
-.jadwal-form .rw-label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.jadwal-form .rw-required { color: #dc2626; }
-.jadwal-form .rw-input { padding: 0.55rem 0.875rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.9rem; font-family: inherit; background: #fff; width: 100%; }
-.jadwal-form .rw-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-.jadwal-form .rw-invalid { border-color: #ef4444 !important; }
-.jadwal-form .rw-error { font-size: 0.8rem; color: #dc2626; }
-.jadwal-form-actions { display: flex; gap: 0.875rem; padding: 1.5rem 1.75rem; border-top: 1px solid var(--border); background: #f8fafc; }
-.jadwal-btn-submit { display: inline-flex; align-items: center; gap: 6px; padding: 0.65rem 1.5rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-size: 0.925rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 10px rgba(37,99,235,0.35); transition: all 0.18s ease; }
-.jadwal-btn-submit:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); box-shadow: 0 4px 16px rgba(37,99,235,0.45); transform: translateY(-1px); }
-.jadwal-btn-cancel { display: inline-flex; align-items: center; padding: 0.65rem 1.25rem; background: #fff; color: #64748b; font-size: 0.9rem; font-weight: 600; border: 1.5px solid #cbd5e1; border-radius: 10px; text-decoration: none; transition: all 0.15s; }
-.jadwal-btn-cancel:hover { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
-@media (max-width: 640px) { .jadwal-form .rw-form-grid { grid-template-columns: 1fr; } .jadwal-form .rw-col-full { grid-column: 1; } .jadwal-form, .jadwal-form-actions { padding: 1rem; } }
-</style>
-@endpush
 @endsection

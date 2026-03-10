@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class JadwalPetugas extends Model
 {
+    use HasUuids;
     protected $table = 'jadwal_petugas';
 
     public const TIPE_RUTIN = 'rutin';

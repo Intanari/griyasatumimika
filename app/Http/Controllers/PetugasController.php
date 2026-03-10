@@ -17,16 +17,19 @@ class PetugasController extends Controller
 {
     public function index(Request $request)
     {
+        $this->ensureAdminOrManager();
         $user = Auth::user();
 
+        $baseQuery = $this->baseQueryForCurrentUser();
+
         $stats = [
-            'total'    => User::petugasYayasan()->count(),
-            'aktif'    => User::petugasYayasan()->where('status_kerja', User::STATUS_AKTIF)->count(),
-            'cuti'     => User::petugasYayasan()->where('status_kerja', User::STATUS_CUTI)->count(),
-            'nonaktif' => User::petugasYayasan()->where('status_kerja', User::STATUS_NONAKTIF)->count(),
+            'total'    => (clone $baseQuery)->count(),
+            'aktif'    => (clone $baseQuery)->where('status_kerja', User::STATUS_AKTIF)->count(),
+            'cuti'     => (clone $baseQuery)->where('status_kerja', User::STATUS_CUTI)->count(),
+            'nonaktif' => (clone $baseQuery)->where('status_kerja', User::STATUS_NONAKTIF)->count(),
         ];
 
-        $query = User::petugasYayasan();
+        $query = $this->baseQueryForCurrentUser();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -69,12 +72,14 @@ class PetugasController extends Controller
 
     public function create()
     {
+        $this->ensureAdminOrManager();
         $user = Auth::user();
         return view('dashboard.petugas.create', compact('user'));
     }
 
     public function store(Request $request)
     {
+        $this->ensureAdminOrManager();
         $validated = $this->validatePetugas($request, null);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -94,6 +99,7 @@ class PetugasController extends Controller
 
     public function show(User $petuga)
     {
+        $this->ensureAdminOrManager();
         $this->ensurePetugasYayasan($petuga);
         $user = Auth::user();
         return view('dashboard.petugas.show', compact('user', 'petuga'));
@@ -101,6 +107,7 @@ class PetugasController extends Controller
 
     public function edit(User $petuga)
     {
+        $this->ensureAdminOrManager();
         $this->ensurePetugasYayasan($petuga);
         $user = Auth::user();
         return view('dashboard.petugas.edit', compact('user', 'petuga'));
@@ -108,6 +115,7 @@ class PetugasController extends Controller
 
     public function update(Request $request, User $petuga)
     {
+        $this->ensureAdminOrManager();
         $this->ensurePetugasYayasan($petuga);
 
         $validated = $this->validatePetugas($request, $petuga);
@@ -146,6 +154,7 @@ class PetugasController extends Controller
 
     public function destroy(User $petuga)
     {
+        $this->ensureAdminOrManager();
         $this->ensurePetugasYayasan($petuga);
 
         if ($petuga->id === Auth::id()) {
@@ -184,7 +193,8 @@ class PetugasController extends Controller
 
     public function exportExcel(Request $request): StreamedResponse
     {
-        $query = User::petugasYayasan();
+        $this->ensureAdminOrManager();
+        $query = $this->baseQueryForCurrentUser();
         $this->applyFilters($query, $request);
         $items = $query->orderBy('name')->get();
 
@@ -222,7 +232,8 @@ class PetugasController extends Controller
 
     public function exportPdf(Request $request)
     {
-        $query = User::petugasYayasan();
+        $this->ensureAdminOrManager();
+        $query = $this->baseQueryForCurrentUser();
         $this->applyFilters($query, $request);
         $petugas = $query->orderBy('name')->get();
 
@@ -292,8 +303,45 @@ class PetugasController extends Controller
 
     private function ensurePetugasYayasan(User $petuga): void
     {
-        if (!in_array($petuga->role, [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_PETUGAS])) {
+        $current = Auth::user();
+
+        // Super admin boleh mengelola semua petugas yayasan
+        if ($this->isSuperAdmin($current)) {
+            if (! in_array($petuga->role, [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_PETUGAS])) {
+                abort(404);
+            }
+            return;
+        }
+
+        // Petugas admin / manajer hanya boleh mengelola petugas user
+        if ($petuga->role !== User::ROLE_PETUGAS) {
             abort(404);
+        }
+    }
+
+    private function baseQueryForCurrentUser()
+    {
+        $user = Auth::user();
+
+        // Super admin: semua petugas yayasan
+        if ($this->isSuperAdmin($user)) {
+            return User::petugasYayasan();
+        }
+
+        // Petugas admin / manajer: hanya petugas user
+        return User::where('role', User::ROLE_PETUGAS);
+    }
+
+    private function isSuperAdmin(?User $user): bool
+    {
+        return $user && $user->isAdmin() && $user->email === 'admin@gmail.com';
+    }
+
+    private function ensureAdminOrManager(): void
+    {
+        $user = Auth::user();
+        if (! $user || (! $user->isAdmin() && ! $user->isManager())) {
+            abort(403);
         }
     }
 }

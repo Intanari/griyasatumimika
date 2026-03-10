@@ -24,10 +24,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'username', 'foto', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir',
-                'alamat', 'tanggal_bergabung', 'status_kerja', 'shift_jaga',
-            ]);
+            if (Schema::hasColumn('users', 'username')) {
+                $table->dropUnique('users_username_unique');
+            }
+        });
+        Schema::table('users', function (Blueprint $table) {
+            $columnsToDrop = [];
+            foreach (['username', 'foto', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat', 'tanggal_bergabung', 'status_kerja', 'shift_jaga'] as $col) {
+                if (Schema::hasColumn('users', $col)) {
+                    $columnsToDrop[] = $col;
+                }
+            }
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
     }
 };

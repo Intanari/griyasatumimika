@@ -107,7 +107,7 @@
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-success" title="Terima laporan dan kirim email ke pelapor">✓ Terima</button>
                                         </form>
-                                        <form action="{{ route('dashboard.laporan.tolak', $laporan) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menolak laporan ini? Email konfirmasi akan dikirim ke pelapor.');">
+                                        <form action="{{ route('dashboard.laporan.tolak', $laporan) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menolak laporan ini? Email konfirmasi akan dikirim ke pelapor.">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-danger" title="Tolak laporan dan kirim email ke pelapor">✗ Tolak</button>
                                         </form>

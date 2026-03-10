@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('patient_schedules', function (Blueprint $table) {
             if (!Schema::hasColumn('patient_schedules', 'patient_id')) {
-                $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
+                $table->foreignUuid('patient_id')->constrained('patients')->cascadeOnDelete();
             }
             if (!Schema::hasColumn('patient_schedules', 'tanggal')) {
                 $table->date('tanggal')->index();
@@ -48,6 +48,11 @@ return new class extends Migration
             if (Schema::hasColumn('patient_schedules', 'patient_id')) {
                 $table->dropConstrainedForeignId('patient_id');
             }
+            if (Schema::hasColumn('patient_schedules', 'tanggal')) {
+                $table->dropIndex('patient_schedules_tanggal_index');
+            }
+        });
+        Schema::table('patient_schedules', function (Blueprint $table) {
             if (Schema::hasColumn('patient_schedules', 'tanggal')) {
                 $table->dropColumn('tanggal');
             }

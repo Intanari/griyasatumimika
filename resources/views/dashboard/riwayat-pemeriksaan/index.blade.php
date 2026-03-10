@@ -155,7 +155,7 @@
                                 </a>
                                 <form action="{{ route('dashboard.riwayat-pemeriksaan.destroy', $h) }}"
                                     method="POST" style="display:inline;"
-                                    onsubmit="return confirm('Yakin ingin menghapus riwayat pemeriksaan {{ addslashes($h->patient->nama_lengkap ?? '') }}?');">
+                                    data-confirm="Yakin ingin menghapus riwayat pemeriksaan {{ addslashes($h->patient->nama_lengkap ?? '') }}?">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="rw-action-btn rw-action-hapus" title="Hapus">

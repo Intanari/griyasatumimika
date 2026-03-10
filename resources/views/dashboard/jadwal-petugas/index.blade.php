@@ -295,7 +295,7 @@
                                             <div class="jp-actions">
                                                 <a href="{{ route('dashboard.jadwal-petugas.duplicate', $j) }}" class="jp-action jp-action-copy" title="Salin">Salin</a>
                                                 <a href="{{ route('dashboard.jadwal-petugas.edit', $j) }}" class="jp-action jp-action-edit" title="Edit">Edit</a>
-                                                <form action="{{ route('dashboard.jadwal-petugas.destroy', $j) }}" method="POST" class="jp-action-form" onsubmit="return confirm('Yakin ingin menghapus jadwal ini?');">
+                                                <form action="{{ route('dashboard.jadwal-petugas.destroy', $j) }}" method="POST" class="jp-action-form" data-confirm="Yakin ingin menghapus jadwal ini?">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="jp-action jp-action-delete" title="Hapus">Hapus</button>

@@ -163,7 +163,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('dashboard.donasi.pengeluaran.edit', $p) }}" class="btn btn-sm btn-outline" title="Edit">Edit</a>
-                                <form action="{{ route('dashboard.donasi.pengeluaran.destroy', $p) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin hapus pengeluaran ini?');">
+                                <form action="{{ route('dashboard.donasi.pengeluaran.destroy', $p) }}" method="POST" style="display:inline;" data-confirm="Yakin hapus pengeluaran ini?">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline" style="color:#dc2626;" title="Hapus">Hapus</button>

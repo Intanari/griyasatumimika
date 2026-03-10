@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rehabilitation_schedules', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('nama_kegiatan');
             $table->string('hari'); // senin, selasa, rabu, kamis, jumat, sabtu, minggu
             $table->time('jam_mulai');
             $table->time('jam_selesai')->nullable();
             $table->string('tempat')->nullable();
-            $table->foreignId('pembimbing_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUuid('pembimbing_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('deskripsi')->nullable();
             $table->boolean('is_aktif')->default(true);
             $table->timestamps();

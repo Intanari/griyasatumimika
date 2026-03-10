@@ -25,6 +25,9 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if (! $user) {
+            abort(403);
+        }
         $stats = $this->getStats();
 
         $donasi_terbaru = Donation::orderByDesc('created_at')->limit(8)->get();
@@ -240,12 +243,25 @@ class DashboardController extends Controller
     public function donasi()
     {
         $user = Auth::user();
+        if (! $user || (! $user->isAdmin() && ! $user->isManager())) {
+            abort(403);
+        }
         $stats = $this->getStats();
 
         $donasi = Donation::orderByDesc('created_at')->take(10)->get();
         $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->take(10)->get();
 
         return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'pengeluaran'));
+    }
+
+    public function about()
+    {
+        $user = Auth::user();
+        if (! $user) {
+            abort(403);
+        }
+
+        return view('dashboard.about', compact('user'));
     }
 
     public function laporan()

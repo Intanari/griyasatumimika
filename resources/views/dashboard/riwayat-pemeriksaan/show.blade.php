@@ -22,7 +22,7 @@
                 Edit
             </a>
             <form action="{{ route('dashboard.riwayat-pemeriksaan.destroy', $examination_history) }}" method="POST"
-                style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus riwayat pemeriksaan ini?');">
+                style="display:inline;" data-confirm="Yakin ingin menghapus riwayat pemeriksaan ini?">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="rw-topbar-btn rw-topbar-hapus">

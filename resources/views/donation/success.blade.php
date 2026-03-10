@@ -56,6 +56,85 @@
         .impact-note-text { font-size: 0.88rem; color: #64748b; line-height: 1.65; }
         .impact-note-text strong { color: var(--primary-dark); }
 
+        /* ─── Modal alert (sama gaya konfirmasi dashboard) ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(15, 23, 42, 0.35);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+            max-width: 420px;
+            width: 100%;
+            min-width: 0;
+            max-height: calc(100vh - 2rem);
+            margin: auto;
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+        .modal-overlay.open .modal-box {
+            transform: scale(1);
+        }
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+        .modal-message {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            word-break: break-word;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .modal-actions .btn {
+            min-width: 100px;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-family: inherit;
+            cursor: pointer;
+            min-height: 44px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+        }
+        .modal-actions .btn:hover {
+            filter: brightness(1.06);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+        }
+
         @media (max-width: 600px) {
             .navbar { padding: 0 1rem; }
             .nav-inner { height: 64px; }
@@ -66,6 +145,28 @@
             .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
             .info-val { text-align: left; max-width: none; }
             .actions { gap: 0.75rem; }
+            .modal-overlay {
+                padding: 0.75rem;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+                align-items: flex-start;
+            }
+            .modal-box {
+                max-width: 100%;
+                padding: 1.25rem 1.5rem;
+                max-height: calc(100vh - 4rem);
+            }
+            .modal-title { font-size: 0.95rem; }
+            .modal-message { font-size: 0.875rem; max-height: 45vh; }
+            .modal-actions .btn {
+                width: 100%;
+                min-height: 48px;
+            }
+        }
+        @media (max-width: 380px) {
+            .modal-box { padding: 1.25rem 1.25rem; border-radius: 14px; }
+            .modal-title { font-size: 0.9rem; }
+            .modal-message { font-size: 0.85rem; max-height: 40vh; }
         }
     </style>
 </head>
@@ -129,11 +230,37 @@
             <div class="impact-note-text">Donasimu akan kami salurkan langsung kepada program <strong>{{ $programs[$donation->program] ?? $donation->program }}</strong>. Terima kasih telah menjadi bagian dari perubahan!</div>
         </div>
     </div>
+
+    <div id="alertModal" class="modal-overlay" aria-hidden="true" role="dialog">
+        <div class="modal-box">
+            <h3 id="alertModalTitle" class="modal-title">Info</h3>
+            <p id="alertModalMessage" class="modal-message"></p>
+            <div class="modal-actions">
+                <button type="button" id="alertModalOk" class="btn">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function showAlertModal(message, title) {
+            var el = document.getElementById('alertModal');
+            var titleEl = document.getElementById('alertModalTitle');
+            var msgEl = document.getElementById('alertModalMessage');
+            if (titleEl) titleEl.textContent = title || 'Info';
+            if (msgEl) msgEl.textContent = message || '';
+            if (el) { el.classList.add('open'); el.setAttribute('aria-hidden', 'false'); }
+        }
+        function closeAlertModal() {
+            var el = document.getElementById('alertModal');
+            if (el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+        }
+        document.getElementById('alertModalOk').addEventListener('click', closeAlertModal);
+        document.getElementById('alertModal').addEventListener('click', function(e) { if (e.target === this) closeAlertModal(); });
+
         function shareReceipt() {
             const text = `Saya baru saja berdonasi {{ $donation->formatted_amount }} untuk program "{{ $programs[$donation->program] ?? $donation->program }}" melalui PeduliJiwa. Yuk ikut berbagi! 💜`;
             if (navigator.share) { navigator.share({ title: 'Donasi PeduliJiwa', text: text, url: window.location.origin }); }
-            else { navigator.clipboard.writeText(text).then(() => alert('Pesan sudah disalin!')); }
+            else { navigator.clipboard.writeText(text).then(() => showAlertModal('Pesan sudah disalin!', 'Berhasil')); }
         }
         const colors = ['#4f46e5', '#7c3aed', '#ec4899', '#10b981', '#f59e0b'];
         for (let i = 0; i < 30; i++) {

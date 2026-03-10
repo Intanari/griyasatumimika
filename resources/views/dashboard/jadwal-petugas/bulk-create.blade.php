@@ -200,7 +200,9 @@ document.querySelector('form').addEventListener('submit', function(e) {
     var checked = document.querySelectorAll('input[name="hari[]"]:checked').length;
     if (checked === 0) {
         e.preventDefault();
-        alert('Pilih minimal satu hari dalam minggu (Senin–Minggu).');
+        if (typeof window.showAlert === 'function') {
+            window.showAlert('Pilih minimal satu hari dalam minggu (Senin–Minggu).', 'Perhatian');
+        }
         return false;
     }
 });

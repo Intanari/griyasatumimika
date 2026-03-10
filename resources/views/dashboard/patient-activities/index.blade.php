@@ -4,19 +4,19 @@
 @section('topbar-title', 'Aktivitas Pasien')
 
 @section('content')
-<a href="{{ route('dashboard') }}" class="page-back-link">Back</a>
+<a href="{{ route('dashboard') }}" class="page-back-link">Kembali</a>
 
-{{-- Kartu terpisah: Tambah Aktifitas Pasien (tidak digabung dengan tabel) --}}
+{{-- Kartu terpisah: Tambah Aktivitas Pasien (tidak digabung dengan tabel) --}}
 <div class="card pa-card pa-card-form">
     <div class="pa-header">
-        <h1 class="pa-title">Tambah Aktifitas Pasien</h1>
+        <h1 class="pa-title">Tambah Aktivitas Pasien</h1>
         <button type="button" class="pa-btn-add" id="btnTambahAktivitas" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Tambah Aktifitas Pasien
+            Tambah Aktivitas Pasien
         </button>
     </div>
 
-    {{-- Form Tambah Aktifitas (collapse) — kotak ini terpisah dari tabel di bawah --}}
+    {{-- Form Tambah Aktivitas (collapse) — kotak ini terpisah dari tabel di bawah --}}
     <div class="pa-form-wrap" id="formTambahAktivitas" hidden>
         <form action="{{ route('dashboard.patient-activities.store-simple') }}" method="POST" class="pa-form" enctype="multipart/form-data">
             @csrf
@@ -79,11 +79,14 @@
         <h2 class="pa-title">Data Aktivitas Pasien</h2>
     </div>
     <div class="pa-data-section">
-        <p class="page-table-desc">Tabel di bawah menampilkan aktivitas pasien (tanggal, nama pasien, deskripsi, gambar). Gunakan tombol Tambah Aktifitas Pasien di atas untuk menambah catatan aktivitas baru.</p>
+        <p class="page-table-desc">
+            Tabel di bawah menampilkan riwayat aktivitas pasien (tanggal, nama pasien, deskripsi, dan gambar).
+            Gunakan tombol <strong>Tambah Aktivitas Pasien</strong> di atas untuk menambahkan catatan aktivitas baru.
+        </p>
         @if ($groups->isEmpty())
             <div class="pa-empty">
-                <p class="pa-empty-title">Belum ada aktivitas pasien</p>
-                <p class="pa-empty-desc">Klik tombol &ldquo;Tambah Aktifitas Pasien&rdquo; untuk mencatat aktivitas.</p>
+                <p class="pa-empty-title">Belum ada data aktivitas pasien</p>
+                <p class="pa-empty-desc">Klik tombol &ldquo;Tambah Aktivitas Pasien&rdquo; untuk mulai mencatat aktivitas.</p>
             </div>
         @else
             <div class="pa-table-wrap">

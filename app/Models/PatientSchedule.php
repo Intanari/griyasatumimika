@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class PatientSchedule extends Model
 {
+    use HasUuids;
     protected $table = 'patient_schedules';
 
     protected $fillable = [

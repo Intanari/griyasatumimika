@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonationExpenseController;
 use App\Http\Controllers\JadwalPetugasController;
@@ -56,6 +57,7 @@ Route::domain(config('app.admin_domain'))->group(function () {
     // Dashboard (Auth Required - wajib login)
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/tentang-sistem', [DashboardController::class, 'about'])->name('dashboard.about');
         Route::get('/dashboard/donasi', [DashboardController::class, 'donasi'])->name('dashboard.donasi');
         Route::resource('dashboard/donasi/pengeluaran', DonationExpenseController::class)->only(['create', 'store', 'edit', 'update', 'destroy'])->parameters(['pengeluaran' => 'donation_expense'])->names([
             'create'  => 'dashboard.donasi.pengeluaran.create',
@@ -168,6 +170,17 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'update' => 'dashboard.stock.update',
             'destroy' => 'dashboard.stock.destroy',
         ]);
+        Route::resource('dashboard/admin-users', AdminUserController::class)->parameters(['admin-users' => 'admin_user'])->names([
+            'index'   => 'dashboard.admin-users.index',
+            'create'  => 'dashboard.admin-users.create',
+            'store'   => 'dashboard.admin-users.store',
+            'edit'    => 'dashboard.admin-users.edit',
+            'update'  => 'dashboard.admin-users.update',
+            'destroy' => 'dashboard.admin-users.destroy',
+        ])->except(['show']);
+        Route::put('dashboard/admin-users/{admin_user}/profile', [AdminUserController::class, 'updateProfile'])->name('dashboard.admin-users.update-profile');
+        Route::put('dashboard/admin-users/{admin_user}/password', [AdminUserController::class, 'updatePassword'])->name('dashboard.admin-users.update-password');
+        Route::put('dashboard/admin-users/{admin_user}/role', [AdminUserController::class, 'updateRole'])->name('dashboard.admin-users.update-role');
         Route::resource('dashboard/petugas', PetugasController::class)->parameters(['petuga' => 'petuga'])->names([
             'index'   => 'dashboard.petugas.index',
             'create'  => 'dashboard.petugas.create',

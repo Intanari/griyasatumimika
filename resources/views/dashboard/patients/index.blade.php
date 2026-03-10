@@ -91,7 +91,7 @@
                                 <div class="action-buttons">
                                     <a href="{{ route('dashboard.patients.show', $patient) }}" class="btn btn-sm btn-outline" title="Detail">Detail</a>
                                     <a href="{{ route('dashboard.patients.edit', $patient) }}" class="btn btn-sm btn-outline" title="Edit">Edit</a>
-                                    <form action="{{ route('dashboard.patients.destroy', $patient) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus pasien {{ $patient->nama_lengkap }}?');">
+                                    <form action="{{ route('dashboard.patients.destroy', $patient) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus pasien {{ $patient->nama_lengkap }}?">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus">Hapus</button>

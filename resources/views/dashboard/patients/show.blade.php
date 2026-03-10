@@ -22,7 +22,7 @@
             <div class="patient-detail-actions">
                 <a href="{{ route('dashboard.patient-activities.index', ['patient_id' => $patient->id]) }}" class="btn btn-outline" title="Lihat aktivitas pasien ini">📋 Aktivitas</a>
                 <a href="{{ route('dashboard.patients.edit', $patient) }}" class="btn btn-primary">Edit</a>
-                <form action="{{ route('dashboard.patients.destroy', $patient) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus pasien {{ $patient->nama_lengkap }}?');">
+                <form action="{{ route('dashboard.patients.destroy', $patient) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus pasien {{ $patient->nama_lengkap }}?">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Hapus</button>

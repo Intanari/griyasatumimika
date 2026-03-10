@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventory_items', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('category'); // makanan, obat, alat_kesehatan, perlengkapan, kebersihan, lainnya
             $table->integer('quantity')->default(0);

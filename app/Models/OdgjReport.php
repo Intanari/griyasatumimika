@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class OdgjReport extends Model
 {
+    use HasUuids;
     protected $fillable = [
         'kategori',
         'lokasi',

@@ -17,7 +17,21 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('patient_activities', function (Blueprint $table) {
-            $table->dropColumn(['image', 'batch_uuid']);
+            if (Schema::hasColumn('patient_activities', 'batch_uuid')) {
+                $table->dropIndex('patient_activities_batch_uuid_index');
+            }
+        });
+        Schema::table('patient_activities', function (Blueprint $table) {
+            $columnsToDrop = [];
+            if (Schema::hasColumn('patient_activities', 'image')) {
+                $columnsToDrop[] = 'image';
+            }
+            if (Schema::hasColumn('patient_activities', 'batch_uuid')) {
+                $columnsToDrop[] = 'batch_uuid';
+            }
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
     }
 };

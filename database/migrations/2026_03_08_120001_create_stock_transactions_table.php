@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stock_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
             $table->string('type'); // in, out
             $table->integer('quantity');
             $table->string('staff_name')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUuid('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('notes')->nullable();
             $table->timestamps();
         });

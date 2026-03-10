@@ -30,7 +30,7 @@
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success">✓ Terima</button>
                 </form>
-                <form action="{{ route('dashboard.laporan.tolak', $laporan) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menolak laporan ini?');">
+                <form action="{{ route('dashboard.laporan.tolak', $laporan) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menolak laporan ini?">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-danger">✗ Tolak</button>
                 </form>

@@ -18,7 +18,7 @@
         <div class="rw-detail-topbar-right">
             <a href="{{ route('dashboard.patient-activities.duplicate', $patientActivity) }}" class="rw-topbar-btn rw-topbar-copy">Duplikat</a>
             <a href="{{ route('dashboard.patient-activities.edit', $patientActivity) }}" class="rw-topbar-btn rw-topbar-edit">Edit</a>
-            <form action="{{ route('dashboard.patient-activities.destroy', $patientActivity) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus aktivitas ini?');">
+            <form action="{{ route('dashboard.patient-activities.destroy', $patientActivity) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus aktivitas ini?">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="rw-topbar-btn rw-topbar-hapus">Hapus</button>

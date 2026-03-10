@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('examination_histories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('patient_id')->constrained('patients')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('patient_id')->constrained('patients')->cascadeOnDelete();
             $table->date('tanggal_pemeriksaan');
             $table->string('tempat_pemeriksaan');
             $table->text('keluhan')->nullable();

@@ -27,7 +27,7 @@
         <div class="petugas-profile-actions">
             <a href="{{ route('dashboard.petugas.edit', $petuga) }}" class="btn btn-primary">Edit</a>
             @if ($petuga->id !== $user->id)
-                <form action="{{ route('dashboard.petugas.destroy', $petuga) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus petugas {{ $petuga->name }}?');">
+                <form action="{{ route('dashboard.petugas.destroy', $petuga) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus petugas {{ $petuga->name }}?">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Hapus</button>

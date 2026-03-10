@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jadwal_petugas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
             $table->date('tanggal')->index();
             $table->string('shift', 20)->default('pagi'); // pagi, siang, malam
             $table->time('jam_mulai')->nullable();
