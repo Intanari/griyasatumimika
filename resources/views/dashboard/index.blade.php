@@ -6,8 +6,16 @@
 @section('content')
 <div class="welcome-banner">
     <div>
-        <h2>Selamat datang, {{ $user->name }}.</h2>
-        <p>Dashboard ini merangkum donasi, laporan ODGJ, data pasien, petugas, dan stok barang untuk mendukung pelayanan rehabilitasi yang aman dan terkoordinasi.</p>
+        <h2>Dashboard Yayasan PeduliJiwa</h2>
+        <p>
+            Selamat datang, {{ $user->name }}. Dashboard ini merangkum donasi, laporan ODGJ,
+            data pasien, petugas, dan stok barang sebagai pusat kendali layanan rehabilitasi
+            terpadu Yayasan PeduliJiwa.
+        </p>
+        <div class="welcome-banner-meta">
+            <span class="welcome-banner-tag">Profil Yayasan</span>
+            <span>Yayasan PeduliJiwa Indonesia • Rehabilitasi ODGJ</span>
+        </div>
     </div>
 </div>
 
@@ -34,7 +42,7 @@
 @endif
 
 <div class="stats-grid">
-    <div class="stat-card purple">
+    <a href="{{ route('dashboard.donasi') }}" class="stat-card purple stat-card-link">
         <div class="stat-header">
             <div>
                 <div class="stat-value">{{ number_format($stats['total_donasi']) }}</div>
@@ -42,19 +50,9 @@
             </div>
             <div class="stat-icon purple">📋</div>
         </div>
-        <div class="stat-sub">Seluruh transaksi</div>
-    </div>
-    <div class="stat-card teal">
-        <div class="stat-header">
-            <div>
-                <div class="stat-value" style="font-size:1.35rem;">Rp {{ number_format($stats['total_terkumpul'], 0, ',', '.') }}</div>
-                <div class="stat-label">Dana Terkumpul</div>
-            </div>
-            <div class="stat-icon teal">💰</div>
-        </div>
-        <div class="stat-sub">Donasi berhasil</div>
-    </div>
-    <div class="stat-card rose">
+        <div class="stat-sub">Jumlah orang yang mendonasi · Klik ke halaman donasi</div>
+    </a>
+    <a href="{{ route('dashboard.laporan') }}" class="stat-card rose stat-card-link">
         <div class="stat-header">
             <div>
                 <div class="stat-value">{{ number_format($stats['total_laporan_odgj'] ?? 0) }}</div>
@@ -62,8 +60,8 @@
             </div>
             <div class="stat-icon rose">🚨</div>
         </div>
-        <div class="stat-sub">{{ $stats['laporan_odgj_baru'] ?? 0 }} laporan baru</div>
-    </div>
+        <div class="stat-sub">Jumlah orang pelapor · Klik ke halaman laporan ODGJ</div>
+    </a>
     <a href="{{ route('dashboard.stock.index') }}" class="stat-card blue stat-card-link">
         <div class="stat-header">
             <div>
@@ -72,123 +70,61 @@
             </div>
             <div class="stat-icon blue">📦</div>
         </div>
-        <div class="stat-sub">{{ $stockStats['low_stock'] ?? 0 }} hampir habis · Klik untuk kelola</div>
+        <div class="stat-sub">Jumlah jenis barang · Klik ke halaman stok</div>
     </a>
 </div>
 
-{{-- Card Stok Barang (ringkasan + link ke Manajemen Stok) --}}
-<div class="card dashboard-stock-card">
-    <div class="card-title">
-        <span>📦 Stok Barang</span>
+{{-- Kotak Stok: Sisa Stok per Barang (berdasarkan data persediaan stok barang) --}}
+@if(($stockItems ?? collect())->isNotEmpty())
+@php $maxSisa = (int) ($maxSisaStock ?? 1); @endphp
+<div class="card dashboard-stock-items-card">
+    <div class="card-title dashboard-stock-sisa-title">
+        <div class="dashboard-stock-sisa-title-inner">
+            <span class="dashboard-stock-sisa-icon" aria-hidden="true">📊</span>
+            <span>Sisa Stok per Barang</span>
+        </div>
         <a href="{{ route('dashboard.stock.index') }}" class="btn-link">Kelola Stok →</a>
     </div>
-    <div class="dashboard-stock-stats">
-        <div class="dashboard-stock-stat">
-            <div class="dashboard-stock-stat-value">{{ number_format($stockStats['total_items'] ?? 0) }}</div>
-            <div class="dashboard-stock-stat-label">Jenis Barang</div>
-        </div>
-        <div class="dashboard-stock-stat">
-            <div class="dashboard-stock-stat-value">{{ number_format($stockStats['total_quantity'] ?? 0) }}</div>
-            <div class="dashboard-stock-stat-label">Total Unit</div>
-        </div>
-        <div class="dashboard-stock-stat dashboard-stock-stat-warn">
-            <div class="dashboard-stock-stat-value">{{ $stockStats['low_stock'] ?? 0 }}</div>
-            <div class="dashboard-stock-stat-label">Hampir Habis</div>
-        </div>
-        <div class="dashboard-stock-stat dashboard-stock-stat-danger">
-            <div class="dashboard-stock-stat-value">{{ $stockStats['out_of_stock'] ?? 0 }}</div>
-            <div class="dashboard-stock-stat-label">Habis</div>
-        </div>
-    </div>
-    @php
-        $chart = $stockChart ?? ['masuk' => 0, 'keluar' => 0, 'sisa' => 0];
-        $maxVal = max(1, $chart['masuk'], $chart['keluar'], $chart['sisa']);
-    @endphp
-    <div class="dashboard-stock-chart">
-        <div class="dashboard-stock-chart-title">Grafik Stok Barang (Masuk / Keluar / Sisa)</div>
-        <div class="dashboard-stock-chart-bars">
-            <div class="dashboard-stock-chart-row">
-                <span class="dashboard-stock-chart-label">Stok Masuk</span>
-                <div class="dashboard-stock-chart-bar-wrap">
-                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-masuk" style="width: {{ $maxVal > 0 ? round($chart['masuk'] / $maxVal * 100) : 0 }}%;"></div>
-                </div>
-                <span class="dashboard-stock-chart-value">{{ number_format($chart['masuk']) }}</span>
-            </div>
-            <div class="dashboard-stock-chart-row">
-                <span class="dashboard-stock-chart-label">Stok Keluar</span>
-                <div class="dashboard-stock-chart-bar-wrap">
-                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-keluar" style="width: {{ $maxVal > 0 ? round($chart['keluar'] / $maxVal * 100) : 0 }}%;"></div>
-                </div>
-                <span class="dashboard-stock-chart-value">{{ number_format($chart['keluar']) }}</span>
-            </div>
-            <div class="dashboard-stock-chart-row">
-                <span class="dashboard-stock-chart-label">Sisa Stok</span>
-                <div class="dashboard-stock-chart-bar-wrap">
-                    <div class="dashboard-stock-chart-bar dashboard-stock-chart-bar-sisa" style="width: {{ $maxVal > 0 ? round($chart['sisa'] / $maxVal * 100) : 0 }}%;"></div>
-                </div>
-                <span class="dashboard-stock-chart-value">{{ number_format($chart['sisa']) }}</span>
-            </div>
-        </div>
-    </div>
-    <p class="dashboard-stock-desc">Ringkasan inventaris barang yayasan. Klik <a href="{{ route('dashboard.stock.index') }}">Kelola Stok</a> untuk daftar barang, restock, dan riwayat transaksi.</p>
-</div>
-
-{{-- Kotak Stok per Item + Grafik per Item --}}
-@if(($stockItems ?? collect())->isNotEmpty())
-<div class="card dashboard-stock-items-card">
-    <div class="card-title">
-        <span>📦 Detail Stok per Item</span>
-        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;justify-content:flex-end;">
-            <small style="font-size:0.8rem;color:var(--text-muted);font-weight:500;">Menampilkan beberapa item stok dengan sisa stok tertinggi</small>
-            <a href="{{ route('dashboard.stock.index') }}" class="btn-link">Kelola Stok →</a>
-        </div>
-    </div>
-    <div class="dashboard-stock-items-grid">
-        @foreach($stockItems as $item)
-            <div class="dashboard-stock-item-box">
-                <div class="dashboard-stock-item-header">
-                    <div class="dashboard-stock-item-name" title="{{ $item->name }}">{{ $item->name }}</div>
-                    <span class="dashboard-stock-item-badge dashboard-stock-item-badge-{{ $item->stock_status }}">
-                        @if($item->stock_status === 'habis')
-                            Habis
-                        @elseif($item->stock_status === 'low')
-                            Hampir habis
-                        @else
-                            Aman
+    <p class="dashboard-stock-sisa-desc">Nilai sisa = total persediaan dikurangi total pengeluaran untuk setiap nama stok barang.</p>
+    <div class="dashboard-stock-sisa-scroll-wrap">
+        <button type="button" class="dashboard-stock-sisa-nav dashboard-stock-sisa-nav-prev" aria-label="Sebelumnya" title="Sebelumnya">‹</button>
+        <div class="dashboard-stock-sisa-scroll">
+            <div class="dashboard-stock-items-grid">
+                @foreach($stockItems as $item)
+                    <div class="dashboard-stock-item-box">
+                        <div class="dashboard-stock-item-header">
+                            <div class="dashboard-stock-item-name" title="{{ $item->name }}">{{ $item->name }}</div>
+                            <span class="dashboard-stock-item-badge dashboard-stock-item-badge-{{ $item->stock_status }}">
+                                @if($item->stock_status === 'habis')
+                                    Habis
+                                @elseif($item->stock_status === 'low')
+                                    Hampir habis
+                                @else
+                                    Aman
+                                @endif
+                            </span>
+                        </div>
+                        <div class="dashboard-stock-item-sisa-big">{{ number_format($item->sisa) }}</div>
+                        <div class="dashboard-stock-item-meta">
+                            <span class="dashboard-stock-item-qty">{{ number_format($item->sisa) }} {{ $item->unit }}</span>
+                            <span class="dashboard-stock-item-category">{{ $item->category_label }}</span>
+                        </div>
+                        <div class="dashboard-stock-item-sisa-chart">
+                            <div class="dashboard-stock-item-sisa-label">Sisa stok</div>
+                            <div class="dashboard-stock-item-sisa-bar-wrap">
+                                <div class="dashboard-stock-item-sisa-bar" style="width: {{ $maxSisa > 0 ? min(100, round(($item->sisa / $maxSisa) * 100)) : 0 }}%;"></div>
+                            </div>
+                        </div>
+                        @if($item->min_stock > 0)
+                            <div class="dashboard-stock-item-progress-label" style="margin-top:0.35rem;font-size:0.72rem;color:var(--text-muted);">
+                                Min. stok: {{ number_format($item->min_stock) }}
+                            </div>
                         @endif
-                    </span>
-                </div>
-                <div class="dashboard-stock-item-meta">
-                    @php
-                        $sisaMap = $stockPerItemSisaByName ?? [];
-                        $currentSisa = (int) ($sisaMap[$item->name] ?? $item->quantity);
-                    @endphp
-                    <span class="dashboard-stock-item-qty">{{ number_format($currentSisa) }} {{ $item->unit }}</span>
-                    <span class="dashboard-stock-item-category">{{ $item->category_label }}</span>
-                </div>
-                @if($item->min_stock > 0)
-                    <div class="dashboard-stock-item-progress-wrap">
-                        @php
-                            $progressSafe = max(0, min(100, $currentSisa > 0 ? round(($currentSisa / max(1, $item->min_stock)) * 100) : 0));
-                        @endphp
-                        <div class="dashboard-stock-item-progress-bar">
-                            <div class="dashboard-stock-item-progress-fill" style="width: {{ $progressSafe }}%;"></div>
-                        </div>
-                        <div class="dashboard-stock-item-progress-label">
-                            <span>Min. stok: {{ number_format($item->min_stock) }}</span>
-                            <span>{{ $progressSafe }}%</span>
-                        </div>
                     </div>
-                @endif
+                @endforeach
             </div>
-        @endforeach
-    </div>
-
-    <div class="dashboard-stock-items-chart-wrap">
-        <p class="dashboard-stock-items-chart-title">Grafik Stok per Item (Jumlah, Masuk, Keluar, Sisa)</p>
-        <div class="dashboard-stock-items-chart">
-            <canvas id="chartStockPerItem" height="260"></canvas>
         </div>
+        <button type="button" class="dashboard-stock-sisa-nav dashboard-stock-sisa-nav-next" aria-label="Selanjutnya" title="Selanjutnya">›</button>
     </div>
 </div>
 @endif
@@ -294,69 +230,6 @@
     </div>
 </div>
 
-{{-- ── Riwayat Pemeriksaan Card ─────────────────────────────────── --}}
-<div class="card exam-dashboard-card">
-    <div class="card-title">
-        <div style="display:flex;align-items:center;gap:0.6rem;">
-            <div class="exam-card-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4"/><path d="M9 3h6"/><path d="M15 3h4a2 2 0 0 1 2 2v4"/><path d="M3 9v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M12 12v6"/><path d="M9 15h6"/></svg>
-            </div>
-            <span>Riwayat Pemeriksaan</span>
-        </div>
-        <a href="{{ route('dashboard.riwayat-pemeriksaan.index') }}" class="btn-link">Lihat Semua →</a>
-    </div>
-
-    {{-- Stats row --}}
-    <div class="exam-stats-row">
-        <div class="exam-stat exam-stat-total">
-            <div class="exam-stat-val">{{ number_format($examStats['total'] ?? 0) }}</div>
-            <div class="exam-stat-lbl">Total Pemeriksaan</div>
-        </div>
-        <div class="exam-stat exam-stat-bulan">
-            <div class="exam-stat-val">{{ number_format($examStats['bulan_ini'] ?? 0) }}</div>
-            <div class="exam-stat-lbl">Bulan Ini</div>
-            @php $delta = ($examStats['bulan_ini'] ?? 0) - ($examStats['bulan_lalu'] ?? 0); @endphp
-            @if($examStats['bulan_lalu'] > 0)
-            <div class="exam-stat-delta {{ $delta >= 0 ? 'delta-up' : 'delta-down' }}">
-                {{ $delta >= 0 ? '▲' : '▼' }} {{ abs($delta) }} vs bulan lalu
-            </div>
-            @endif
-        </div>
-        <div class="exam-stat exam-stat-lalu">
-            <div class="exam-stat-val">{{ number_format($examStats['bulan_lalu'] ?? 0) }}</div>
-            <div class="exam-stat-lbl">Bulan Lalu</div>
-        </div>
-        @if(count($examChartTempat['labels'] ?? []) > 0)
-        <div class="exam-stat exam-stat-tempat">
-            <div class="exam-stat-val" style="font-size:1rem;line-height:1.3;">{{ $examChartTempat['labels'][0] ?? '–' }}</div>
-            <div class="exam-stat-lbl">Tempat Terbanyak</div>
-        </div>
-        @endif
-    </div>
-
-    {{-- Charts --}}
-    <div class="exam-charts-row">
-        <div class="exam-chart-box">
-            <p class="exam-chart-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                Pemeriksaan per Bulan (6 Bulan Terakhir)
-            </p>
-            <div class="exam-chart-canvas-wrap">
-                <canvas id="chartExamBulan"></canvas>
-            </div>
-        </div>
-        <div class="exam-chart-box">
-            <p class="exam-chart-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Top Tempat Pemeriksaan
-            </p>
-            <div class="exam-chart-canvas-wrap">
-                <canvas id="chartExamTempat"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{-- ── Aktivitas Pasien Card ──────────────────────────────────── --}}
 <div class="card exam-dashboard-card">
     <div class="card-title">
@@ -369,17 +242,21 @@
         <a href="{{ route('dashboard.patient-activities.index') }}" class="btn-link">Lihat Semua →</a>
     </div>
     <div class="exam-stats-row">
-        <div class="exam-stat exam-stat-total">
-            <div class="exam-stat-val">{{ number_format($activityStats['total'] ?? 0) }}</div>
-            <div class="exam-stat-lbl">Total Aktivitas</div>
+        <div class="exam-stat exam-stat-lalu">
+            <div class="exam-stat-val">{{ number_format($activityStats['hari_ini'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Hari Ini</div>
+        </div>
+        <div class="exam-stat exam-stat-minggu">
+            <div class="exam-stat-val">{{ number_format($activityStats['minggu_ini'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Minggu Ini</div>
         </div>
         <div class="exam-stat exam-stat-bulan">
             <div class="exam-stat-val">{{ number_format($activityStats['bulan_ini'] ?? 0) }}</div>
             <div class="exam-stat-lbl">Bulan Ini</div>
         </div>
-        <div class="exam-stat exam-stat-lalu">
-            <div class="exam-stat-val">{{ number_format($activityStats['hari_ini'] ?? 0) }}</div>
-            <div class="exam-stat-lbl">Hari Ini</div>
+        <div class="exam-stat exam-stat-total">
+            <div class="exam-stat-val">{{ number_format($activityStats['total'] ?? 0) }}</div>
+            <div class="exam-stat-lbl">Total Semua Aktivitas</div>
         </div>
     </div>
 </div>
@@ -408,12 +285,12 @@
                     <tbody>
                         @foreach ($donasi_terbaru->take(5) as $donasi)
                             <tr>
-                                <td>
+                                <td data-label="Donatur">
                                     <div style="font-weight:600;">{{ $donasi->donor_name }}</div>
                                     <div style="font-size:0.78rem;color:var(--text-muted);">{{ $donasi->program }}</div>
                                 </td>
-                                <td style="font-weight:700;color:var(--primary);">{{ $donasi->formatted_amount }}</td>
-                                <td>
+                                <td data-label="Nominal" style="font-weight:700;color:var(--primary);">{{ $donasi->formatted_amount }}</td>
+                                <td data-label="Status">
                                     @if ($donasi->status === 'paid')<span class="badge badge-paid">✅</span>
                                     @elseif ($donasi->status === 'pending')<span class="badge badge-pending">⏳</span>
                                     @else<span class="badge badge-failed">❌</span>
@@ -450,9 +327,9 @@
                     <tbody>
                         @foreach ($laporan_odgj->take(5) as $laporan)
                             <tr>
-                                <td style="font-weight:600;font-family:monospace;font-size:0.82rem;">{{ $laporan->nomor_laporan }}</td>
-                                <td>{{ $laporan->kategori_label }}</td>
-                                <td>
+                                <td data-label="No. Laporan" style="font-weight:600;font-family:monospace;font-size:0.82rem;">{{ $laporan->nomor_laporan }}</td>
+                                <td data-label="Kategori">{{ $laporan->kategori_label }}</td>
+                                <td data-label="Status">
                                     @if ($laporan->status === 'baru')<span class="badge badge-pending">🆕 Baru</span>
                                     @elseif ($laporan->status === 'diproses')<span class="badge badge-paid">⏳</span>
                                     @else<span class="badge badge-cancel">✅</span>
@@ -526,7 +403,7 @@
     .dashboard-stock-alert-icon { margin: 0 auto; }
 }
 
-/* Stat card yang bisa diklik (link ke Manajemen Stok) */
+/* Stat card yang bisa diklik (link ke Donasi, Laporan ODGJ, Stok) */
 .stat-card-link {
     text-decoration: none;
     color: inherit;
@@ -536,8 +413,11 @@
 }
 .stat-card-link:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 40px -10px rgba(59,130,246,0.2);
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
 }
+.stat-card-link.purple:hover { box-shadow: 0 10px 40px -10px rgba(147,51,234,0.25); }
+.stat-card-link.rose:hover   { box-shadow: 0 10px 40px -10px rgba(244,63,94,0.25); }
+.stat-card-link.blue:hover  { box-shadow: 0 10px 40px -10px rgba(59,130,246,0.2); }
 
 /* Card Stok Barang di dashboard */
 .dashboard-stock-card { margin-bottom: 1.5rem; }
@@ -631,13 +511,78 @@
     text-decoration: none;
 }
 .dashboard-stock-desc a:hover { text-decoration: underline; }
-/* Grid item stok per barang */
+/* Kotak Sisa Stok per Barang */
 .dashboard-stock-items-card { margin-bottom: 1.5rem; }
+.dashboard-stock-sisa-title-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.dashboard-stock-sisa-icon { font-size: 1.25rem; }
+.dashboard-stock-sisa-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: -0.5rem 0 1rem 0;
+    line-height: 1.45;
+}
+.dashboard-stock-sisa-scroll-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+.dashboard-stock-sisa-scroll {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+.dashboard-stock-sisa-scroll::-webkit-scrollbar { height: 6px; }
+.dashboard-stock-sisa-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+.dashboard-stock-sisa-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.dashboard-stock-sisa-nav {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.dashboard-stock-sisa-nav:hover {
+    background: #f1f5f9;
+    color: var(--text);
+    border-color: #cbd5e1;
+}
 .dashboard-stock-items-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+    width: max-content;
+    min-width: 100%;
+}
+.dashboard-stock-item-box {
+    flex: 0 0 200px;
+    min-width: 180px;
+}
+.dashboard-stock-item-sisa-big {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0.25rem 0 0.1rem 0;
 }
 .dashboard-stock-item-box {
     background: #f8fafc;
@@ -727,6 +672,39 @@
     font-size: 0.72rem;
     color: var(--text-muted);
 }
+/* Grafik sisa stok per card */
+.dashboard-stock-item-sisa-chart {
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+.dashboard-stock-item-sisa-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.35rem;
+}
+.dashboard-stock-item-sisa-bar-wrap {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+.dashboard-stock-item-sisa-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    min-width: 4px;
+    transition: width 0.3s ease;
+}
+.dashboard-stock-item-sisa-value {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text);
+}
 .dashboard-stock-items-chart-wrap {
     border-top: 1px solid var(--border);
     padding-top: 1.25rem;
@@ -743,15 +721,12 @@
     position: relative;
     height: 260px;
 }
-@media (max-width: 1024px) {
-    .dashboard-stock-items-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
 @media (max-width: 640px) {
-    .dashboard-stock-items-grid {
-        grid-template-columns: minmax(0, 1fr);
+    .dashboard-stock-item-box {
+        flex: 0 0 160px;
+        min-width: 140px;
     }
+    .dashboard-stock-sisa-nav { width: 32px; height: 32px; font-size: 1.1rem; }
 }
 @media (max-width: 640px) {
     .dashboard-stock-stats { grid-template-columns: repeat(2, 1fr); }
@@ -830,6 +805,7 @@
 .exam-stat:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 .exam-stat-total { border-top: 3px solid #3b82f6; }
 .exam-stat-bulan  { border-top: 3px solid #10b981; }
+.exam-stat-minggu { border-top: 3px solid #f59e0b; }
 .exam-stat-lalu   { border-top: 3px solid #94a3b8; }
 .exam-stat-tempat { border-top: 3px solid #f59e0b; }
 .exam-stat-val  { font-size: 1.6rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 4px; }
@@ -971,193 +947,20 @@
         });
     }
 
-    // ── Riwayat Pemeriksaan: Bar per Bulan ───────────────────────────
-    var examBulanLabels = @json($examChartBulan['labels'] ?? []);
-    var examBulanData   = @json($examChartBulan['data'] ?? []);
-
-    new Chart(document.getElementById('chartExamBulan'), {
-        type: 'bar',
-        data: {
-            labels: examBulanLabels,
-            datasets: [{
-                label: 'Pemeriksaan',
-                data: examBulanData,
-                backgroundColor: 'rgba(59,130,246,0.85)',
-                borderRadius: 8,
-                borderSkipped: false,
-                hoverBackgroundColor: 'rgba(37,99,235,0.95)',
-            }],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(ctx) { return ' ' + ctx.parsed.y + ' pemeriksaan'; }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { font: { size: 11 }, color: '#64748b' },
-                },
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        precision: 0,
-                        font: { size: 11 },
-                        color: '#94a3b8',
-                    },
-                    grid: { color: 'rgba(0,0,0,0.04)' },
-                },
-            },
-        },
-    });
-
-    // ── Riwayat Pemeriksaan: Horizontal Bar Tempat ───────────────────
-    var examTempatLabels = @json($examChartTempat['labels'] ?? []);
-    var examTempatData   = @json($examChartTempat['data'] ?? []);
-
-    if (examTempatLabels.length > 0) {
-        new Chart(document.getElementById('chartExamTempat'), {
-            type: 'bar',
-            data: {
-                labels: examTempatLabels,
-                datasets: [{
-                    label: 'Jumlah',
-                    data: examTempatData,
-                    backgroundColor: [
-                        'rgba(16,185,129,0.85)',
-                        'rgba(59,130,246,0.75)',
-                        'rgba(245,158,11,0.75)',
-                        'rgba(139,92,246,0.75)',
-                        'rgba(236,72,153,0.75)',
-                    ],
-                    borderRadius: 6,
-                    borderSkipped: false,
-                }],
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) { return ' ' + ctx.parsed.x + ' kali'; }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1, precision: 0, font: { size: 11 }, color: '#94a3b8' },
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                    },
-                    y: {
-                        grid: { display: false },
-                        ticks: { font: { size: 11 }, color: '#374151' },
-                    },
-                },
-            },
+    // Navigasi scroll Sisa Stok per Barang
+    var stockScrollEl = document.querySelector('.dashboard-stock-sisa-scroll');
+    var stockPrevBtn = document.querySelector('.dashboard-stock-sisa-nav-prev');
+    var stockNextBtn = document.querySelector('.dashboard-stock-sisa-nav-next');
+    if (stockScrollEl && stockPrevBtn && stockNextBtn) {
+        var scrollStep = 220;
+        stockPrevBtn.addEventListener('click', function() {
+            stockScrollEl.scrollBy({ left: -scrollStep, behavior: 'smooth' });
         });
-    } else {
-        var noDataCtx = document.getElementById('chartExamTempat');
-        if (noDataCtx) {
-            noDataCtx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:220px;color:#94a3b8;font-size:0.875rem;">Belum ada data</div>';
-        }
+        stockNextBtn.addEventListener('click', function() {
+            stockScrollEl.scrollBy({ left: scrollStep, behavior: 'smooth' });
+        });
     }
 
-    // ── Grafik Stok per Item: Jumlah, Masuk, Keluar, Sisa ───────────────
-    var stockPerItemLabels = @json($stockPerItemChart['labels'] ?? []);
-    var stockPerItemJumlah = @json($stockPerItemChart['jumlah'] ?? []);
-    var stockPerItemMasuk  = @json($stockPerItemChart['masuk'] ?? []);
-    var stockPerItemKeluar = @json($stockPerItemChart['keluar'] ?? []);
-    var stockPerItemSisa   = @json($stockPerItemChart['sisa'] ?? []);
-
-    var stockPerItemEl = document.getElementById('chartStockPerItem');
-    if (stockPerItemEl && stockPerItemLabels.length > 0) {
-        new Chart(stockPerItemEl, {
-            type: 'bar',
-            data: {
-                labels: stockPerItemLabels,
-                datasets: [
-                    {
-                        label: 'Jumlah Item (Saat Ini)',
-                        data: stockPerItemJumlah,
-                        backgroundColor: colors.stock.jumlah,
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    },
-                    {
-                        label: 'Stok Masuk',
-                        data: stockPerItemMasuk,
-                        backgroundColor: colors.stock.masuk,
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    },
-                    {
-                        label: 'Stok Keluar',
-                        data: stockPerItemKeluar,
-                        backgroundColor: colors.stock.keluar,
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    },
-                    {
-                        label: 'Sisa Stok (Masuk - Keluar)',
-                        data: stockPerItemSisa,
-                        backgroundColor: colors.stock.sisa,
-                        borderRadius: 6,
-                        borderSkipped: false,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { font: { size: 11 } },
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) {
-                                return ' ' + ctx.dataset.label + ': ' + (ctx.parsed.y ?? 0).toLocaleString('id-ID');
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { size: 10 },
-                            color: '#64748b',
-                            maxRotation: 45,
-                            minRotation: 0,
-                            autoSkip: true,
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: { size: 11 },
-                            color: '#94a3b8',
-                        },
-                        grid: { color: 'rgba(0,0,0,0.04)' },
-                    },
-                },
-            },
-        });
-    } else if (stockPerItemEl) {
-        stockPerItemEl.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:0.875rem;">Belum ada data stok per item</div>';
-    }
 })();
 </script>
 @endpush

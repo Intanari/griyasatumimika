@@ -56,9 +56,14 @@ class PatientController extends Controller
             'tanggal_lahir'  => 'nullable|date',
             'jenis_kelamin'  => 'nullable|in:L,P',
             'tanggal_masuk'  => 'required|date',
+            'tanggal_keluar' => 'required_if:status,selesai|nullable|date',
             'status'         => 'required|in:aktif,selesai,dirujuk',
+            'deskripsi'      => 'nullable|string|max:2000',
             'foto'           => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
+        if (($validated['status'] ?? '') !== 'selesai') {
+            $validated['tanggal_keluar'] = null;
+        }
 
         if ($request->hasFile('foto')) {
             $validated['foto'] = $request->file('foto')->store('patients', 'public');
@@ -91,9 +96,14 @@ class PatientController extends Controller
             'tanggal_lahir'  => 'nullable|date',
             'jenis_kelamin'  => 'nullable|in:L,P',
             'tanggal_masuk'  => 'required|date',
+            'tanggal_keluar' => 'required_if:status,selesai|nullable|date',
             'status'         => 'required|in:aktif,selesai,dirujuk',
+            'deskripsi'      => 'nullable|string|max:2000',
             'foto'           => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
+        if (($validated['status'] ?? '') !== 'selesai') {
+            $validated['tanggal_keluar'] = null;
+        }
 
         if ($request->hasFile('foto')) {
             if ($patient->foto) {

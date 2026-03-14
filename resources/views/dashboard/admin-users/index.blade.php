@@ -82,11 +82,11 @@
                 <tbody>
                     @foreach ($accounts as $index => $account)
                         <tr>
-                            <td class="admin-account-cell-num">{{ $accounts->firstItem() + $index }}</td>
-                            <td class="admin-account-cell-name">{{ $account->name }}</td>
-                            <td class="admin-account-cell-email">{{ $account->email }}</td>
-                            <td><span class="admin-account-badge-role">{{ $account->role_label }}</span></td>
-                            <td class="admin-account-cell-actions">
+                            <td class="admin-account-cell-num" data-label="No">{{ $accounts->firstItem() + $index }}</td>
+                            <td class="admin-account-cell-name" data-label="Nama">{{ $account->name }}</td>
+                            <td class="admin-account-cell-email" data-label="Email">{{ $account->email }}</td>
+                            <td data-label="Role"><span class="admin-account-badge-role">{{ $account->role_label }}</span></td>
+                            <td class="admin-account-cell-actions" data-label="Aksi">
                                 <a href="{{ route('dashboard.admin-users.edit', $account) }}" class="btn btn-sm btn-outline">Edit</a>
                                 @if ($account->id !== $user->id)
                                     <form action="{{ route('dashboard.admin-users.destroy', $account) }}" method="POST" data-confirm="Yakin ingin menghapus akun {{ $account->email }}?">

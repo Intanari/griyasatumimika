@@ -4,8 +4,17 @@
 @section('topbar-title', 'Detail Petugas')
 
 @section('content')
-<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Back</a>
+<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Kembali ke Data Petugas</a>
 <div class="card petugas-profile-card">
+    <div class="petugas-form-header">
+        <div class="petugas-form-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+            <h2 class="petugas-form-title">Detail Petugas</h2>
+            <p class="petugas-form-subtitle">Informasi lengkap petugas {{ $petuga->name }}</p>
+        </div>
+    </div>
     <div class="petugas-profile-header">
         <div class="petugas-profile-avatar-wrap">
             @if($petuga->foto_url)
@@ -114,16 +123,37 @@
 
 @push('styles')
 <style>
-.petugas-profile-card { max-width: 720px; }
+.petugas-profile-card { max-width: 720px; overflow: hidden; }
+.petugas-form-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+.petugas-form-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+.petugas-form-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+.petugas-form-subtitle { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
 .petugas-profile-header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding: 1.5rem 1.75rem;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
 }
+.petugas-profile-body { padding: 1.5rem 1.75rem; }
 .petugas-profile-avatar-wrap { position: relative; flex-shrink: 0; }
 .petugas-profile-avatar {
     width: 100px; height: 100px;

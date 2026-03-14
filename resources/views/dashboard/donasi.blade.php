@@ -33,10 +33,19 @@
             <div class="stat-icon orange">⏳</div>
         </div>
     </div>
+    <div class="stat-card red">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ number_format($stats['donasi_gagal'] ?? 0) }}</div>
+                <div class="stat-label">Gagal</div>
+            </div>
+            <div class="stat-icon red">❌</div>
+        </div>
+    </div>
     <div class="stat-card teal">
         <div class="stat-header">
             <div>
-                <div class="stat-value" style="font-size:1.25rem;">Rp {{ number_format($stats['total_terkumpul'], 0, ',', '.') }}</div>
+                <div class="stat-value" style="font-size:1.25rem;">Rp {{ number_format($stats['dana_terkumpul'] ?? 0, 0, ',', '.') }}</div>
                 <div class="stat-label">Dana Terkumpul</div>
             </div>
             <div class="stat-icon teal">💰</div>
@@ -49,6 +58,16 @@
                 <div class="stat-label">Pengeluaran Donasi</div>
             </div>
             <div class="stat-icon blue">💸</div>
+        </div>
+    </div>
+    <div class="stat-card cyan">
+        <div class="stat-header">
+            <div>
+                @php $sisaDana = max(0, ($stats['dana_terkumpul'] ?? 0) - ($stats['total_pengeluaran_donasi'] ?? 0)); @endphp
+                <div class="stat-value" style="font-size:1.25rem;">Rp {{ number_format($sisaDana, 0, ',', '.') }}</div>
+                <div class="stat-label">Sisa Dana</div>
+            </div>
+            <div class="stat-icon cyan">📊</div>
         </div>
     </div>
 </div>
@@ -82,22 +101,22 @@
                     @php $programLabels = ['rawat-inap' => 'Rawat Inap & Obat', 'pelatihan-vokasi' => 'Pelatihan Vokasi', 'rumah-singgah' => 'Rumah Singgah', 'umum' => 'Donasi Umum']; @endphp
                     @foreach ($donasi as $index => $d)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
+                            <td data-label="#">{{ $donasi->firstItem() + $index }}</td>
+                            <td data-label="Donatur">
                                 <div style="font-weight:600;">{{ $d->donor_name }}</div>
                                 <div style="font-size:0.78rem;color:var(--text-muted);">{{ $d->donor_email }}</div>
                             </td>
-                            <td>{{ $programLabels[$d->program] ?? $d->program }}</td>
-                            <td style="font-weight:700;color:var(--primary);">{{ $d->formatted_amount }}</td>
-                            <td>
+                            <td data-label="Program">{{ $programLabels[$d->program] ?? $d->program }}</td>
+                            <td data-label="Nominal" style="font-weight:700;color:var(--primary);">{{ $d->formatted_amount }}</td>
+                            <td data-label="Status">
                                 @if ($d->status === 'paid')<span class="badge badge-paid">✅ Berhasil</span>
                                 @elseif ($d->status === 'pending')<span class="badge badge-pending">⏳ Pending</span>
                                 @elseif ($d->status === 'failed')<span class="badge badge-failed">❌ Gagal</span>
                                 @else<span class="badge badge-cancel">🚫 {{ ucfirst($d->status) }}</span>
                                 @endif
                             </td>
-                            <td style="color:var(--text-muted);font-size:0.8rem;">{{ $d->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
-                            <td>
+                            <td data-label="Tanggal" style="color:var(--text-muted);font-size:0.8rem;">{{ $d->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
+                            <td data-label="Detail">
                                 <a href="{{ route('donation.payment', $d) }}" target="_blank" class="btn btn-sm btn-outline" title="Lihat detail donasi">
                                     Detail
                                 </a>
@@ -107,7 +126,9 @@
                 </tbody>
             </table>
         </div>
-        <p class="page-table-desc" style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);">Menampilkan 10 donasi terbaru. Data lain tidak ditampilkan di sini.</p>
+        @if ($donasi->hasPages())
+            <div style="margin-top:1.5rem;display:flex;justify-content:center;">{{ $donasi->appends(request()->query())->links('pagination::default') }}</div>
+        @endif
     @endif
 </div>
 
@@ -143,12 +164,12 @@
                 <tbody>
                     @foreach ($pengeluaran as $index => $p)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
+                            <td data-label="#">{{ $pengeluaran->firstItem() + $index }}</td>
+                            <td data-label="Digunakan untuk apa">
                                 <div style="font-weight:600;">{{ $p->keterangan }}</div>
                             </td>
-                            <td style="font-weight:700;color:var(--primary);">{{ $p->formatted_jumlah }}</td>
-                            <td>
+                            <td data-label="Jumlah" style="font-weight:700;color:var(--primary);">{{ $p->formatted_jumlah }}</td>
+                            <td data-label="Bukti">
                                 @if($p->bukti_path)
                                     <a href="{{ $p->bukti_url }}" target="_blank" rel="noopener" class="pengeluaran-bukti-link" title="Lihat bukti">
                                         <img src="{{ $p->bukti_url }}" alt="Bukti" class="pengeluaran-bukti-thumb">
@@ -157,11 +178,11 @@
                                     <span style="color:var(--text-muted);font-size:0.85rem;">–</span>
                                 @endif
                             </td>
-                            <td style="color:var(--text-muted);font-size:0.9rem;">
+                            <td data-label="Tanggal & Waktu" style="color:var(--text-muted);font-size:0.9rem;">
                                 {{ $p->tanggal_pengeluaran->locale('id')->translatedFormat('d F Y') }}
                                 <span style="font-size:0.8rem;">{{ $p->created_at->locale('id')->translatedFormat('H:i') }}</span>
                             </td>
-                            <td>
+                            <td data-label="Aksi">
                                 <a href="{{ route('dashboard.donasi.pengeluaran.edit', $p) }}" class="btn btn-sm btn-outline" title="Edit">Edit</a>
                                 <form action="{{ route('dashboard.donasi.pengeluaran.destroy', $p) }}" method="POST" style="display:inline;" data-confirm="Yakin hapus pengeluaran ini?">
                                     @csrf
@@ -174,7 +195,9 @@
                 </tbody>
             </table>
         </div>
-        <p class="page-table-desc" style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);">Menampilkan 10 pengeluaran donasi terbaru. Data lain tidak ditampilkan di sini.</p>
+        @if ($pengeluaran->hasPages())
+            <div style="margin-top:1.5rem;display:flex;justify-content:center;">{{ $pengeluaran->appends(request()->query())->links('pagination::default') }}</div>
+        @endif
     @endif
 </div>
 

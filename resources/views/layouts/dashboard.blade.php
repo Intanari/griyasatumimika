@@ -357,6 +357,8 @@
         .stat-card.teal::before { background: linear-gradient(180deg, var(--accent), #22d3ee); }
         .stat-card.blue::before { background: linear-gradient(180deg, #3b82f6, #60a5fa); }
         .stat-card.rose::before { background: linear-gradient(180deg, var(--accent-rose), #fb7185); }
+        .stat-card.red::before { background: linear-gradient(180deg, #dc2626, #ef4444); }
+        .stat-card.cyan::before { background: linear-gradient(180deg, #06b6d4, #22d3ee); }
         .stat-header { display: flex; align-items: flex-start; justify-content: space-between; }
         .stat-icon {
             width: 48px; height: 48px; border-radius: 14px;
@@ -369,6 +371,8 @@
         .stat-icon.teal { background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(34,211,238,0.1)); }
         .stat-icon.blue { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(96,165,250,0.1)); }
         .stat-icon.rose { background: linear-gradient(135deg, rgba(244,63,94,0.15), rgba(251,113,133,0.1)); }
+        .stat-icon.red { background: linear-gradient(135deg, rgba(220,38,38,0.15), rgba(239,68,68,0.1)); }
+        .stat-icon.cyan { background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(34,211,238,0.1)); }
         .stat-value { font-size: 1.75rem; font-weight: 800; color: var(--text); line-height: 1.2; letter-spacing: -0.02em; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
         .stat-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; opacity: 0.9; }
@@ -529,25 +533,54 @@
         .btn-outline:hover { background: rgba(59,130,246,0.08); border-color: var(--primary); color: var(--primary); }
 
         .welcome-banner {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, #38bdf8 100%);
-            border-radius: 16px; padding: 2rem 2.5rem; color: white;
-            margin-bottom: 2rem; position: relative; overflow: hidden;
-            box-shadow: 0 4px 24px rgba(59,130,246,0.25);
+            background: linear-gradient(135deg, rgba(239,246,255,0.96), rgba(219,234,254,1));
+            border-radius: 18px;
+            padding: 1.75rem 1.9rem 1.65rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(15,23,42,0.08);
+            border: 1px solid rgba(191,219,254,0.95);
         }
         .welcome-banner::before {
-            content: ''; position: absolute; top: -80px; right: -80px;
-            width: 280px; height: 280px;
-            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
-            border-radius: 50%;
+            content: '';
+            position: absolute;
+            inset: -120px 45% auto auto;
+            background: radial-gradient(circle at top, rgba(59,130,246,0.28), transparent 70%);
+            opacity: 0.9;
         }
-        .welcome-banner::after {
-            content: ''; position: absolute; bottom: -100px; right: 100px;
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
-            border-radius: 50%;
+        .welcome-banner h2 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+            position: relative;
+            letter-spacing: -0.02em;
         }
-        .welcome-banner h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem; position: relative; z-index: 1; letter-spacing: -0.02em; }
-        .welcome-banner p { font-size: 0.9rem; opacity: 0.95; position: relative; z-index: 1; line-height: 1.5; }
+        .welcome-banner p {
+            font-size: 0.9rem;
+            position: relative;
+            line-height: 1.6;
+            color: var(--text-muted);
+            max-width: 620px;
+        }
+        .welcome-banner-meta {
+            position: relative;
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.5rem;
+            font-size: 0.8rem;
+            color: #1f2937;
+        }
+        .welcome-banner-tag {
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(37,99,235,0.1);
+            color: #1d4ed8;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
 
         nav ul.pagination { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; list-style: none; padding: 0; margin: 0; }
         nav ul.pagination li { display: inline-block; }
@@ -656,8 +689,37 @@
             .stat-value { font-size: 1.5rem; }
             .card { padding: 1.25rem; }
             .card-title { font-size: 0.95rem; flex-wrap: wrap; gap: 0.75rem; }
-            .table-wrapper { margin: 0 -1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .table-wrapper table { min-width: 700px; font-size: 0.8rem; }
+            /* Tabel mobile: tetap bentuk tabel, muat di layar tanpa geser kiri-kanan */
+            .table-wrapper, .petugas-table-wrap, .jadwal-table-wrap, .rw-table-wrap, .jp-table-wrap, .jr-table-wrap, .sf-table-wrap, .stock-table-wrapper, .pa-table-wrap, .admin-account-table-wrap {
+                overflow-x: visible !important;
+                max-width: 100%;
+                margin-left: 0; margin-right: 0;
+            }
+            .table-wrapper table, .petugas-table-wrap table, .jadwal-table-wrap table, .rw-table-wrap table, .jp-table-wrap table, .jr-table-wrap table, .sf-table-wrap table, .stock-table-wrapper table, .pa-table-wrap table, .admin-account-table-wrap table {
+                width: 100% !important; max-width: 100% !important;
+                min-width: 0 !important;
+                table-layout: fixed;
+                font-size: 0.7rem;
+            }
+            .table-wrapper th, .table-wrapper td, .petugas-table-wrap th, .petugas-table-wrap td, .jadwal-table-wrap th, .jadwal-table-wrap td, .rw-table-wrap th, .rw-table-wrap td, .jp-table-wrap th, .jp-table-wrap td, .jr-table-wrap th, .jr-table-wrap td, .sf-table-wrap th, .sf-table-wrap td, .stock-table-wrapper th, .stock-table-wrapper td, .pa-table-wrap th, .pa-table-wrap td, .admin-account-table-wrap th, .admin-account-table-wrap td {
+                padding: 0.4rem 0.35rem;
+                word-break: normal;
+                overflow-wrap: break-word;
+                white-space: normal;
+                line-height: 1.25;
+            }
+            /* Header kolom: satu baris, huruf tidak dipenggal (NAMA, EMAIL, ROLE, AKSI utuh) */
+            .table-wrapper th, .petugas-table-wrap th, .jadwal-table-wrap th, .rw-table-wrap th, .jp-table-wrap th, .jr-table-wrap th, .sf-table-wrap th, .stock-table-wrapper th, .pa-table-wrap th, .admin-account-table-wrap th {
+                font-size: 0.65rem;
+                white-space: nowrap;
+            }
+            /* Isi sel: gambar/avatar mengecil, tombol ringkas */
+            .table-wrapper td img, .petugas-table-wrap td img, .jadwal-table-wrap td img, .rw-table-wrap td img, .pa-table-wrap td img {
+                max-width: 32px; max-height: 32px; height: auto; object-fit: cover;
+            }
+            .table-wrapper .btn-sm, .petugas-table-wrap .petugas-action-btn, .jadwal-table-wrap .jadwal-action-btn, .rw-table-wrap .rw-action-btn, .jp-table-wrap .jp-action, .jr-table-wrap .jr-action-btn, .sf-table-wrap .sf-action, .stock-table-wrapper .stock-row-btn, .admin-account-table-wrap .btn-sm {
+                padding: 4px 8px; font-size: 0.65rem; white-space: nowrap;
+            }
             th, td { padding: 0.65rem 0.75rem; }
             .welcome-banner { padding: 1.5rem 1.25rem; }
             .welcome-banner h2 { font-size: 1.25rem; }
@@ -1134,6 +1196,29 @@
             <span class="nav-item-icon">ℹ️</span>
             Tentang Sistem
         </a>
+        @if($isAdmin)
+        <div class="nav-section-title">Pengaturan</div>
+        <a href="{{ route('dashboard.profil-yayasan.index') }}" class="nav-item {{ request()->routeIs('dashboard.profil-yayasan.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">📄</span>
+            Profil Yayasan
+        </a>
+        <a href="{{ route('dashboard.profil-struktur.index') }}" class="nav-item {{ request()->routeIs('dashboard.profil-struktur.*') || request()->routeIs('dashboard.petugas-yayasan.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">🏛️</span>
+            Profil Struktur
+        </a>
+        <a href="{{ route('dashboard.visi-misi.index') }}" class="nav-item {{ request()->routeIs('dashboard.visi-misi.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">🎯</span>
+            Visi & Misi
+        </a>
+        <a href="{{ route('dashboard.layanan.index') }}" class="nav-item {{ request()->routeIs('dashboard.layanan.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">📋</span>
+            Layanan
+        </a>
+        <a href="{{ route('dashboard.web-settings.index') }}" class="nav-item {{ request()->routeIs('dashboard.web-settings.*') ? 'active' : '' }}">
+            <span class="nav-item-icon">⚙️</span>
+            Pengaturan Web
+        </a>
+        @endif
     </nav>
     <div class="sidebar-footer">
         <div class="user-card">

@@ -113,30 +113,30 @@
                 <tbody>
                     @foreach($jadwals as $i => $j)
                         <tr class="jadwal-row">
-                            <td class="jadwal-td-no">{{ $jadwals->firstItem() + $i }}</td>
-                            <td>
+                            <td class="jadwal-td-no" data-label="No">{{ $jadwals->firstItem() + $i }}</td>
+                            <td data-label="Pasien">
                                 <div class="jadwal-patient-cell">
                                     <div class="jadwal-patient-avatar">{{ strtoupper(mb_substr($j->patient->nama_lengkap ?? '?', 0, 1)) }}</div>
                                     <span class="jadwal-patient-name">{{ $j->patient->nama_lengkap ?? '–' }}</span>
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Pembimbing">
                                 <span class="jadwal-pembimbing">{{ $j->pembimbingUser->name ?? '–' }}</span>
                             </td>
-                            <td>
+                            <td data-label="Tanggal">
                                 <div class="jadwal-date-cell">
                                     <svg class="jadwal-date-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                                     {{ $j->tanggal?->locale('id')->translatedFormat('d F Y') }}
                                 </div>
                             </td>
-                            <td>
+                            <td data-label="Jam">
                                 @if($j->jam_mulai)
                                     <span class="jadwal-time">{{ \Carbon\Carbon::parse($j->jam_mulai)->format('H:i') }}{{ $j->jam_selesai ? ' – ' . \Carbon\Carbon::parse($j->jam_selesai)->format('H:i') : '' }}</span>
                                 @else
                                     <span class="jadwal-time-muted">–</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Aksi">
                                 <div class="jadwal-action-group">
                                     <a href="{{ route('dashboard.jadwal-pasien.show', $j) }}" class="jadwal-action-btn jadwal-action-detail" title="Detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>

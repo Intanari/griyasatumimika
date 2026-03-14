@@ -251,13 +251,13 @@
                             @if($groupByNama ?? true)
                                 @foreach($jadwals as $i => $row)
                                     <tr class="{{ $i % 2 === 0 ? 'jp-row-even' : 'jp-row-odd' }}">
-                                        <td>
+                                        <td data-label="Petugas">
                                             <div class="jp-user-cell">
                                                 <div class="jp-user-avatar">{{ strtoupper(substr($row->user->name ?? '?', 0, 1)) }}</div>
                                                 <span class="jp-user-name">{{ $row->user->name ?? '–' }}</span>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td data-label="Shift">
                                             @foreach($row->shifts as $sl)
                                                 @php $slug = in_array(strtolower($sl), ['pagi','siang','malam']) ? strtolower($sl) : 'default'; @endphp
                                                 <span class="jp-badge jp-badge-{{ $slug }}">{{ $sl }}</span>
@@ -265,9 +265,9 @@
                                             @if($row->has_ganti ?? false)<span class="jp-badge jp-badge-ganti">Pengganti</span>@endif
                                             @if($row->shifts->isEmpty() && !($row->has_ganti ?? false))<span class="jp-time-muted">–</span>@endif
                                         </td>
-                                        <td><span class="jp-time">{{ $row->jam }}</span></td>
-                                        <td><span class="jp-hari">{{ $row->hari ?: '–' }}</span></td>
-                                        <td>
+                                        <td data-label="Jam"><span class="jp-time">{{ $row->jam }}</span></td>
+                                        <td data-label="Hari"><span class="jp-hari">{{ $row->hari ?: '–' }}</span></td>
+                                        <td data-label="Aksi">
                                             <a href="{{ route('dashboard.jadwal-petugas.index', array_merge(request()->except('user_id', 'page'), ['user_id' => $row->user->id])) }}" class="jp-action jp-action-edit" title="Kelola jadwal">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                 <span>Kelola</span>
@@ -278,20 +278,20 @@
                             @else
                                 @foreach($jadwals as $i => $j)
                                     <tr class="{{ $i % 2 === 0 ? 'jp-row-even' : 'jp-row-odd' }}">
-                                        <td>
+                                        <td data-label="Petugas">
                                             <div class="jp-user-cell">
                                                 <div class="jp-user-avatar">{{ strtoupper(substr($j->user->name ?? '?', 0, 1)) }}</div>
                                                 <span class="jp-user-name">{{ $j->user->name ?? '–' }}</span>
                                             </div>
                                         </td>
                                         @php $shiftSlug = in_array(strtolower($j->shift_label), ['pagi','siang','malam']) ? strtolower($j->shift_label) : 'default'; @endphp
-                                        <td>
+                                        <td data-label="Shift">
                                             <span class="jp-badge jp-badge-{{ $shiftSlug }}">{{ $j->shift_label }}</span>
                                             @if($j->tipe === 'ganti')<span class="jp-badge jp-badge-ganti">Pengganti</span>@endif
                                         </td>
-                                        <td><span class="jp-time">{{ $j->jam_display }}</span></td>
-                                        <td><span class="jp-hari">{{ $j->hari }}</span></td>
-                                        <td>
+                                        <td data-label="Jam"><span class="jp-time">{{ $j->jam_display }}</span></td>
+                                        <td data-label="Hari"><span class="jp-hari">{{ $j->hari }}</span></td>
+                                        <td data-label="Aksi">
                                             <div class="jp-actions">
                                                 <a href="{{ route('dashboard.jadwal-petugas.duplicate', $j) }}" class="jp-action jp-action-copy" title="Salin">Salin</a>
                                                 <a href="{{ route('dashboard.jadwal-petugas.edit', $j) }}" class="jp-action jp-action-edit" title="Edit">Edit</a>

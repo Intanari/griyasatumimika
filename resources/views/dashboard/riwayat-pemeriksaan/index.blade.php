@@ -118,30 +118,30 @@
                 <tbody>
                     @foreach ($histories as $i => $h)
                     <tr class="rw-row">
-                        <td class="rw-td-no">{{ $histories->firstItem() + $i }}</td>
+                        <td class="rw-td-no" data-label="No">{{ $histories->firstItem() + $i }}</td>
 
-                        <td>
+                        <td data-label="Nama Pasien">
                             <div class="rw-patient-cell">
                                 <div class="rw-patient-avatar">{{ strtoupper(mb_substr($h->patient->nama_lengkap ?? '?', 0, 1)) }}</div>
                                 <span class="rw-patient-name">{{ $h->patient->nama_lengkap ?? '–' }}</span>
                             </div>
                         </td>
 
-                        <td>
+                        <td data-label="Tanggal Pemeriksaan">
                             <div class="rw-date-cell">
                                 <svg class="rw-date-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                                 <span>{{ $h->tanggal_pemeriksaan->translatedFormat('d M Y') }}</span>
                             </div>
                         </td>
 
-                        <td>
+                        <td data-label="Tempat Pemeriksaan">
                             <div class="rw-place-cell">
                                 <svg class="rw-place-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 <span>{{ $h->tempat_pemeriksaan }}</span>
                             </div>
                         </td>
 
-                        <td>
+                        <td data-label="Aksi">
                             <div class="rw-action-group">
                                 <a href="{{ route('dashboard.riwayat-pemeriksaan.show', $h) }}"
                                     class="rw-action-btn rw-action-detail" title="Lihat Detail">

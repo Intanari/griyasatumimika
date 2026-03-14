@@ -16,6 +16,16 @@ use App\Http\Controllers\ExaminationHistoryController;
 use App\Http\Controllers\PatientActivityController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\TransparansiDonasiController;
+use App\Http\Controllers\WebSettingController;
+use App\Http\Controllers\ProfilYayasanController;
+use App\Http\Controllers\StrukturOrganisasiController;
+use App\Http\Controllers\PetugasYayasanController;
+use App\Http\Controllers\VisiMisiController;
+use App\Http\Controllers\LayananController;
+use App\Http\Controllers\ProsesLaporanOdgjController;
+use App\Http\Controllers\TahapanRehabilitasiController;
+use App\Http\Controllers\PublicPatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 $mainDomain = config('app.main_domain');
 Route::domain($mainDomain)->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+        return view('public.home');
     })->name('welcome');
 });
 
@@ -190,15 +200,102 @@ Route::domain(config('app.admin_domain'))->group(function () {
             'update'  => 'dashboard.petugas.update',
             'destroy' => 'dashboard.petugas.destroy',
         ]);
+
+        Route::get('/dashboard/pengaturan-web', [WebSettingController::class, 'index'])->name('dashboard.web-settings.index');
+        Route::post('/dashboard/pengaturan-web/warna', [WebSettingController::class, 'saveColors'])->name('dashboard.web-settings.save-colors');
+        Route::post('/dashboard/pengaturan-web/p-colors', [WebSettingController::class, 'savePColors'])->name('dashboard.web-settings.save-p-colors');
+        Route::post('/dashboard/pengaturan-web/span-colors', [WebSettingController::class, 'saveSpanColors'])->name('dashboard.web-settings.save-span-colors');
+        Route::post('/dashboard/pengaturan-web/div-colors', [WebSettingController::class, 'saveDivColors'])->name('dashboard.web-settings.save-div-colors');
+        Route::post('/dashboard/pengaturan-web/link-colors', [WebSettingController::class, 'saveLinkColors'])->name('dashboard.web-settings.save-link-colors');
+        Route::post('/dashboard/pengaturan-web/button-colors', [WebSettingController::class, 'saveButtonColors'])->name('dashboard.web-settings.save-button-colors');
+        Route::post('/dashboard/pengaturan-web/custom-class-colors', [WebSettingController::class, 'saveCustomClassColors'])->name('dashboard.web-settings.save-custom-class-colors');
+        Route::post('/dashboard/pengaturan-web/background', [WebSettingController::class, 'saveBackground'])->name('dashboard.web-settings.save-background');
+
+        Route::get('/dashboard/profil-yayasan', [ProfilYayasanController::class, 'index'])->name('dashboard.profil-yayasan.index');
+        Route::get('/dashboard/profil-yayasan/create', [ProfilYayasanController::class, 'create'])->name('dashboard.profil-yayasan.create');
+        Route::post('/dashboard/profil-yayasan', [ProfilYayasanController::class, 'store'])->name('dashboard.profil-yayasan.store');
+        Route::get('/dashboard/profil-yayasan/{profilYayasan}', [ProfilYayasanController::class, 'show'])->name('dashboard.profil-yayasan.show');
+        Route::get('/dashboard/profil-yayasan/{profilYayasan}/edit', [ProfilYayasanController::class, 'edit'])->name('dashboard.profil-yayasan.edit');
+        Route::put('/dashboard/profil-yayasan/{profilYayasan}', [ProfilYayasanController::class, 'update'])->name('dashboard.profil-yayasan.update');
+        Route::delete('/dashboard/profil-yayasan/{profilYayasan}', [ProfilYayasanController::class, 'destroy'])->name('dashboard.profil-yayasan.destroy');
+
+        Route::get('/dashboard/profil-struktur', [StrukturOrganisasiController::class, 'index'])->name('dashboard.profil-struktur.index');
+        Route::put('/dashboard/profil-struktur/kepengurusan', [StrukturOrganisasiController::class, 'updateKepengurusan'])->name('dashboard.profil-struktur.update-kepengurusan');
+        Route::get('/dashboard/petugas-yayasan/create', [PetugasYayasanController::class, 'create'])->name('dashboard.petugas-yayasan.create');
+        Route::post('/dashboard/petugas-yayasan', [PetugasYayasanController::class, 'store'])->name('dashboard.petugas-yayasan.store');
+        Route::get('/dashboard/petugas-yayasan/{petugasYayasan}', [PetugasYayasanController::class, 'show'])->name('dashboard.petugas-yayasan.show');
+        Route::get('/dashboard/petugas-yayasan/{petugasYayasan}/edit', [PetugasYayasanController::class, 'edit'])->name('dashboard.petugas-yayasan.edit');
+        Route::put('/dashboard/petugas-yayasan/{petugasYayasan}', [PetugasYayasanController::class, 'update'])->name('dashboard.petugas-yayasan.update');
+        Route::delete('/dashboard/petugas-yayasan/{petugasYayasan}', [PetugasYayasanController::class, 'destroy'])->name('dashboard.petugas-yayasan.destroy');
+
+        Route::get('/dashboard/visi-misi', [VisiMisiController::class, 'index'])->name('dashboard.visi-misi.index');
+        Route::get('/dashboard/visi-misi/create', [VisiMisiController::class, 'create'])->name('dashboard.visi-misi.create');
+        Route::post('/dashboard/visi-misi', [VisiMisiController::class, 'store'])->name('dashboard.visi-misi.store');
+        Route::get('/dashboard/visi-misi/{visiMisi}', [VisiMisiController::class, 'show'])->name('dashboard.visi-misi.show');
+        Route::get('/dashboard/visi-misi/{visiMisi}/edit', [VisiMisiController::class, 'edit'])->name('dashboard.visi-misi.edit');
+        Route::put('/dashboard/visi-misi/{visiMisi}', [VisiMisiController::class, 'update'])->name('dashboard.visi-misi.update');
+        Route::delete('/dashboard/visi-misi/{visiMisi}', [VisiMisiController::class, 'destroy'])->name('dashboard.visi-misi.destroy');
+
+        Route::get('/dashboard/layanan', [LayananController::class, 'index'])->name('dashboard.layanan.index');
+        Route::get('/dashboard/layanan/proses-laporan-odgj/create', [ProsesLaporanOdgjController::class, 'create'])->name('dashboard.layanan.proses-laporan-odgj.create');
+        Route::post('/dashboard/layanan/proses-laporan-odgj', [ProsesLaporanOdgjController::class, 'store'])->name('dashboard.layanan.proses-laporan-odgj.store');
+        Route::get('/dashboard/layanan/proses-laporan-odgj/{prosesLaporanOdgj}', [ProsesLaporanOdgjController::class, 'show'])->name('dashboard.layanan.proses-laporan-odgj.show');
+        Route::get('/dashboard/layanan/proses-laporan-odgj/{prosesLaporanOdgj}/edit', [ProsesLaporanOdgjController::class, 'edit'])->name('dashboard.layanan.proses-laporan-odgj.edit');
+        Route::put('/dashboard/layanan/proses-laporan-odgj/{prosesLaporanOdgj}', [ProsesLaporanOdgjController::class, 'update'])->name('dashboard.layanan.proses-laporan-odgj.update');
+        Route::delete('/dashboard/layanan/proses-laporan-odgj/{prosesLaporanOdgj}', [ProsesLaporanOdgjController::class, 'destroy'])->name('dashboard.layanan.proses-laporan-odgj.destroy');
+        Route::get('/dashboard/layanan/tahapan-rehabilitasi/create', [TahapanRehabilitasiController::class, 'create'])->name('dashboard.layanan.tahapan-rehabilitasi.create');
+        Route::post('/dashboard/layanan/tahapan-rehabilitasi', [TahapanRehabilitasiController::class, 'store'])->name('dashboard.layanan.tahapan-rehabilitasi.store');
+        Route::get('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}', [TahapanRehabilitasiController::class, 'show'])->name('dashboard.layanan.tahapan-rehabilitasi.show');
+        Route::get('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}/edit', [TahapanRehabilitasiController::class, 'edit'])->name('dashboard.layanan.tahapan-rehabilitasi.edit');
+        Route::put('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}', [TahapanRehabilitasiController::class, 'update'])->name('dashboard.layanan.tahapan-rehabilitasi.update');
+        Route::delete('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}', [TahapanRehabilitasiController::class, 'destroy'])->name('dashboard.layanan.tahapan-rehabilitasi.destroy');
     });
 });
 
 // ============================================================
-// Domain Utama - Routes Publik (donasi, laporan)
+// Domain Utama - Routes Publik (profil, donasi, laporan)
 // ============================================================
 Route::domain($mainDomain)->group(function () {
+    Route::redirect('/tentang', '/profil', 301);
+    Route::get('/profil', fn () => view('public.pages.profil'))->name('pages.profil');
+    Route::get('/layanan', function () {
+        $prosesLaporanOdgj = \App\Models\ProsesLaporanOdgj::orderBy('no_urut')->orderBy('id')->get();
+        $tahapanRehabilitasi = \App\Models\TahapanRehabilitasi::orderBy('no_urut')->orderBy('id')->get();
+        return view('public.pages.layanan', compact('prosesLaporanOdgj', 'tahapanRehabilitasi'));
+    })->name('pages.layanan');
+    Route::get('/galeri', function () {
+        $activities = \App\Models\PatientActivity::with('patient')
+            ->whereNotNull('image')
+            ->where('image', '!=', '')
+            ->orderByDesc('tanggal')
+            ->get();
+        return view('public.pages.galeri', compact('activities'));
+    })->name('pages.galeri');
+    Route::get('/kontak', fn () => view('public.pages.kontak'))->name('pages.kontak');
+    Route::get('/cara-donasi', fn () => view('public.pages.cara-donasi'))->name('pages.cara-donasi');
+    Route::get('/mitra', fn () => view('public.pages.mitra'))->name('pages.mitra');
+    Route::get('/faq', fn () => view('public.pages.faq'))->name('pages.faq');
+
+    Route::get('/profil/yayasan', function () {
+        $profilItems = \App\Models\ProfilYayasan::orderBy('created_at')->get();
+        return view('public.pages.profil.yayasan', compact('profilItems'));
+    })->name('profil.yayasan');
+
+    Route::get('/profil/visi-misi', function () {
+        $visiMisiItems = \App\Models\VisiMisi::orderBy('created_at')->get();
+        return view('public.pages.profil.visi-misi', compact('visiMisiItems'));
+    })->name('profil.visi-misi');
+
+    Route::get('/profil/struktur-organisasi', function () {
+        $order = ['pembina', 'ketua_yayasan', 'ketua_pengawas', 'sekretaris', 'bendahara', 'pengawas'];
+        $kepengurusan = \App\Models\StrukturKepengurusan::all()->sortBy(fn ($m) => array_search($m->role, $order))->values();
+        $petugas = \App\Models\PetugasYayasan::orderBy('urutan')->orderBy('nama')->get();
+        return view('public.pages.profil.struktur-organisasi', compact('kepengurusan', 'petugas'));
+    })->name('profil.struktur');
+
     Route::get('/laporan-odgj', [OdgjReportController::class, 'showForm'])->name('odgj-report.form');
     Route::post('/laporan-odgj', [OdgjReportController::class, 'store'])->name('odgj-report.store');
+    Route::get('/laporan-odgj/{report}/sukses', [OdgjReportController::class, 'success'])->name('odgj-report.success');
 
     Route::get('/donasi', [DonationController::class, 'showForm'])->name('donation.form');
     Route::post('/donasi', [DonationController::class, 'store'])->name('donation.store');
@@ -208,4 +305,11 @@ Route::domain($mainDomain)->group(function () {
 
     // Midtrans callback (webhook dari Midtrans)
     Route::post('/donasi/callback', [DonationController::class, 'callback'])->name('donation.callback');
+
+    Route::get('/transparansi-donasi', [TransparansiDonasiController::class, 'index'])->name('transparansi.donasi');
+    Route::get('/transparansi-donasi/pdf/donasi', [TransparansiDonasiController::class, 'pdfDonations'])->name('transparansi.donasi.pdf.donations');
+    Route::get('/transparansi-donasi/pdf/pengeluaran', [TransparansiDonasiController::class, 'pdfExpenses'])->name('transparansi.donasi.pdf.expenses');
+
+    Route::get('/pasien', [PublicPatientController::class, 'index'])->name('public.pasien.index');
+    Route::get('/pasien/{patient}', [PublicPatientController::class, 'show'])->name('public.pasien.show');
 });

@@ -4,9 +4,9 @@
 @section('topbar-title', 'Edit Jadwal Rehabilitasi')
 
 @section('content')
+<a href="{{ route('dashboard.jadwal-rehabilitasi.index') }}" class="page-back-link">Kembali ke Jadwal Rehabilitasi</a>
 <div class="card jadwal-form-card">
     <div class="jadwal-form-header">
-        <a href="{{ route('dashboard.jadwal-rehabilitasi.index') }}" class="jadwal-back-link">← Kembali</a>
         <div class="jadwal-form-header-main">
             <div class="jadwal-form-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -95,8 +95,6 @@
 <style>
 .jadwal-form-card { padding: 0; overflow: hidden; }
 .jadwal-form-header { padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); background: #f8fafc; }
-.jadwal-back-link { display: inline-block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 0.75rem; text-decoration: none; }
-.jadwal-back-link:hover { color: var(--primary); }
 .jadwal-form-header-main { display: flex; align-items: center; gap: 1rem; }
 .jadwal-form-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); display: flex; align-items: center; justify-content: center; color: var(--primary); }
 .jadwal-form-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 2px; }

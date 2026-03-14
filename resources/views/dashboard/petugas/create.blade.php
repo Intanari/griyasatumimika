@@ -4,11 +4,16 @@
 @section('topbar-title', 'Tambah Petugas')
 
 @section('content')
-<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Back</a>
+<a href="{{ route('dashboard.petugas.index') }}" class="page-back-link">Kembali ke Data Petugas</a>
 <div class="card petugas-form-card">
     <div class="petugas-form-header">
-        <h2 class="petugas-form-title">Form Tambah Petugas Pendamping</h2>
-        <p class="petugas-form-subtitle">Lengkapi data identitas, pekerjaan, dan akun sistem.</p>
+        <div class="petugas-form-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+            <h2 class="petugas-form-title">Tambah Petugas Pendamping</h2>
+            <p class="petugas-form-subtitle">Lengkapi data identitas, pekerjaan, dan akun sistem.</p>
+        </div>
     </div>
 
     <form action="{{ route('dashboard.petugas.store') }}" method="POST" class="petugas-form" enctype="multipart/form-data">
@@ -153,10 +158,29 @@
 
 @push('styles')
 <style>
-.petugas-form-card { max-width: 900px; }
-.petugas-form-header { margin-bottom: 1.5rem; }
-.petugas-form-title { font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
-.petugas-form-subtitle { font-size: 0.875rem; color: var(--text-muted); }
+.petugas-form-card { max-width: 900px; overflow: hidden; }
+.petugas-form-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+    margin-bottom: 0;
+}
+.petugas-form-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+.petugas-form-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+.petugas-form-subtitle { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+.petugas-form { padding: 1.5rem 1.75rem; }
 .petugas-form-section { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
 .petugas-form-section:last-of-type { border-bottom: none; }
 .petugas-section-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }

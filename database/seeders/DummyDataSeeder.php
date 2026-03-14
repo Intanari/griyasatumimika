@@ -10,7 +10,6 @@ use App\Models\JadwalLibur;
 use App\Models\JadwalPetugas;
 use App\Models\OdgjReport;
 use App\Models\Patient;
-use App\Models\PatientActivity;
 use App\Models\PatientSchedule;
 use App\Models\RehabilitationSchedule;
 use App\Models\Shift;
@@ -59,27 +58,23 @@ class DummyDataSeeder extends Seeder
         $this->seedJadwalLibur($petugasUsers);
         $this->command->info('Jadwal libur seeded.');
 
-        // 9. Patient Activities
-        $this->seedPatientActivities($patients);
-        $this->command->info('Patient activities seeded.');
-
-        // 10. Rehabilitation Schedules
+        // 9. Rehabilitation Schedules
         $this->seedRehabilitationSchedules($petugasUsers);
         $this->command->info('Rehabilitation schedules seeded.');
 
-        // 11. Inventory Items
+        // 10. Inventory Items
         $inventoryItems = $this->seedInventoryItems();
         $this->command->info('Inventory items seeded.');
 
-        // 12. Stock Transactions
+        // 11. Stock Transactions
         $this->seedStockTransactions($inventoryItems, $petugasUsers);
         $this->command->info('Stock transactions seeded.');
 
-        // 13. Donation Expenses
+        // 12. Donation Expenses
         $this->seedDonationExpenses();
         $this->command->info('Donation expenses seeded.');
 
-        // 14. Stock Supplies & Expenses
+        // 13. Stock Supplies & Expenses
         $this->seedStockSuppliesAndExpenses();
         $this->command->info('Stock supplies & expenses seeded.');
 
@@ -243,27 +238,6 @@ class DummyDataSeeder extends Seeder
                     'user_id' => $user->id,
                     'tanggal' => now()->addDays(7),
                     'keterangan' => 'Cuti tahunan',
-                ]);
-            }
-        }
-    }
-
-    private function seedPatientActivities(array $patients): void
-    {
-        $jenis = ['terapi', 'senam', 'keterampilan', 'ibadah', 'rekreasi', 'lainnya'];
-        foreach ($patients as $i => $patient) {
-            for ($j = 0; $j < 4; $j++) {
-                PatientActivity::create([
-                    'patient_id' => $patient->id,
-                    'tanggal' => now()->subDays($j * 2),
-                    'jenis_aktivitas' => $jenis[$j % count($jenis)],
-                    'deskripsi' => 'Kegiatan dummy ' . ($j + 1),
-                    'hasil_evaluasi' => $j % 2 === 0 ? 'Baik' : null,
-                    'waktu_mulai' => '09:00',
-                    'waktu_selesai' => '10:30',
-                    'durasi_menit' => 90,
-                    'tempat' => 'Ruang Aktivitas',
-                    'batch_uuid' => Str::uuid()->toString(),
                 ]);
             }
         }

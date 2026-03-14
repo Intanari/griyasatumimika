@@ -15,13 +15,16 @@ class Patient extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'tanggal_masuk',
+        'tanggal_keluar',
         'status',
+        'deskripsi',
         'foto',
     ];
 
     protected $casts = [
         'tanggal_lahir' => 'date',
         'tanggal_masuk' => 'date',
+        'tanggal_keluar' => 'date',
     ];
 
     public function getUmurAttribute(): ?int

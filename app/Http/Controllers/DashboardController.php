@@ -97,10 +97,14 @@ class DashboardController extends Controller
 
         // ── Aktivitas Pasien stats ─────────────────────────────────────
         $activityStats = [
-            'total'     => PatientActivity::count(),
-            'bulan_ini' => PatientActivity::whereMonth('tanggal', now()->month)
-                             ->whereYear('tanggal', now()->year)->count(),
-            'hari_ini'  => PatientActivity::whereDate('tanggal', now())->count(),
+            'total'      => PatientActivity::count(),
+            'bulan_ini'  => PatientActivity::whereMonth('tanggal', now()->month)
+                              ->whereYear('tanggal', now()->year)->count(),
+            'minggu_ini' => PatientActivity::whereBetween('tanggal', [
+                now()->startOfWeek()->startOfDay(),
+                now()->endOfWeek()->endOfDay(),
+            ])->count(),
+            'hari_ini'   => PatientActivity::whereDate('tanggal', now())->count(),
         ];
 
         // ── Stok Barang (ringkasan untuk dashboard, ambil dari data stok barang) ──
@@ -170,14 +174,8 @@ class DashboardController extends Controller
             $stockChart = ['masuk' => 0, 'keluar' => 0, 'sisa' => 0];
         }
 
-        // ── Stok Barang per Item (untuk kotak & grafik di dashboard) ─────
+        // ── Stok Barang per Item: tampilkan card hanya berdasarkan data persediaan stok barang (StockSupply) ─────
         try {
-            $stockItems = InventoryItem::orderByDesc('quantity')
-                ->orderBy('name')
-                ->limit(8)
-                ->get();
-
-            // Kelompokkan stok masuk & keluar berdasarkan nama barang
             $stokMasukPerNama = StockSupply::select('nama', DB::raw('SUM(jumlah) as total'))
                 ->groupBy('nama')
                 ->pluck('total', 'nama');
@@ -185,58 +183,50 @@ class DashboardController extends Controller
                 ->groupBy('nama')
                 ->pluck('total', 'nama');
 
-            $perItemLabels = [];
-            $perItemJumlah = [];
-            $perItemMasuk = [];
-            $perItemKeluar = [];
-            $perItemSisa = [];
+            // Hanya item yang punya data persediaan (tabel persediaan stok barang) yang ditampilkan
+            $allNames = $stokMasukPerNama->keys()
+                ->sort()
+                ->values();
 
-            foreach ($stockItems as $item) {
-                $label = $item->name;
-                $masuk = (int) ($stokMasukPerNama[$label] ?? 0);
-                $keluar = (int) ($stokKeluarPerNama[$label] ?? 0);
+            $stockItems = collect();
+            $stockPerItemSisaByName = [];
+
+            foreach ($allNames as $nama) {
+                $masuk = (int) ($stokMasukPerNama[$nama] ?? 0);
+                $keluar = (int) ($stokKeluarPerNama[$nama] ?? 0);
                 $sisa = max(0, $masuk - $keluar);
 
-                $perItemLabels[] = $label;
-                // Jumlah item = total unit saat ini di tabel inventaris
-                $perItemJumlah[] = (int) $item->quantity;
-                $perItemMasuk[] = $masuk;
-                $perItemKeluar[] = $keluar;
-                $perItemSisa[] = $sisa;
+                $inv = InventoryItem::where('name', $nama)->first();
+                $unit = $inv ? $inv->unit : 'Unit';
+                $min_stock = $inv ? (int) $inv->min_stock : 0;
+                $category_label = $inv ? $inv->category_label : 'Lainnya';
+                $stock_status = $sisa <= 0 ? 'habis' : (($min_stock > 0 && $sisa < $min_stock) || ($min_stock === 0 && $sisa < 3) ? 'low' : 'aman');
+
+                $stockItems->push((object) [
+                    'name'            => $nama,
+                    'sisa'            => $sisa,
+                    'unit'            => $unit,
+                    'min_stock'       => $min_stock,
+                    'category_label'  => $category_label,
+                    'stock_status'    => $stock_status,
+                ]);
+                $stockPerItemSisaByName[$nama] = $sisa;
             }
 
-            $stockPerItemChart = [
-                'labels' => $perItemLabels,
-                'jumlah' => $perItemJumlah,
-                'masuk'  => $perItemMasuk,
-                'keluar' => $perItemKeluar,
-                'sisa'   => $perItemSisa,
-            ];
-
-            // Peta sisa stok per nama barang (menggunakan data dari tabel stok barang)
-            $stockPerItemSisaByName = [];
-            foreach ($perItemLabels as $index => $label) {
-                $stockPerItemSisaByName[$label] = (int) ($perItemSisa[$index] ?? 0);
-            }
+            $maxSisaStock = $stockItems->isEmpty() ? 1 : max(1, $stockItems->max('sisa'));
         } catch (\Throwable $e) {
             $stockItems = collect();
-            $stockPerItemChart = [
-                'labels' => [],
-                'jumlah' => [],
-                'masuk'  => [],
-                'keluar' => [],
-                'sisa'   => [],
-            ];
             $stockPerItemSisaByName = [];
+            $maxSisaStock = 1;
         }
 
-        return view('dashboard.index', compact(
+        return view('dashboard.home', compact(
             'user', 'stats',
             'donasi_terbaru', 'donasi_per_program', 'laporan_odgj',
             'patientChartStatus', 'patientChartGender',
             'examStats', 'examChartBulan', 'examChartTempat',
             'activityStats', 'stockStats', 'stockChart',
-            'stockItems', 'stockPerItemChart', 'stockPerItemSisaByName'
+            'stockItems', 'stockPerItemSisaByName', 'maxSisaStock'
         ));
     }
 
@@ -248,8 +238,8 @@ class DashboardController extends Controller
         }
         $stats = $this->getStats();
 
-        $donasi = Donation::orderByDesc('created_at')->take(10)->get();
-        $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->take(10)->get();
+        $donasi = Donation::orderByDesc('created_at')->paginate(10, ['*'], 'donasi_page');
+        $pengeluaran = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->paginate(10, ['*'], 'pengeluaran_page');
 
         return view('dashboard.donasi', compact('user', 'stats', 'donasi', 'pengeluaran'));
     }
@@ -269,7 +259,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $stats = $this->getStats();
 
-        $laporan_odgj = OdgjReport::orderByDesc('created_at')->paginate(20);
+        $laporan_odgj = OdgjReport::orderByDesc('created_at')->paginate(10);
 
         return view('dashboard.laporan', compact('user', 'stats', 'laporan_odgj'));
     }
@@ -338,7 +328,9 @@ class DashboardController extends Controller
             'total_donasi'        => Donation::count(),
             'donasi_sukses'       => Donation::where('status', 'paid')->count(),
             'donasi_pending'      => Donation::where('status', 'pending')->count(),
+            'donasi_gagal'        => Donation::where('status', 'failed')->count(),
             'total_terkumpul'     => max(0, (int) Donation::where('status', 'paid')->sum('amount') - (int) DonationExpense::sum('jumlah')),
+            'dana_terkumpul'      => (int) Donation::where('status', 'paid')->sum('amount'),
             'total_petugas'       => User::where('role', 'petugas_rehabilitasi')->where('is_active', true)->count(),
             'total_petugas_yayasan' => User::petugasYayasan()->count(),
             'petugas_aktif'       => User::petugasYayasan()->where('status_kerja', User::STATUS_AKTIF)->count(),
@@ -351,10 +343,13 @@ class DashboardController extends Controller
                 ->whereYear('paid_at', now()->year)
                 ->sum('amount'),
             'total_pengeluaran_donasi' => DonationExpense::sum('jumlah'),
-            'total_laporan_odgj'  => OdgjReport::count(),
-            'laporan_odgj_baru'   => OdgjReport::where('status', 'baru')->count(),
-            'laporan_penjemputan' => OdgjReport::where('kategori', 'penjemputan')->count(),
-            'laporan_pengantaran' => OdgjReport::where('kategori', 'pengantaran')->count(),
+            'total_laporan_odgj'   => OdgjReport::count(),
+            'laporan_odgj_baru'    => OdgjReport::where('status', 'baru')->count(),
+            'laporan_diterima'     => OdgjReport::whereIn('status', ['diproses', 'selesai'])->count(),
+            'laporan_ditolak'      => OdgjReport::where('status', 'ditolak')->count(),
+            'laporan_pending'      => OdgjReport::where('status', 'baru')->count(),
+            'laporan_penjemputan'  => OdgjReport::where('kategori', 'penjemputan')->count(),
+            'laporan_pengantaran'  => OdgjReport::where('kategori', 'pengantaran')->count(),
             'total_pasien'        => Patient::count(),
             'pasien_laki_laki'    => Patient::where('jenis_kelamin', 'L')->count(),
             'pasien_perempuan'    => Patient::where('jenis_kelamin', 'P')->count(),

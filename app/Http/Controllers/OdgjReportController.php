@@ -14,7 +14,12 @@ class OdgjReportController extends Controller
 {
     public function showForm()
     {
-        return view('odgj-report.form');
+        return view('public.odgj-report.form');
+    }
+
+    public function success(OdgjReport $report)
+    {
+        return view('public.odgj-report.success', compact('report'));
     }
 
     public function store(Request $request)
@@ -60,9 +65,7 @@ class OdgjReportController extends Controller
         $this->sendNotificationToPetugas($report);
         $this->sendThankYouToWarga($report);
 
-        return redirect()
-            ->route('odgj-report.form')
-            ->with('success', "Laporan ODGJ berhasil dikirim. Nomor laporan: {$nomorLaporan}. Petugas akan segera menghubungi Anda.");
+        return redirect()->route('odgj-report.success', $report);
     }
 
     private function sendNotificationToPetugas(OdgjReport $report): void

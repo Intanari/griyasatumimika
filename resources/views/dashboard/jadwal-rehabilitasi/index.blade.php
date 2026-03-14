@@ -180,14 +180,14 @@
                             <tbody>
                                 @foreach($jadwals as $i => $j)
                                     <tr class="jr-row">
-                                        <td class="jr-td-no">{{ $jadwals->firstItem() + $i }}</td>
-                                        <td><span class="jr-kegiatan-name">{{ $j->nama_kegiatan }}</span></td>
-                                        <td><span class="jr-badge jr-badge-hari">{{ $j->hari_label }}</span></td>
-                                        <td><span class="jr-time">{{ \Carbon\Carbon::parse($j->jam_mulai)->format('H:i') }}{{ $j->jam_selesai ? ' – ' . \Carbon\Carbon::parse($j->jam_selesai)->format('H:i') : '' }}</span></td>
-                                        <td><span class="jr-place">{{ $j->tempat ?? '–' }}</span></td>
-                                        <td><span class="jr-pembimbing">{{ $j->pembimbingUser->name ?? '–' }}</span></td>
-                                        <td><span class="jr-badge {{ $j->is_aktif ? 'jr-badge-aktif' : 'jr-badge-nonaktif' }}">{{ $j->is_aktif ? 'Aktif' : 'Nonaktif' }}</span></td>
-                                        <td>
+                                        <td class="jr-td-no" data-label="No">{{ $jadwals->firstItem() + $i }}</td>
+                                        <td data-label="Kegiatan"><span class="jr-kegiatan-name">{{ $j->nama_kegiatan }}</span></td>
+                                        <td data-label="Hari"><span class="jr-badge jr-badge-hari">{{ $j->hari_label }}</span></td>
+                                        <td data-label="Jam"><span class="jr-time">{{ \Carbon\Carbon::parse($j->jam_mulai)->format('H:i') }}{{ $j->jam_selesai ? ' – ' . \Carbon\Carbon::parse($j->jam_selesai)->format('H:i') : '' }}</span></td>
+                                        <td data-label="Tempat"><span class="jr-place">{{ $j->tempat ?? '–' }}</span></td>
+                                        <td data-label="Pembimbing"><span class="jr-pembimbing">{{ $j->pembimbingUser->name ?? '–' }}</span></td>
+                                        <td data-label="Status"><span class="jr-badge {{ $j->is_aktif ? 'jr-badge-aktif' : 'jr-badge-nonaktif' }}">{{ $j->is_aktif ? 'Aktif' : 'Nonaktif' }}</span></td>
+                                        <td data-label="Aksi">
                                             <div class="jr-action-group">
                                                 <a href="{{ route('dashboard.jadwal-rehabilitasi.edit', $j) }}" class="jr-action-btn jr-action-edit">Edit</a>
                                                 <form action="{{ route('dashboard.jadwal-rehabilitasi.destroy', $j) }}" method="POST" style="display:inline;" data-confirm="Yakin ingin menghapus jadwal ini? Semua petugas akan menerima notifikasi email.">

@@ -73,10 +73,10 @@
                 <tbody>
                     @forelse($supplies as $s)
                     <tr>
-                        <td>{{ $s->nama }}</td>
-                        <td>{{ number_format($s->jumlah) }}</td>
-                        <td>{{ $s->created_at->format('d/m/Y H:i') }}</td>
-                        <td class="action-cell">
+                        <td data-label="Nama">{{ $s->nama }}</td>
+                        <td data-label="Jumlah">{{ number_format($s->jumlah) }}</td>
+                        <td data-label="Waktu">{{ $s->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="action-cell" data-label="Aksi">
                             <div class="stock-row-actions">
                                 <a href="{{ route('dashboard.stock.persediaan.show', $s) }}" class="stock-row-btn stock-row-btn-view" title="Detail">Detail</a>
                                 <a href="{{ route('dashboard.stock.persediaan.edit', $s) }}" class="stock-row-btn stock-row-btn-edit" title="Edit">Edit</a>
@@ -115,10 +115,10 @@
                 <tbody>
                     @forelse($expenses as $e)
                     <tr>
-                        <td>{{ $e->nama }}</td>
-                        <td>{{ number_format($e->jumlah) }}</td>
-                        <td>{{ $e->created_at->format('d/m/Y H:i') }}</td>
-                        <td class="action-cell">
+                        <td data-label="Nama">{{ $e->nama }}</td>
+                        <td data-label="Jumlah">{{ number_format($e->jumlah) }}</td>
+                        <td data-label="Waktu">{{ $e->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="action-cell" data-label="Aksi">
                             <div class="stock-row-actions">
                                 <a href="{{ route('dashboard.stock.pengeluaran.show', $e) }}" class="stock-row-btn stock-row-btn-view" title="Detail">Detail</a>
                                 <a href="{{ route('dashboard.stock.pengeluaran.edit', $e) }}" class="stock-row-btn stock-row-btn-edit" title="Edit">Edit</a>

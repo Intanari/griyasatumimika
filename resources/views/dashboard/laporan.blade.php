@@ -15,13 +15,31 @@
             <div class="stat-icon purple">🚨</div>
         </div>
     </div>
+    <div class="stat-card green">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ number_format($stats['laporan_diterima'] ?? 0) }}</div>
+                <div class="stat-label">Diterima</div>
+            </div>
+            <div class="stat-icon green">✅</div>
+        </div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ number_format($stats['laporan_ditolak'] ?? 0) }}</div>
+                <div class="stat-label">Ditolak</div>
+            </div>
+            <div class="stat-icon red">❌</div>
+        </div>
+    </div>
     <div class="stat-card orange">
         <div class="stat-header">
             <div>
-                <div class="stat-value">{{ number_format($stats['laporan_odgj_baru']) }}</div>
-                <div class="stat-label">Baru</div>
+                <div class="stat-value">{{ number_format($stats['laporan_pending'] ?? $stats['laporan_odgj_baru']) }}</div>
+                <div class="stat-label">Pending</div>
             </div>
-            <div class="stat-icon orange">🆕</div>
+            <div class="stat-icon orange">⏳</div>
         </div>
     </div>
     <div class="stat-card blue">
@@ -72,22 +90,22 @@
                 <tbody>
                     @foreach ($laporan_odgj as $index => $laporan)
                         <tr>
-                            <td>{{ $laporan_odgj->firstItem() + $index }}</td>
-                            <td>
+                            <td data-label="#">{{ $laporan_odgj->firstItem() + $index }}</td>
+                            <td data-label="Email">
                                 @if($laporan->email)
                                     <a href="mailto:{{ $laporan->email }}" style="font-size:0.82rem;">{{ Str::limit($laporan->email, 25) }}</a>
                                 @else
                                     <span style="color:var(--text-muted);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Deskripsi">
                                 @if($laporan->deskripsi)
                                     <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $laporan->deskripsi }}">{{ Str::limit($laporan->deskripsi, 40) }}</div>
                                 @else
                                     <span style="color:var(--text-muted);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Status">
                                 @if ($laporan->status === 'baru')
                                     <span class="badge badge-pending">🆕 Baru</span>
                                 @elseif ($laporan->status === 'diproses')
@@ -98,8 +116,8 @@
                                     <span class="badge badge-cancel">✅ Selesai</span>
                                 @endif
                             </td>
-                            <td style="color:var(--text-muted);font-size:0.8rem;">{{ $laporan->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
-                            <td>
+                            <td data-label="Tanggal" style="color:var(--text-muted);font-size:0.8rem;">{{ $laporan->created_at->locale('id')->translatedFormat('d M Y, H:i') }}</td>
+                            <td data-label="Aksi">
                                 <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                                     <a href="{{ route('dashboard.laporan.show', $laporan) }}" class="btn btn-sm btn-outline" title="Lihat detail laporan">Detail</a>
                                     @if ($laporan->status === 'baru')

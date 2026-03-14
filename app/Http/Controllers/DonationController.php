@@ -33,7 +33,7 @@ class DonationController extends Controller
         $program      = $request->query('program', 'umum');
         $programLabel = $this->programs[$program] ?? 'Donasi Umum PeduliJiwa';
 
-        return view('donation.form', [
+        return view('public.donation.form', [
             'program'      => $program,
             'programLabel' => $programLabel,
             'programs'     => $this->programs,
@@ -112,7 +112,7 @@ class DonationController extends Controller
             return redirect()->route('donation.success', $donation->id);
         }
 
-        return view('donation.payment', compact('donation'));
+        return view('public.donation.payment', compact('donation'));
     }
 
     public function checkStatus(Donation $donation)
@@ -182,7 +182,7 @@ class DonationController extends Controller
 
     public function success(Donation $donation)
     {
-        return view('donation.success', compact('donation'));
+        return view('public.donation.success', compact('donation'));
     }
 
     private function sendThankYouEmail(Donation $donation): void

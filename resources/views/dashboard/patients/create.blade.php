@@ -63,8 +63,18 @@
                 </select>
                 @error('status')<span class="form-error">{{ $message }}</span>@enderror
             </div>
+            <div class="form-group form-group-tanggal-keluar" id="wrapTanggalKeluar" style="{{ old('status') === 'selesai' ? '' : 'display:none;' }}">
+                <label for="tanggal_keluar">Tanggal Keluar <span class="required" id="labelRequiredTanggalKeluar">*</span></label>
+                <input type="date" id="tanggal_keluar" name="tanggal_keluar" value="{{ old('tanggal_keluar') }}">
+                @error('tanggal_keluar')<span class="form-error">{{ $message }}</span>@enderror
+            </div>
         </div>
             </div>
+        </div>
+        <div class="form-group form-group-deskripsi">
+            <label for="deskripsi">Deskripsi Pasien</label>
+            <textarea id="deskripsi" name="deskripsi" rows="4" maxlength="2000" placeholder="Ringkasan kondisi, riwayat, atau catatan tambahan tentang pasien...">{{ old('deskripsi') }}</textarea>
+            @error('deskripsi')<span class="form-error">{{ $message }}</span>@enderror
         </div>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary btn-submit">Simpan</button>
@@ -82,11 +92,13 @@
 .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 0; }
 .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
 .form-group .required { color: #dc2626; }
-.form-group input, .form-group select {
+.form-group input, .form-group select, .form-group textarea {
     width: 100%; padding: 0.5rem 0.875rem; border: 1px solid var(--border); border-radius: 10px;
     font-size: 0.9rem; font-family: inherit;
 }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+.form-group-deskripsi { margin-bottom: 1rem; }
 .form-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.25rem; }
 .form-actions {
     display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;
@@ -130,6 +142,18 @@
             r.readAsDataURL(this.files[0]);
         }
     });
+    var statusSelect = document.getElementById('status');
+    var wrapTanggalKeluar = document.getElementById('wrapTanggalKeluar');
+    var inputTanggalKeluar = document.getElementById('tanggal_keluar');
+    if (statusSelect && wrapTanggalKeluar && inputTanggalKeluar) {
+        function toggleTanggalKeluar() {
+            var isSelesai = statusSelect.value === 'selesai';
+            wrapTanggalKeluar.style.display = isSelesai ? '' : 'none';
+            inputTanggalKeluar.required = isSelesai;
+        }
+        statusSelect.addEventListener('change', toggleTanggalKeluar);
+        toggleTanggalKeluar();
+    }
 })();
 </script>
 @endpush

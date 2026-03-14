@@ -4,21 +4,32 @@
 @section('topbar-title', 'Tambah Akun Petugas')
 
 @section('content')
-<a href="{{ route('dashboard.admin-users.index') }}" class="page-back-link">Kembali</a>
+<a href="{{ route('dashboard.admin-users.index') }}" class="page-back-link">Kembali ke Daftar Akun</a>
 
-<div class="card admin-account-form-card" style="max-width: 560px;">
-    <div class="admin-account-form-card-title">
-        <span>Form Tambah Akun Petugas</span>
-        @if(isset($isSuperAdmin) && $isSuperAdmin)
-            <span class="admin-account-badge-super">Super Admin</span>
-        @endif
+<div class="card admin-account-form-card">
+    <div class="admin-account-form-header">
+        <div class="admin-account-form-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+            <h2 class="admin-account-form-title">Tambah Akun Petugas</h2>
+            <p class="admin-account-form-subtitle">Buat akun baru untuk petugas. Isi data profil, password, dan role.</p>
+            @if(isset($isSuperAdmin) && $isSuperAdmin)
+                <span class="admin-account-badge-super">Super Admin</span>
+            @endif
+        </div>
     </div>
 
     <form action="{{ route('dashboard.admin-users.store') }}" method="POST" class="admin-account-form">
         @csrf
 
-        <div class="form-section">
-            <div class="form-section-title">Data Profil</div>
+        {{-- 1. Data Profil --}}
+        <div class="admin-account-section">
+            <h3 class="admin-account-section-title">
+                <span class="admin-account-section-icon">👤</span>
+                Data Profil
+            </h3>
+            <p class="admin-account-section-desc">Nama lengkap dan email untuk login.</p>
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Nama Lengkap <span class="required">*</span></label>
@@ -33,8 +44,13 @@
             </div>
         </div>
 
-        <div class="form-section">
-            <div class="form-section-title">Password</div>
+        {{-- 2. Buat Password --}}
+        <div class="admin-account-section">
+            <h3 class="admin-account-section-title">
+                <span class="admin-account-section-icon">🔐</span>
+                Buat Password
+            </h3>
+            <p class="admin-account-section-desc">Password untuk login pertama kali. Minimal 8 karakter.</p>
             <div class="form-group">
                 <label for="password">Password <span class="required">*</span></label>
                 <input type="password" id="password" name="password" required minlength="8" placeholder="Minimal 8 karakter">
@@ -46,8 +62,13 @@
             </div>
         </div>
 
-        <div class="form-section">
-            <div class="form-section-title">Role</div>
+        {{-- 3. Ubah Role --}}
+        <div class="admin-account-section">
+            <h3 class="admin-account-section-title">
+                <span class="admin-account-section-icon">⚙️</span>
+                Role
+            </h3>
+            <p class="admin-account-section-desc">Hak akses pengguna dalam sistem.</p>
             <div class="form-group">
                 <label for="role">Role <span class="required">*</span></label>
                 <select id="role" name="role" required>
@@ -61,32 +82,35 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Simpan</button>
+            <button type="submit" class="btn btn-primary">Simpan Akun</button>
             <a href="{{ route('dashboard.admin-users.index') }}" class="btn btn-outline">Batal</a>
         </div>
     </form>
 </div>
 
+@push('styles')
 <style>
-/* Card & layout */
-.admin-account-form-card {
-    box-shadow: 0 4px 24px rgba(15,23,42,0.06);
-    border-radius: 16px;
-    padding: 1.75rem 2rem;
-}
-.admin-account-form-card .admin-account-form-card-title,
-.admin-account-form-card .card-title {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    border-bottom: 1px solid var(--border);
+.admin-account-form-card { max-width: 640px; overflow: hidden; }
+.admin-account-form-header {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
 }
+.admin-account-form-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+.admin-account-form-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+.admin-account-form-subtitle { font-size: 0.82rem; color: var(--text-muted); margin: 0.25rem 0 0 0; }
 .admin-account-badge-super {
     display: inline-block;
     padding: 4px 10px;
@@ -98,42 +122,39 @@
     background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(168,85,247,0.15));
     color: #7c3aed;
     border: 1px solid rgba(124,58,237,0.3);
+    margin-top: 0.5rem;
 }
-[data-theme="dark"] .admin-account-badge-super {
-    background: rgba(139,92,246,0.25);
-    color: #a78bfa;
-    border-color: rgba(167,139,250,0.4);
-}
-/* Sections */
-.admin-account-form .form-section {
-    margin-bottom: 1.75rem;
+.admin-account-form { padding: 1.5rem 1.75rem; }
+.admin-account-section {
+    margin-bottom: 2rem;
     padding: 1.25rem 1.35rem;
-    background: rgba(0,0,0,0.02);
+    background: #f8fafc;
     border-radius: 12px;
     border: 1px solid var(--border);
 }
-[data-theme="dark"] .admin-account-form .form-section {
-    background: rgba(255,255,255,0.03);
-}
-.admin-account-form .form-section:last-of-type { margin-bottom: 0; }
-.admin-account-form .form-section-title {
-    font-size: 0.72rem;
+.admin-account-section:last-of-type { margin-bottom: 0; }
+.admin-account-section-title {
+    font-size: 0.95rem;
     font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
-/* Form groups */
+.admin-account-section-icon { font-size: 1.1rem; }
+.admin-account-section-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
 .admin-account-form .form-group {
     margin-bottom: 1.1rem;
 }
 .admin-account-form .form-group:last-child { margin-bottom: 0; }
 .admin-account-form .form-group label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 0.45rem;
@@ -142,18 +163,13 @@
 .admin-account-form .form-group input,
 .admin-account-form .form-group select {
     width: 100%;
-    padding: 0.65rem 0.95rem;
+    padding: 0.55rem 0.875rem;
     font-size: 0.9rem;
     font-family: inherit;
     color: var(--text);
-    background: var(--card);
+    background: #fff;
     border: 1px solid var(--border);
     border-radius: 10px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-.admin-account-form .form-group input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.8;
 }
 .admin-account-form .form-group input:focus,
 .admin-account-form .form-group select:focus {
@@ -175,18 +191,13 @@
     color: #dc2626;
     margin-top: 0.35rem;
 }
-/* Form row (Nama | Email) */
 .admin-account-form .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.1rem;
 }
-@media (max-width: 600px) {
-    .admin-account-form .form-row { grid-template-columns: 1fr; }
-}
-/* Actions */
 .admin-account-form .form-actions {
-    margin-top: 1.75rem;
+    margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
     display: flex;
@@ -194,6 +205,10 @@
     flex-wrap: wrap;
 }
 .admin-account-form .form-actions .btn { padding: 0.65rem 1.35rem; font-size: 0.9rem; }
+@media (max-width: 600px) {
+    .admin-account-form .form-row { grid-template-columns: 1fr; }
+}
 </style>
+@endpush
 @endsection
 

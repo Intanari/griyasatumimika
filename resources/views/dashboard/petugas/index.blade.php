@@ -153,19 +153,19 @@
                 <tbody>
                     @foreach ($petugas as $index => $p)
                         <tr>
-                            <td class="petugas-cell-no">{{ $petugas->firstItem() + $index }}</td>
-                            <td>
+                            <td class="petugas-cell-no" data-label="No">{{ $petugas->firstItem() + $index }}</td>
+                            <td data-label="Foto">
                                 @if($p->foto_url)
                                     <img src="{{ $p->foto_url }}" alt="{{ $p->name }}" class="petugas-avatar" loading="lazy">
                                 @else
                                     <div class="petugas-avatar petugas-avatar-initials" title="{{ $p->name }}">{{ strtoupper(mb_substr($p->name, 0, 1)) }}</div>
                                 @endif
                             </td>
-                            <td><strong class="petugas-cell-name">{{ $p->name }}</strong></td>
-                            <td>{{ $p->no_hp ?? '-' }}</td>
-                            <td class="petugas-cell-alamat">{{ Str::limit($p->alamat ?? '-', 35) }}</td>
-                            <td>{{ $p->tanggal_bergabung?->translatedFormat('d M Y') ?? '-' }}</td>
-                            <td>
+                            <td data-label="Nama Petugas"><strong class="petugas-cell-name">{{ $p->name }}</strong></td>
+                            <td data-label="Nomor HP">{{ $p->no_hp ?? '-' }}</td>
+                            <td class="petugas-cell-alamat" data-label="Alamat">{{ Str::limit($p->alamat ?? '-', 35) }}</td>
+                            <td data-label="Tanggal Bergabung">{{ $p->tanggal_bergabung?->translatedFormat('d M Y') ?? '-' }}</td>
+                            <td data-label="Status Kerja">
                                 @if($p->status_kerja === 'aktif')
                                     <span class="badge badge-paid">Aktif</span>
                                 @elseif($p->status_kerja === 'cuti')
@@ -174,7 +174,7 @@
                                     <span class="badge badge-cancel">Nonaktif</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Aksi">
                                 <div class="petugas-actions">
                                     <a href="{{ route('dashboard.petugas.show', $p) }}" class="petugas-action-btn petugas-action-detail" title="Detail">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>

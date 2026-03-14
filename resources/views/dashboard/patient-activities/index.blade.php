@@ -98,19 +98,20 @@
                         <th>Nama Pasien</th>
                         <th>Deskripsi</th>
                         <th class="pa-th-gambar">Gambar</th>
+                        <th class="pa-th-aksi">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($groups as $i => $g)
                     <tr>
-                        <td class="pa-td-no">{{ $groups->firstItem() + $i }}</td>
-                        <td class="pa-td-datetime">
+                        <td class="pa-td-no" data-label="No">{{ $groups->firstItem() + $i }}</td>
+                        <td class="pa-td-datetime" data-label="Tanggal Waktu">
                             <span class="pa-date">{{ $g->tanggal->translatedFormat('l, j F Y') }}</span>
                             <span class="pa-time">{{ $g->waktu }}</span>
                         </td>
-                        <td>{{ $g->pasien }}</td>
-                        <td class="pa-td-desc">{{ $g->deskripsi ? \Str::limit($g->deskripsi, 80) : '–' }}</td>
-                        <td class="pa-td-gambar">
+                        <td data-label="Nama Pasien">{{ $g->pasien }}</td>
+                        <td class="pa-td-desc" data-label="Deskripsi">{{ $g->deskripsi ? \Str::limit($g->deskripsi, 80) : '–' }}</td>
+                        <td class="pa-td-gambar" data-label="Gambar">
                             @if(!empty($g->image_urls))
                                 <div class="pa-thumbs-wrap">
                                     @foreach($g->image_urls as $url)
@@ -122,6 +123,17 @@
                             @else
                                 –
                             @endif
+                        </td>
+                        <td class="pa-td-aksi" data-label="Aksi">
+                            <div class="pa-action-buttons">
+                                <a href="{{ route('dashboard.patient-activities.show', $g->id) }}" class="pa-btn pa-btn-detail" title="Detail">Detail</a>
+                                <a href="{{ route('dashboard.patient-activities.edit', $g->id) }}" class="pa-btn pa-btn-edit" title="Edit">Edit</a>
+                                <form action="{{ route('dashboard.patient-activities.destroy', $g->id) }}" method="POST" class="pa-action-form" data-confirm="Yakin ingin menghapus aktivitas ini?">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="pa-btn pa-btn-hapus" title="Hapus">Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -200,6 +212,17 @@
 .pa-td-datetime .pa-date { display: block; font-weight: 600; color: #1d4ed8; margin-bottom: 0.35rem; }
 .pa-td-datetime .pa-time { display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; }
 .pa-td-desc { max-width: 360px; line-height: 1.5; }
+.pa-th-aksi { width: 160px; text-align: center; min-width: 140px; }
+.pa-td-aksi { text-align: center; vertical-align: middle; white-space: nowrap; }
+.pa-action-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; align-items: center; }
+.pa-action-form { display: inline; margin: 0; }
+.pa-btn { display: inline-block; padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 600; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.pa-btn-detail { background: #eff6ff; color: #1d4ed8; }
+.pa-btn-detail:hover { background: #dbeafe; }
+.pa-btn-edit { background: #fef3c7; color: #b45309; }
+.pa-btn-edit:hover { background: #fde68a; }
+.pa-btn-hapus { background: #fee2e2; color: #dc2626; }
+.pa-btn-hapus:hover { background: #fecaca; }
 .pa-pagination { padding: 1.25rem 1.75rem; border-top: 1px solid var(--border); display: flex; justify-content: center; }
 </style>
 @endpush

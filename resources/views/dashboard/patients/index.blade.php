@@ -50,15 +50,17 @@
                         <th>Umur</th>
                         <th>Jenis Kelamin</th>
                         <th>Tanggal Masuk</th>
+                        <th>Tanggal Keluar</th>
                         <th>Status</th>
+                        <th>Deskripsi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($patients as $index => $patient)
                         <tr>
-                            <td>{{ $patients->firstItem() + $index }}</td>
-                            <td>
+                            <td data-label="No">{{ $patients->firstItem() + $index }}</td>
+                            <td data-label="Foto">
                                 <a href="{{ route('dashboard.patients.show', $patient) }}" class="patient-photo-cell">
                                     @if($patient->foto_url)
                                         <img src="{{ asset('storage/' . $patient->foto) }}" alt="{{ $patient->nama_lengkap }}" class="patient-photo-thumb" loading="lazy">
@@ -67,18 +69,19 @@
                                     @endif
                                 </a>
                             </td>
-                            <td>{{ $patient->nama_lengkap }}</td>
-                            <td>
+                            <td data-label="Nama Lengkap">{{ $patient->nama_lengkap }}</td>
+                            <td data-label="Tempat, Tanggal Lahir">
                                 @if($patient->tempat_lahir || $patient->tanggal_lahir)
                                     {{ $patient->tempat_lahir ?? '-' }}, {{ $patient->tanggal_lahir?->translatedFormat('d M Y') ?? '-' }}
                                 @else
                                     <span style="color:var(--text-muted);">-</span>
                                 @endif
                             </td>
-                            <td>{{ $patient->umur ? $patient->umur . ' th' : '-' }}</td>
-                            <td>{{ $patient->jenis_kelamin_label }}</td>
-                            <td style="font-size:0.85rem;">{{ $patient->tanggal_masuk->translatedFormat('d M Y') }}</td>
-                            <td>
+                            <td data-label="Umur">{{ $patient->umur ? $patient->umur . ' th' : '-' }}</td>
+                            <td data-label="Jenis Kelamin">{{ $patient->jenis_kelamin_label }}</td>
+                            <td data-label="Tanggal Masuk" style="font-size:0.85rem;">{{ $patient->tanggal_masuk->translatedFormat('d M Y') }}</td>
+                            <td data-label="Tanggal Keluar" style="font-size:0.85rem;">{{ $patient->tanggal_keluar?->translatedFormat('d M Y') ?? '-' }}</td>
+                            <td data-label="Status">
                                 @if ($patient->status === 'aktif')
                                     <span class="badge badge-paid">Aktif</span>
                                 @elseif ($patient->status === 'selesai')
@@ -87,7 +90,14 @@
                                     <span class="badge badge-pending">Dirujuk</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Deskripsi" class="patient-deskripsi-cell">
+                                @if($patient->deskripsi)
+                                    <span title="{{ $patient->deskripsi }}">{{ Str::limit($patient->deskripsi, 50) }}</span>
+                                @else
+                                    <span style="color:var(--text-muted);">-</span>
+                                @endif
+                            </td>
+                            <td data-label="Aksi">
                                 <div class="action-buttons">
                                     <a href="{{ route('dashboard.patients.show', $patient) }}" class="btn btn-sm btn-outline" title="Detail">Detail</a>
                                     <a href="{{ route('dashboard.patients.edit', $patient) }}" class="btn btn-sm btn-outline" title="Edit">Edit</a>
@@ -180,6 +190,7 @@
     display: flex; align-items: center; justify-content: center;
     border: 2px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
+.patient-deskripsi-cell { max-width: 220px; font-size: 0.85rem; color: var(--text-muted); }
 </style>
 @endpush
 @endsection
