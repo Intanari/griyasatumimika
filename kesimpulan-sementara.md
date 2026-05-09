@@ -1,0 +1,6 @@
+# Kesimpulan Sementara
+
+Berdasarkan seluruh tahapan pengembangan Sistem Informasi Yayasan Griya Satu Mimika pada **Sprint 1 sampai Sprint 7**, dapat disimpulkan bahwa sistem berhasil dibangun secara bertahap dan terintegrasi melalui pemantapan fondasi keamanan dan pemisahan area publik–admin (routing domain, autentikasi, dan RBAC), penguatan alur pelaporan ODGJ dari form publik hingga notifikasi email dan pengelolaan status, serta penyusunan modul manajemen data operasional (pasien dan riwayat pemeriksaan). Pada tahapan berikutnya, sistem juga dikembangkan untuk mendukung pengelolaan jadwal kunjungan, manajemen petugas/shift, pengingat terjadwal, pencatatan aktivitas pasien, hingga pengembangan modul jadwal rehabilitasi. Selanjutnya, pada tahap operasional sistem semakin lengkap dengan adanya modul stok/inventori yang mendukung pencatatan supply dan transaksi dasar untuk kebutuhan aktivitas yayasan.
+
+Secara keseluruhan, dokumentasi artefak Scrum yang saling terhubung (sprint planning, daily scrum, increment/development, dan sprint review) menunjukkan bahwa proses pengembangan berjalan secara terstruktur. Hasil incremental yang terbentuk memberikan dampak pada peningkatan keteraturan informasi dan efisiensi proses operasional, serta menyediakan antarmuka yang dapat diandalkan baik untuk kebutuhan admin maupun kebutuhan publik.
+
