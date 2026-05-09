@@ -42,6 +42,11 @@
                 @error('tanggal_lahir')<span class="form-error">{{ $message }}</span>@enderror
             </div>
             <div class="form-group">
+                <label>Umur</label>
+                <div class="form-readonly-value" id="umurDisplay" aria-live="polite">{{ $patient->umur !== null ? $patient->umur . ' tahun' : '—' }}</div>
+                <span class="form-hint-umur">Dihitung otomatis dari tanggal lahir</span>
+            </div>
+            <div class="form-group">
                 <label for="jenis_kelamin">Jenis Kelamin</label>
                 <select id="jenis_kelamin" name="jenis_kelamin">
                     <option value="">-- Pilih --</option>
@@ -100,6 +105,23 @@
 }
 .form-group textarea { resize: vertical; min-height: 100px; }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+.form-readonly-value {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--card);
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    cursor: default;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-hint-umur { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem; }
 .form-group-deskripsi { margin-bottom: 1rem; }
 .form-error { display: block; font-size: 0.8rem; color: #dc2626; margin-top: 0.25rem; }
 .form-actions {
@@ -155,6 +177,30 @@
         }
         statusSelect.addEventListener('change', toggleTanggalKeluar);
         toggleTanggalKeluar();
+    }
+    function umurFromDateYmd(ymd) {
+        if (!ymd) return null;
+        var p = ymd.split('-');
+        if (p.length !== 3) return null;
+        var y = parseInt(p[0], 10), m = parseInt(p[1], 10) - 1, d = parseInt(p[2], 10);
+        var birth = new Date(y, m, d);
+        if (isNaN(birth.getTime())) return null;
+        var today = new Date();
+        var age = today.getFullYear() - birth.getFullYear();
+        var md = today.getMonth() - birth.getMonth();
+        if (md < 0 || (md === 0 && today.getDate() < birth.getDate())) age--;
+        return age >= 0 ? age : null;
+    }
+    var tanggalLahirInput = document.getElementById('tanggal_lahir');
+    var umurDisplay = document.getElementById('umurDisplay');
+    function refreshUmur() {
+        if (!umurDisplay) return;
+        var a = tanggalLahirInput ? umurFromDateYmd(tanggalLahirInput.value) : null;
+        umurDisplay.textContent = a !== null ? a + ' tahun' : '—';
+    }
+    if (tanggalLahirInput && umurDisplay) {
+        tanggalLahirInput.addEventListener('change', refreshUmur);
+        tanggalLahirInput.addEventListener('input', refreshUmur);
     }
 })();
 </script>

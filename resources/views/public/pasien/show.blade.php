@@ -28,21 +28,12 @@
                             <span class="pasien-detail-value">{{ $patient->nama_lengkap }}</span>
                         </div>
                         <div class="pasien-detail-row">
-                            <span class="pasien-detail-label">Tempat, Tanggal Lahir</span>
-                            <span class="pasien-detail-value">
-                                {{ $patient->tempat_lahir ?? '-' }},
-                                {{ $patient->tanggal_lahir ? $patient->tanggal_lahir->translatedFormat('d F Y') : '-' }}
-                            </span>
+                            <span class="pasien-detail-label">Umur</span>
+                            <span class="pasien-detail-value">{{ $patient->umur !== null ? $patient->umur . ' tahun' : '—' }}</span>
                         </div>
                         <div class="pasien-detail-row">
                             <span class="pasien-detail-label">Jenis Kelamin</span>
                             <span class="pasien-detail-value">{{ $patient->jenis_kelamin_label }}</span>
-                        </div>
-                        <div class="pasien-detail-row">
-                            <span class="pasien-detail-label">Tanggal Masuk</span>
-                            <span class="pasien-detail-value">
-                                {{ $patient->tanggal_masuk ? $patient->tanggal_masuk->translatedFormat('d F Y') : '-' }}
-                            </span>
                         </div>
                         <div class="pasien-detail-row">
                             <span class="pasien-detail-label">Status</span>
