@@ -197,7 +197,8 @@ class DashboardController extends Controller
                 $sisa = max(0, $masuk - $keluar);
 
                 $inv = InventoryItem::where('name', $nama)->first();
-                $unit = $inv ? $inv->unit : 'Unit';
+                $latestSupply = StockSupply::where('nama', $nama)->orderByDesc('created_at')->first();
+                $unit = $latestSupply?->satuan ?? ($inv ? $inv->unit : 'pcs');
                 $min_stock = $inv ? (int) $inv->min_stock : 0;
                 $category_label = $inv ? $inv->category_label : 'Lainnya';
                 $stock_status = $sisa <= 0 ? 'habis' : (($min_stock > 0 && $sisa < $min_stock) || ($min_stock === 0 && $sisa < 3) ? 'low' : 'aman');
@@ -233,7 +234,7 @@ class DashboardController extends Controller
     public function donasi()
     {
         $user = Auth::user();
-        if (! $user || (! $user->isAdmin() && ! $user->isManager())) {
+        if (! $user || ! $user->hasManagerPrivileges()) {
             abort(403);
         }
         $stats = $this->getStats();

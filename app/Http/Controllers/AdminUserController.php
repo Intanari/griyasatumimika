@@ -12,15 +12,10 @@ class AdminUserController extends Controller
 {
     public function index(Request $request)
     {
-        $user         = $this->ensureAdmin();
-        $isSuperAdmin = $this->isSuperAdmin($user);
+        $user         = $this->ensureCanManageAccounts();
+        $isSuperAdmin = $user->isSuperAdmin();
 
-        $query = User::query()->whereIn('role', [User::ROLE_PETUGAS, User::ROLE_ADMIN]);
-
-        // Jika bukan super admin, hanya boleh melihat petugas user
-        if (! $isSuperAdmin) {
-            $query->where('role', User::ROLE_PETUGAS);
-        }
+        $query = $this->accountsQueryFor($user);
 
         $search = trim((string) $request->query('q', ''));
         if ($search !== '') {
@@ -31,15 +26,12 @@ class AdminUserController extends Controller
         }
 
         $roleFilter = $request->query('role');
-        $allowedRoles = [User::ROLE_PETUGAS, User::ROLE_ADMIN];
+        $allowedFilters = $this->allowedRolesFor($user);
         $activeRoleFilter = null;
 
-        if ($roleFilter && in_array($roleFilter, $allowedRoles, true)) {
-            // Petugas admin hanya boleh memfilter petugas user
-            if ($isSuperAdmin || $roleFilter === User::ROLE_PETUGAS) {
-                $query->where('role', $roleFilter);
-                $activeRoleFilter = $roleFilter;
-            }
+        if ($roleFilter && in_array($roleFilter, $allowedFilters, true)) {
+            $query->where('role', $roleFilter);
+            $activeRoleFilter = $roleFilter;
         }
 
         $accounts = $query
@@ -51,33 +43,36 @@ class AdminUserController extends Controller
             ]);
 
         return view('dashboard.admin-users.index', [
-            'user'            => $user,
-            'accounts'        => $accounts,
-            'isSuperAdmin'    => $isSuperAdmin,
-            'search'          => $search,
-            'activeRoleFilter'=> $activeRoleFilter,
+            'user'             => $user,
+            'accounts'         => $accounts,
+            'isSuperAdmin'     => $isSuperAdmin,
+            'search'           => $search,
+            'activeRoleFilter' => $activeRoleFilter,
         ]);
     }
 
     public function create()
     {
-        $user = $this->ensureAdmin();
-        $isSuperAdmin = $this->isSuperAdmin($user);
-        return view('dashboard.admin-users.create', compact('user', 'isSuperAdmin'));
+        $user = $this->ensureCanManageAccounts();
+
+        return view('dashboard.admin-users.create', [
+            'user'         => $user,
+            'isSuperAdmin' => $user->isSuperAdmin(),
+        ]);
     }
 
     public function store(Request $request)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
         $data = $this->validateData($request, null, $user);
 
         User::create([
-            'name'        => $data['name'],
-            'email'       => $data['email'],
-            'password'    => Hash::make($data['password']),
-            'role'        => $data['role'],
-            'is_active'   => true,
-            'status_kerja'=> User::STATUS_AKTIF,
+            'name'         => $data['name'],
+            'email'        => $data['email'],
+            'password'     => Hash::make($data['password']),
+            'role'         => $data['role'],
+            'is_active'    => true,
+            'status_kerja' => User::STATUS_AKTIF,
         ]);
 
         return redirect()->route('dashboard.admin-users.index')
@@ -86,32 +81,24 @@ class AdminUserController extends Controller
 
     public function edit(User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        // Hanya super admin yang boleh mengelola akun admin
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
-        $isSuperAdmin = $this->isSuperAdmin($user);
         return view('dashboard.admin-users.edit', [
-            'user'          => $user,
-            'account'       => $admin_user,
-            'isSuperAdmin'  => $isSuperAdmin,
+            'user'         => $user,
+            'account'      => $admin_user,
+            'isSuperAdmin' => $user->isSuperAdmin(),
         ]);
     }
 
     public function update(Request $request, User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
@@ -131,12 +118,9 @@ class AdminUserController extends Controller
 
     public function updateProfile(Request $request, User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
@@ -161,12 +145,9 @@ class AdminUserController extends Controller
 
     public function updatePassword(Request $request, User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
@@ -183,21 +164,14 @@ class AdminUserController extends Controller
 
     public function updateRole(Request $request, User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
-        $allowedRoles = $this->isSuperAdmin($user)
-            ? [User::ROLE_PETUGAS, User::ROLE_ADMIN]
-            : [User::ROLE_PETUGAS];
-
         $data = $request->validate([
-            'role' => ['required', Rule::in($allowedRoles)],
+            'role' => ['required', Rule::in($this->allowedRolesFor($user))],
         ]);
 
         $admin_user->role = $data['role'];
@@ -209,12 +183,9 @@ class AdminUserController extends Controller
 
     public function destroy(User $admin_user)
     {
-        $user = $this->ensureAdmin();
+        $user = $this->ensureCanManageAccounts();
 
-        if (
-            ! in_array($admin_user->role, [User::ROLE_PETUGAS, User::ROLE_ADMIN]) ||
-            ($admin_user->role === User::ROLE_ADMIN && ! $this->isSuperAdmin($user))
-        ) {
+        if (! $this->canManageTarget($user, $admin_user)) {
             abort(404);
         }
 
@@ -242,15 +213,8 @@ class AdminUserController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore($target?->id),
             ],
+            'role'  => ['required', Rule::in($this->allowedRolesFor($currentUser))],
         ];
-
-        // Penentuan role yang diperbolehkan
-        if ($this->isSuperAdmin($currentUser)) {
-            $rules['role'] = ['required', Rule::in([User::ROLE_PETUGAS, User::ROLE_ADMIN])];
-        } else {
-            // Petugas admin hanya boleh mengelola petugas user
-            $rules['role'] = ['required', Rule::in([User::ROLE_PETUGAS])];
-        }
 
         if ($target) {
             $rules['password'] = ['nullable', 'string', 'min:8', 'confirmed'];
@@ -261,18 +225,55 @@ class AdminUserController extends Controller
         return $request->validate($rules);
     }
 
-    private function ensureAdmin(): User
+    private function ensureCanManageAccounts(): User
     {
         $user = Auth::user();
-        if (! $user || ! $user->isAdmin()) {
+        if (! $user || ! $user->canManageAccounts()) {
             abort(403);
         }
+
         return $user;
     }
 
-    private function isSuperAdmin(User $user): bool
+    /** @return list<string> */
+    private function allowedRolesFor(User $user): array
     {
-        return $user->email === 'admin@gmail.com';
+        if ($user->isSuperAdmin()) {
+            return [User::ROLE_SUPER_ADMIN, User::ROLE_ADMIN, User::ROLE_MANAGER];
+        }
+
+        if ($user->isAdmin()) {
+            return [User::ROLE_MANAGER];
+        }
+
+        return [];
+    }
+
+    private function accountsQueryFor(User $user)
+    {
+        $query = User::query();
+
+        if ($user->isSuperAdmin()) {
+            return $query->whereIn('role', User::staffAccountRoles());
+        }
+
+        if ($user->isAdmin()) {
+            return $query->where('role', User::ROLE_MANAGER);
+        }
+
+        abort(403);
+    }
+
+    private function canManageTarget(User $current, User $target): bool
+    {
+        if ($current->isSuperAdmin()) {
+            return in_array($target->role, User::staffAccountRoles(), true);
+        }
+
+        if ($current->isAdmin()) {
+            return $target->role === User::ROLE_MANAGER;
+        }
+
+        return false;
     }
 }
-

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class WebSetting extends Model
 {
@@ -69,6 +70,101 @@ class WebSetting extends Model
         return is_array($decoded) ? $decoded : [];
     }
 
+    /** @return array<string, string> */
+    public static function publicPageSlugs(): array
+    {
+        return config('public-pages.slugs', []);
+    }
+
+    /** @return array<string, string> */
+    public static function routeToPageSlug(): array
+    {
+        return config('public-pages.routes', []);
+    }
+
+    /** @return list<string> Path relatif disk public, mis. web-settings/foo.png */
+    public static function listStorageBackgroundImages(): array
+    {
+        if (! Storage::disk('public')->exists('web-settings')) {
+            return [];
+        }
+
+        $paths = [];
+        foreach (Storage::disk('public')->files('web-settings') as $path) {
+            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
+                $paths[] = $path;
+            }
+        }
+
+        sort($paths);
+
+        return $paths;
+    }
+
+    /**
+     * Gambar per halaman: dari DB, atau otomatis dari folder web-settings bila belum di-set.
+     *
+     * @return array<string, string>
+     */
+    public static function getResolvedBackgroundImages(): array
+    {
+        $saved = static::getBackgroundImages();
+        $slugs = array_keys(static::publicPageSlugs());
+        $images = static::listStorageBackgroundImages();
+
+        if ($images === []) {
+            return $saved;
+        }
+
+        $resolved = $saved;
+        foreach ($slugs as $i => $slug) {
+            if (empty($resolved[$slug])) {
+                $resolved[$slug] = $images[$i % count($images)];
+            }
+        }
+
+        return $resolved;
+    }
+
+    /**
+     * Simpan pemetaan 1 gambar per halaman dari folder storage/app/public/web-settings.
+     *
+     * @return array<string, string>
+     */
+    public static function syncPerPageBackgroundsFromStorage(bool $overwrite = false): array
+    {
+        $slugs = array_keys(static::publicPageSlugs());
+        $images = static::listStorageBackgroundImages();
+        $existing = static::getBackgroundImages();
+        $mapped = [];
+
+        foreach ($slugs as $i => $slug) {
+            if (! $overwrite && ! empty($existing[$slug])) {
+                $mapped[$slug] = $existing[$slug];
+            } elseif ($images !== []) {
+                $mapped[$slug] = $images[$i % count($images)];
+            }
+        }
+
+        static::set('background_images', $mapped);
+        static::set('background_image_mode', 'per_page');
+        static::set('background_type', 'gambar');
+
+        return $mapped;
+    }
+
+    public static function resolveBackgroundImageForSlug(?string $slug): ?string
+    {
+        if ($slug === null || $slug === '') {
+            return null;
+        }
+
+        $images = static::getResolvedBackgroundImages();
+
+        return $images[$slug] ?? null;
+    }
+
     public static function getBackgroundColors(): array
     {
         $raw = static::get('background_colors', '[]');
@@ -96,7 +192,9 @@ class WebSetting extends Model
                 'custom_class_colors' => static::getCustomClassColors(),
                 'a_colors' => static::getAColors(),
                 'button_colors' => static::getButtonColors(),
-                'background_images' => static::getBackgroundImages(),
+                'background_images' => (static::get('background_image_mode', 'global') === 'per_page')
+                    ? static::getResolvedBackgroundImages()
+                    : static::getBackgroundImages(),
                 'background_colors' => static::getBackgroundColors(),
                 default => $rows->get($k)?->value,
             };

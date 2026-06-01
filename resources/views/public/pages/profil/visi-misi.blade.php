@@ -30,7 +30,7 @@
     .profile-section .section-inner { max-width: 960px; margin: 0 auto; }
     .profile-section .profile-body { margin-left: auto; margin-right: auto; width: 100%; }
     .profile-meta-card h2 { margin-bottom: 1rem; font-size: 1.15rem; }
-    .profile-meta-card .profile-meta-content { font-size: 0.95rem; line-height: 1.75; color: var(--text-muted, #6b7280); }
+    .profile-meta-card .profile-meta-content { font-size: 0.95rem; line-height: 1.75; color: var(--text-muted, rgba(255,255,255,0.78)); }
 </style>
 @endpush
 

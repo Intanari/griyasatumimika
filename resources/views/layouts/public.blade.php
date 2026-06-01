@@ -14,8 +14,8 @@
             --accent: #0ea5e9;
             --accent-green: #10b981;
             --accent-amber: #f59e0b;
-            --text: #0f172a;
-            --text-muted: #64748b;
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.78);
             --border: #e2e8f0;
             --bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
         }

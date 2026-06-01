@@ -12,8 +12,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div>
-            <h2 class="admin-account-form-title">Tambah Akun Petugas</h2>
-            <p class="admin-account-form-subtitle">Buat akun baru untuk petugas. Isi data profil, password, dan role.</p>
+            <h2 class="admin-account-form-title">Tambah Akun</h2>
+            <p class="admin-account-form-subtitle">Buat akun baru dengan role Admin atau Manajer.</p>
             @if(isset($isSuperAdmin) && $isSuperAdmin)
                 <span class="admin-account-badge-super">Super Admin</span>
             @endif
@@ -72,10 +72,11 @@
             <div class="form-group">
                 <label for="role">Role <span class="required">*</span></label>
                 <select id="role" name="role" required>
-                    <option value="{{ \App\Models\User::ROLE_PETUGAS }}" {{ old('role', isset($isSuperAdmin) && !$isSuperAdmin ? \App\Models\User::ROLE_PETUGAS : null) === \App\Models\User::ROLE_PETUGAS ? 'selected' : '' }}>Petugas User</option>
                     @if(isset($isSuperAdmin) && $isSuperAdmin)
-                        <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ old('role') === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Petugas Admin</option>
+                        <option value="{{ \App\Models\User::ROLE_SUPER_ADMIN }}" {{ old('role') === \App\Models\User::ROLE_SUPER_ADMIN ? 'selected' : '' }}>Super Admin</option>
+                        <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ old('role') === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Admin</option>
                     @endif
+                    <option value="{{ \App\Models\User::ROLE_MANAGER }}" {{ old('role', !(isset($isSuperAdmin) && $isSuperAdmin) ? \App\Models\User::ROLE_MANAGER : null) === \App\Models\User::ROLE_MANAGER ? 'selected' : '' }}>Manajer</option>
                 </select>
                 @error('role')<span class="form-error">{{ $message }}</span>@enderror
             </div>

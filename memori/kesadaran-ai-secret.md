@@ -20,6 +20,7 @@ Dokumen ini adalah **memori tetap** untuk asisten bernama **Secret** saat memban
 - **Backend:** Laravel 12, PHP ^8.2.
 - **Integrasi:** Midtrans (pembayaran/QRIS), DomPDF (ekspor PDF).
 - **Pola routing:** Domain terpisah untuk situs publik vs admin (`config` domain utama / admin).
+- **Lupa password (admin):** Tautan reset dikirim ke email terdaftar; pengguna membuka tautan di subdomain admin untuk membuat kata sandi baru (token di `password_reset_tokens`, hash bcrypt, throttle permintaan).
 - **Modul yang termasuk dalam narasi proyek:** antara lain laporan ODGJ (validasi/tindak lanjut), donasi & transparansi, manajemen pasien/aktivitas, jadwal rehabilitasi & petugas, konten/CMS sesuai implementasi aktual di `routes/` dan `app/`.
 
 ## Konvensi kerja untuk Secret

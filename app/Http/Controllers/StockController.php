@@ -32,12 +32,16 @@ class StockController extends Controller
         $totalByNamaSupply = $supplies->groupBy('nama')->map(fn ($rows) => $rows->sum('jumlah'));
         $totalByNamaExpense = $expenses->groupBy('nama')->map(fn ($rows) => $rows->sum('jumlah'));
         $allNames = $totalByNamaSupply->keys()->merge($totalByNamaExpense->keys())->unique()->sort()->values();
+        $satuanByNama = $supplies->groupBy('nama')->map(
+            fn ($rows) => $rows->sortByDesc('created_at')->first()->satuan ?? 'pcs'
+        );
         $cardSisa = $allNames->map(fn ($nama) => [
             'nama' => $nama,
             'sisa' => ($totalByNamaSupply[$nama] ?? 0) - ($totalByNamaExpense[$nama] ?? 0),
+            'satuan' => $satuanByNama[$nama] ?? 'pcs',
         ])->values();
 
-        return view('dashboard.stock.index', compact('user', 'supplies', 'expenses', 'cardSisa'));
+        return view('dashboard.stock.index', compact('user', 'supplies', 'expenses', 'cardSisa', 'satuanByNama'));
     }
 
     public function createSupply()
@@ -54,10 +58,12 @@ class StockController extends Controller
         $valid = $request->validate([
             'nama' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:1',
+            'satuan' => 'nullable|string|max:20',
             'harga' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
         $valid['jumlah'] = (int) $valid['jumlah'];
+        $valid['satuan'] = $valid['satuan'] ?? 'pcs';
         $valid['gambar'] = $request->hasFile('gambar') ? $request->file('gambar')->store('stock-supplies', 'public') : null;
         StockSupply::create($valid);
         return redirect()->route('dashboard.stock.index')->with('success', 'Persediaan stok barang berhasil ditambah.');
@@ -83,11 +89,13 @@ class StockController extends Controller
         $valid = $request->validate([
             'nama' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:1',
+            'satuan' => 'nullable|string|max:20',
             'harga' => 'nullable|numeric|min:0',
             'gambar' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ]);
         $stock_supply->nama = $valid['nama'];
         $stock_supply->jumlah = (int) $valid['jumlah'];
+        $stock_supply->satuan = $valid['satuan'] ?? 'pcs';
         $stock_supply->harga = $valid['harga'] ?? null;
         if ($request->hasFile('gambar')) {
             if ($stock_supply->gambar) {

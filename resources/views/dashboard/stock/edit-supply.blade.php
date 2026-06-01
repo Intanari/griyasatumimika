@@ -19,6 +19,13 @@
 <input type="number" id="jumlah" name="jumlah" value="{{ old('jumlah', $stock_supply->jumlah) }}" required min="1">
 @error('jumlah')<span class="form-error">{{ $message }}</span>@enderror
 </div>
+<div class="form-group"><label for="satuan">Satuan</label>
+<input type="text" id="satuan" name="satuan" value="{{ old('satuan', $stock_supply->satuan ?? 'pcs') }}" maxlength="20" placeholder="pcs, kg, liter" list="satuan-list">
+<datalist id="satuan-list">
+<option value="pcs"><option value="kg"><option value="liter"><option value="pack"><option value="botol"><option value="dus"><option value="box"><option value="lembar"><option value="roll">
+</datalist>
+@error('satuan')<span class="form-error">{{ $message }}</span>@enderror
+</div>
 <div class="form-group"><label for="harga">Harga</label>
 <input type="number" id="harga" name="harga" value="{{ old('harga', $stock_supply->harga) }}" min="0">
 @error('harga')<span class="form-error">{{ $message }}</span>@enderror

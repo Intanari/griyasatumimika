@@ -5,7 +5,7 @@
 @push('styles')
 <style>
     .gallery-section {
-        background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 35%, #f9fafb 100%);
+        background: transparent;
         position: relative;
         overflow: hidden;
     }
@@ -41,15 +41,15 @@
         font-size: 2rem;
         line-height: 1.3;
         margin-bottom: 0.6rem;
-        background: linear-gradient(135deg, #0f172a, #1e3a8a);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #ffffff;
+        background: none;
+        -webkit-text-fill-color: #ffffff;
+        background-clip: unset;
     }
     .gallery-section .section-desc {
         font-size: 0.95rem;
         line-height: 1.75;
-        color: #64748b;
+        color: rgba(255,255,255,0.85);
     }
 
     .gallery-section .gallery-grid {
@@ -184,7 +184,7 @@
     .gallery-empty {
         grid-column: 1 / -1;
         text-align: center;
-        color: #64748b;
+        color: rgba(255,255,255,0.85);
         padding: 2rem 1rem;
     }
     @media (max-width: 900px) {

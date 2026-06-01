@@ -65,6 +65,23 @@ Sistem menyediakan layanan publik dan dashboard admin terpisah melalui domain (p
 - Dependensi: model `User` dan tabel `users`.
 
 ---
+## PB-002A Auth Lupa Password Admin (Reset via Email)
+- Epic: Fondasi & Keamanan
+- User story: Sebagai admin/petugas yang lupa kata sandi, saya ingin menerima tautan reset ke email terdaftar agar dapat membuat kata sandi baru secara aman.
+- Deskripsi: Fitur lupa password menggunakan mekanisme pengiriman tautan reset password ke email pengguna yang telah terdaftar. Pengguna dapat mengakses tautan tersebut untuk membuat password baru secara aman.
+- Prioritas: `Must (M)`
+- Estimasi: 3 SP
+- Status: **Selesai** (domain admin)
+- Acceptance criteria:
+  1. Halaman login menyediakan tautan **Lupa kata sandi?** menuju form permintaan reset.
+  2. Email terdaftar menerima tautan reset (berlaku terbatas, mis. 60 menit) ke subdomain admin.
+  3. Halaman reset memvalidasi token, email, dan kata sandi baru (minimal 8 karakter + konfirmasi).
+  4. Password baru disimpan dengan hash; pesan sukses mengarahkan ke login.
+  5. Permintaan reset dibatasi rate limit; respons tidak membocorkan keberadaan email.
+- Implementasi: `ForgotPasswordController`, `NewPasswordController`, `ResetPasswordMail`, rute `password.request` / `password.email` / `password.reset` / `password.update`.
+- Dependensi: PB-002, konfigurasi `MAIL_*`, tabel `password_reset_tokens`.
+
+---
 ## PB-003 Auth Register Admin (opsional sesuai kebutuhan yayasan)
 - Epic: Fondasi & Keamanan
 - User story: Sebagai admin, saya ingin mendaftarkan akun petugas/admin sesuai prosedur internal.

@@ -10,7 +10,7 @@ class StockSupply extends Model
     use HasUuids;
     protected $table = 'stock_supplies';
 
-    protected $fillable = ['nama', 'jumlah', 'harga', 'gambar'];
+    protected $fillable = ['nama', 'jumlah', 'satuan', 'harga', 'gambar'];
 
     protected $casts = [
         'jumlah' => 'integer',

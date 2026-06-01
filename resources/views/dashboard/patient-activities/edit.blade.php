@@ -86,13 +86,13 @@
             <div class="rw-grid-2">
                 <div class="rw-form-group">
                     <label class="rw-label">Waktu Mulai</label>
-                    <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai', $patientActivity->waktu_mulai?->format('H:i')) }}"
+                    <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai', $patientActivity->waktu_mulai ? \Carbon\Carbon::parse($patientActivity->waktu_mulai)->format('H:i') : '') }}"
                         class="rw-input {{ $errors->has('waktu_mulai') ? 'rw-invalid' : '' }}">
                     @error('waktu_mulai')<span class="rw-error-msg">{{ $message }}</span>@enderror
                 </div>
                 <div class="rw-form-group">
                     <label class="rw-label">Waktu Selesai</label>
-                    <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai', $patientActivity->waktu_selesai?->format('H:i')) }}"
+                    <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai', $patientActivity->waktu_selesai ? \Carbon\Carbon::parse($patientActivity->waktu_selesai)->format('H:i') : '') }}"
                         class="rw-input {{ $errors->has('waktu_selesai') ? 'rw-invalid' : '' }}">
                     @error('waktu_selesai')<span class="rw-error-msg">{{ $message }}</span>@enderror
                 </div>

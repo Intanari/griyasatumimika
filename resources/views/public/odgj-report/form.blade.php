@@ -184,7 +184,7 @@
         border-radius: 14px;
         font-size: 0.95rem;
         font-family: inherit;
-        color: #000000;
+        color: #ffffff;
         background: rgba(255,255,255,0.2);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);

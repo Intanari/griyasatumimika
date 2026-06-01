@@ -12,7 +12,7 @@
         <dt>Nama stok barang</dt>
         <dd>{{ $stock_supply->nama }}</dd>
         <dt>Jumlah</dt>
-        <dd>{{ number_format($stock_supply->jumlah) }}</dd>
+        <dd>{{ number_format($stock_supply->jumlah) }} {{ $stock_supply->satuan ?? 'pcs' }}</dd>
         <dt>Harga</dt>
         <dd>@if($stock_supply->harga !== null) Rp {{ number_format($stock_supply->harga, 0, ',', '.') }} @else – @endif</dd>
         <dt>Waktu</dt>

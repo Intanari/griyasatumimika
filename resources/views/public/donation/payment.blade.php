@@ -54,7 +54,7 @@
     .qr-frame img { width: 200px; height: 200px; display: block; border-radius: 8px; }
     .qr-demo-placeholder { width: 200px; height: 200px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 1rem; border: 1px solid rgba(255,255,255,0.2); }
     .qr-demo-placeholder .qr-icon { font-size: 3rem; }
-    .qr-demo-placeholder .qr-text { font-size: 0.78rem; color: #64748b; line-height: 1.4; }
+    .qr-demo-placeholder .qr-text { font-size: 0.78rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
     .qr-corner { position: absolute; width: 14px; height: 14px; border-color: #2563eb; border-style: solid; }
     .qr-corner-tl { top: 6px; left: 6px; border-width: 3px 0 0 3px; border-radius: 2px 0 0 0; }
     .qr-corner-tr { top: 6px; right: 6px; border-width: 3px 3px 0 0; border-radius: 0 2px 0 0; }
@@ -143,7 +143,7 @@
                             @else
                                 <div class="qr-demo-placeholder">
                                     <div class="qr-icon">📱</div>
-                                    <div class="qr-text"><strong style="color:#1d4ed8">QR Code QRIS</strong><br>akan muncul di sini setelah Midtrans dikonfigurasi</div>
+                                    <div class="qr-text"><strong style="color:#ffffff">QR Code QRIS</strong><br>akan muncul di sini setelah Midtrans dikonfigurasi</div>
                                 </div>
                             @endif
                         </div>

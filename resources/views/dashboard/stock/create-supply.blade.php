@@ -29,6 +29,23 @@
             @error('jumlah')<span class="form-error">{{ $message }}</span>@enderror
         </div>
         <div class="form-group">
+            <label for="satuan">Satuan</label>
+            <input type="text" id="satuan" name="satuan" value="{{ old('satuan', 'pcs') }}" maxlength="20" placeholder="Contoh: pcs, kg, liter" list="satuan-list">
+            <datalist id="satuan-list">
+                <option value="pcs">
+                <option value="kg">
+                <option value="liter">
+                <option value="pack">
+                <option value="botol">
+                <option value="dus">
+                <option value="box">
+                <option value="lembar">
+                <option value="roll">
+            </datalist>
+            <span class="form-hint">Satuan pengukuran barang (default: pcs)</span>
+            @error('satuan')<span class="form-error">{{ $message }}</span>@enderror
+        </div>
+        <div class="form-group">
             <label for="harga">Harga stok barang</label>
             <input type="number" id="harga" name="harga" value="{{ old('harga') }}" min="0" step="0.01" placeholder="Rp">
             @error('harga')<span class="form-error">{{ $message }}</span>@enderror

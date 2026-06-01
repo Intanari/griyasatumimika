@@ -26,6 +26,8 @@ class PatientActivity extends Model
 
     protected $casts = [
         'tanggal' => 'date',
+        'waktu_mulai' => 'datetime:H:i:s',
+        'waktu_selesai' => 'datetime:H:i:s',
     ];
 
     /**

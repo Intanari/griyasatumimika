@@ -97,8 +97,8 @@
         transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .modal-overlay.open .modal-box { transform: scale(1); }
-    .modal-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; line-height: 1.3; word-break: break-word; }
-    .modal-message { font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem; word-break: break-word; max-height: 50vh; overflow-y: auto; }
+    .modal-title { font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; line-height: 1.3; word-break: break-word; }
+    .modal-message { font-size: 0.9rem; color: rgba(255,255,255,0.85); line-height: 1.5; margin-bottom: 1.25rem; word-break: break-word; max-height: 50vh; overflow-y: auto; }
     .modal-actions { display: flex; justify-content: flex-end; }
     .modal-actions .btn {
         min-width: 100px; padding: 0.6rem 1.25rem; font-size: 0.875rem; font-weight: 600;

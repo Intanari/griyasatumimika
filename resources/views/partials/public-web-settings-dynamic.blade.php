@@ -24,23 +24,7 @@
     $bgColors = $ws['background_colors'] ?? [];
     $bgImageMode = $ws['background_image_mode'] ?? 'global';
     $bgImages = $ws['background_images'] ?? [];
-    $routeToSlug = [
-        'welcome' => 'home',
-        'donation.form' => 'donasi',
-        'donation.payment' => 'donasi-bayar',
-        'donation.success' => 'donasi-sukses',
-        'odgj-report.form' => 'laporan-odgj',
-        'odgj-report.success' => 'laporan-odgj-sukses',
-        'profil.struktur' => 'profil-struktur',
-        'profil.visi-misi' => 'profil-visi-misi',
-        'profil.yayasan' => 'profil-yayasan',
-        'pages.galeri' => 'galeri',
-        'pages.kontak' => 'kontak',
-        'pages.layanan' => 'layanan',
-        'transparansi.donasi' => 'transparansi-donasi',
-        'public.pasien.index' => 'pasien',
-        'public.pasien.show' => 'pasien',
-    ];
+    $routeToSlug = \App\Models\WebSetting::routeToPageSlug();
     $currentRoute = \Illuminate\Support\Facades\Route::currentRouteName();
     $currentSlug = $routeToSlug[$currentRoute] ?? null;
     if ($bgType === 'warna' && $bgColorMode === 'per_page' && $currentSlug && !empty($bgColors[$currentSlug])) {
@@ -48,8 +32,8 @@
     } else {
         $bgColor = !empty($ws['background_color']) ? $ws['background_color'] : '#0f172a';
     }
-    $pageImagePath = ($bgImageMode === 'per_page' && $currentSlug && !empty($bgImages[$currentSlug])) ? $bgImages[$currentSlug] : null;
-    if ($pageImagePath) {
+    $pageImagePath = ($currentSlug && !empty($bgImages[$currentSlug])) ? $bgImages[$currentSlug] : null;
+    if ($bgImageMode === 'per_page' && $pageImagePath) {
         $bgImage = asset('storage/' . $pageImagePath);
     } elseif (!empty($ws['background_image'])) {
         $bgImage = asset('storage/' . $ws['background_image']);

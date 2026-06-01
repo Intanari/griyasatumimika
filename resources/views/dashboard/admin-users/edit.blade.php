@@ -76,10 +76,11 @@
             <div class="form-group">
                 <label for="role">Role <span class="required">*</span></label>
                 <select id="role" name="role" required>
-                    <option value="{{ \App\Models\User::ROLE_PETUGAS }}" {{ old('role', $account->role) === \App\Models\User::ROLE_PETUGAS ? 'selected' : '' }}>Petugas User</option>
                     @if(isset($isSuperAdmin) && $isSuperAdmin)
-                        <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ old('role', $account->role) === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Petugas Admin</option>
+                        <option value="{{ \App\Models\User::ROLE_SUPER_ADMIN }}" {{ old('role', $account->role) === \App\Models\User::ROLE_SUPER_ADMIN ? 'selected' : '' }}>Super Admin</option>
+                        <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ old('role', $account->role) === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Admin</option>
                     @endif
+                    <option value="{{ \App\Models\User::ROLE_MANAGER }}" {{ old('role', $account->role) === \App\Models\User::ROLE_MANAGER ? 'selected' : '' }}>Manajer</option>
                 </select>
                 @error('role')<span class="form-error">{{ $message }}</span>@enderror
             </div>

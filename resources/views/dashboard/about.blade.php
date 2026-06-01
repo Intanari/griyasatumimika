@@ -23,9 +23,10 @@
         <section class="about-section">
             <h2>Peran Pengguna</h2>
             <ul>
-                <li><strong>Super Admin</strong>: mengelola seluruh data sistem, termasuk akun Petugas Admin &amp; Petugas User.</li>
-                <li><strong>Petugas Admin</strong>: mengelola data operasional (pasien, jadwal, stok) dan akun Petugas User.</li>
-                <li><strong>Petugas User</strong>: mengisi data harian pasien, aktivitas, dan jadwal sesuai tugas masing‑masing.</li>
+                <li><strong>Super Admin</strong>: akses penuh sistem; mengelola akun Admin dan Manajer.</li>
+                <li><strong>Admin</strong>: mengelola data operasional (pasien, jadwal, stok, donasi) dan akun Manajer.</li>
+                <li><strong>Manajer</strong>: mengelola data operasional sesuai modul yang diizinkan.</li>
+                <li><strong>Petugas Rehabilitasi</strong>: mengisi data harian pasien, aktivitas, dan jadwal di lapangan.</li>
             </ul>
         </section>
 
@@ -44,9 +45,9 @@
         <section class="about-section">
             <h2>Alur Singkat Penggunaan</h2>
             <ol>
-                <li>Super Admin / Petugas Admin membuat akun Petugas User di menu <strong>Manajemen Akun</strong>.</li>
-                <li>Petugas menginput data pasien, jadwal, dan aktivitas harian sesuai kewenangan.</li>
-                <li>Admin memantau laporan ODGJ, donasi, dan stok barang dari halaman dashboard.</li>
+                <li>Super Admin membuat akun Admin/Manajer di menu <strong>Manajemen Akun</strong>; Admin dapat menambah akun Manajer.</li>
+                <li>Petugas rehabilitasi menginput data pasien, jadwal, dan aktivitas harian.</li>
+                <li>Admin dan Manajer memantau laporan ODGJ, donasi, dan stok dari dashboard.</li>
                 <li>Data dapat diekspor (PDF/Excel) sesuai kebutuhan pelaporan.</li>
             </ol>
         </section>

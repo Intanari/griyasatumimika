@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use App\Mail\ResetPasswordMail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Mail;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasUuids, Notifiable;
 
+    public const ROLE_SUPER_ADMIN = 'super_admin';
     public const ROLE_ADMIN = 'admin';
     public const ROLE_MANAGER = 'manajer';
     public const ROLE_PETUGAS = 'petugas_rehabilitasi';
@@ -61,14 +64,30 @@ class User extends Authenticatable
         ];
     }
 
+    /** @return list<string> */
+    public static function staffAccountRoles(): array
+    {
+        return [self::ROLE_SUPER_ADMIN, self::ROLE_ADMIN, self::ROLE_MANAGER];
+    }
+
     public function scopePetugasYayasan(Builder $query): Builder
     {
-        return $query->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MANAGER, self::ROLE_PETUGAS]);
+        return $query->whereIn('role', [
+            self::ROLE_SUPER_ADMIN,
+            self::ROLE_ADMIN,
+            self::ROLE_MANAGER,
+            self::ROLE_PETUGAS,
+        ]);
     }
 
     public function isPetugasRehabilitasi(): bool
     {
         return $this->role === self::ROLE_PETUGAS;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
     }
 
     public function isAdmin(): bool
@@ -79,6 +98,21 @@ class User extends Authenticatable
     public function isManager(): bool
     {
         return $this->role === self::ROLE_MANAGER;
+    }
+
+    public function hasAdminPrivileges(): bool
+    {
+        return $this->isSuperAdmin() || $this->isAdmin();
+    }
+
+    public function hasManagerPrivileges(): bool
+    {
+        return $this->hasAdminPrivileges() || $this->isManager();
+    }
+
+    public function canManageAccounts(): bool
+    {
+        return $this->hasAdminPrivileges();
     }
 
     public function getStatusKerjaLabelAttribute(): string
@@ -113,6 +147,7 @@ class User extends Authenticatable
     public function getRoleLabelAttribute(): string
     {
         return match ($this->role) {
+            self::ROLE_SUPER_ADMIN => 'Super Admin',
             self::ROLE_ADMIN => 'Admin',
             self::ROLE_MANAGER => 'Manajer',
             self::ROLE_PETUGAS => 'Petugas',
@@ -136,5 +171,17 @@ class User extends Authenticatable
     public function jadwalLibur()
     {
         return $this->hasMany(JadwalLibur::class);
+    }
+
+    public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
+    {
+        $resetUrl = sprintf(
+            'https://%s/reset-password/%s?%s',
+            config('app.admin_domain'),
+            $token,
+            http_build_query(['email' => $this->getEmailForPasswordReset()])
+        );
+
+        Mail::to($this->email)->send(new ResetPasswordMail($this, $resetUrl));
     }
 }

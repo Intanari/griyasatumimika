@@ -49,7 +49,7 @@
             @foreach($cardSisa as $item)
             <div class="stock-sisa-item {{ $item['sisa'] < 0 ? 'negative' : '' }}">
                 <div class="stock-sisa-nama">{{ $item['nama'] }}</div>
-                <div class="stock-sisa-nilai">{{ number_format($item['sisa']) }}</div>
+                <div class="stock-sisa-nilai">{{ number_format($item['sisa']) }} <span class="stock-sisa-satuan">{{ $item['satuan'] ?? 'pcs' }}</span></div>
             </div>
                     @endforeach
         </div>
@@ -66,6 +66,7 @@
                     <tr>
                         <th>Nama</th>
                         <th>Jumlah</th>
+                        <th>Satuan</th>
                         <th>Waktu</th>
                         <th>Aksi</th>
                     </tr>
@@ -75,6 +76,7 @@
                     <tr>
                         <td data-label="Nama">{{ $s->nama }}</td>
                         <td data-label="Jumlah">{{ number_format($s->jumlah) }}</td>
+                        <td data-label="Satuan">{{ $s->satuan ?? 'pcs' }}</td>
                         <td data-label="Waktu">{{ $s->created_at->format('d/m/Y H:i') }}</td>
                         <td class="action-cell" data-label="Aksi">
                             <div class="stock-row-actions">
@@ -90,7 +92,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="empty-state">Belum ada data persediaan. Klik tombol <strong>Stok Barang</strong> untuk menambah.</td>
+                        <td colspan="5" class="empty-state">Belum ada data persediaan. Klik tombol <strong>Stok Barang</strong> untuk menambah.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -108,6 +110,7 @@
                     <tr>
                         <th>Nama</th>
                         <th>Jumlah</th>
+                        <th>Satuan</th>
                         <th>Waktu</th>
                         <th>Aksi</th>
                     </tr>
@@ -117,6 +120,7 @@
                     <tr>
                         <td data-label="Nama">{{ $e->nama }}</td>
                         <td data-label="Jumlah">{{ number_format($e->jumlah) }}</td>
+                        <td data-label="Satuan">{{ $satuanByNama[$e->nama] ?? 'pcs' }}</td>
                         <td data-label="Waktu">{{ $e->created_at->format('d/m/Y H:i') }}</td>
                         <td class="action-cell" data-label="Aksi">
                             <div class="stock-row-actions">
@@ -132,7 +136,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="empty-state">Belum ada data pengeluaran. Klik tombol <strong>Pengeluaran Stok Barang</strong> untuk menambah.</td>
+                        <td colspan="5" class="empty-state">Belum ada data pengeluaran. Klik tombol <strong>Pengeluaran Stok Barang</strong> untuk menambah.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -170,6 +174,7 @@
 .stock-sisa-item.negative { background: #fef2f2; border-color: #fecaca; }
 .stock-sisa-nama { font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
 .stock-sisa-nilai { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
+.stock-sisa-satuan { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
 .stock-sisa-item.negative .stock-sisa-nilai { color: var(--accent-rose, #dc2626); }
 .stock-table-wrapper { overflow-x: auto; }
 .stock-table { width: 100%; border-collapse: collapse; min-width: 480px; }

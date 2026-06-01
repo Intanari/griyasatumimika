@@ -42,7 +42,7 @@
     .form-label .req { color: #ef4444; margin-left: 2px; }
     .form-card-donation .form-input,
     .form-card-donation input.form-input,
-    .form-card-donation textarea.form-input { width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(255,255,255,0.35); border-radius: 14px; font-size: 0.95rem; font-family: inherit; color: #000000; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; outline: none; }
+    .form-card-donation textarea.form-input { width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(255,255,255,0.35); border-radius: 14px; font-size: 0.95rem; font-family: inherit; color: #ffffff; background: rgba(255,255,255,0.2); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; outline: none; }
     .form-card-donation .form-input:focus,
     .form-card-donation input.form-input:focus,
     .form-card-donation textarea.form-input:focus { border-color: rgba(59,130,246,0.8); box-shadow: 0 0 0 4px rgba(37,99,235,0.15); background: rgba(255,255,255,0.3); }

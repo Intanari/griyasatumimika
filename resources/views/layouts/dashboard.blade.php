@@ -1111,11 +1111,10 @@
     </a>
     <nav class="sidebar-nav">
         @php
-            $role = $user->role ?? null;
-            $isAdmin = $user->isAdmin();
+            $isSuperAdmin = $user->isSuperAdmin();
+            $hasAdminPrivileges = $user->hasAdminPrivileges();
             $isManager = $user->isManager();
-            $isAdminOrManager = $isAdmin || $isManager;
-            $isSuperAdmin = $isAdmin && $user->email === 'admin@gmail.com';
+            $isAdminOrManager = $user->hasManagerPrivileges();
         @endphp
         <div class="nav-section-title">Menu Utama</div>
         <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') && !request()->routeIs('dashboard.donasi') && !request()->routeIs('dashboard.laporan') && !request()->routeIs('dashboard.patients.*') ? 'active' : '' }}">
@@ -1168,7 +1167,7 @@
             <span class="nav-item-icon">📦</span>
             Stok Barang
         </a>
-        @if($isAdmin)
+        @if($hasAdminPrivileges)
             <a href="{{ route('dashboard.admin-users.index') }}" class="nav-item {{ request()->routeIs('dashboard.admin-users.*') ? 'active' : '' }}">
                 <span class="nav-item-icon">🔐</span>
                 <span class="nav-item-label">
@@ -1196,7 +1195,7 @@
             <span class="nav-item-icon">ℹ️</span>
             Tentang Sistem
         </a>
-        @if($isAdmin)
+        @if($hasAdminPrivileges)
         <div class="nav-section-title">Pengaturan</div>
         <a href="{{ route('dashboard.profil-yayasan.index') }}" class="nav-item {{ request()->routeIs('dashboard.profil-yayasan.*') ? 'active' : '' }}">
             <span class="nav-item-icon">📄</span>
@@ -1438,5 +1437,6 @@
     })();
 })();
 </script>
+@include('partials.password-toggle')
 </body>
 </html>

@@ -281,21 +281,6 @@ class WebSettingController extends Controller
 
     protected function getPublicPageSlugs(): array
     {
-        return [
-            'home' => 'Beranda',
-            'donasi' => 'Donasi - Form',
-            'donasi-bayar' => 'Donasi - Pembayaran',
-            'donasi-sukses' => 'Donasi - Sukses',
-            'laporan-odgj' => 'Laporan ODGJ - Form',
-            'laporan-odgj-sukses' => 'Laporan ODGJ - Sukses',
-            'profil-struktur' => 'Profil - Struktur Organisasi',
-            'profil-visi-misi' => 'Profil - Visi Misi',
-            'profil-yayasan' => 'Profil - Yayasan',
-            'galeri' => 'Galeri',
-            'kontak' => 'Kontak',
-            'layanan' => 'Layanan',
-            'transparansi-donasi' => 'Transparansi Donasi',
-            'pasien' => 'Halaman Pasien',
-        ];
+        return WebSetting::publicPageSlugs();
     }
 }

@@ -277,7 +277,7 @@ class PetugasController extends Controller
             'tanggal_bergabung'  => 'nullable|date',
             'status_kerja'       => 'required|in:aktif,cuti,nonaktif',
             'shift_jaga'         => 'nullable|in:pagi,siang,malam',
-            'role'               => 'required|in:admin,manajer,petugas_rehabilitasi',
+            'role'               => 'required|in:manajer,petugas_rehabilitasi',
             'foto'               => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
         ];
 
@@ -306,14 +306,14 @@ class PetugasController extends Controller
         $current = Auth::user();
 
         // Super admin boleh mengelola semua petugas yayasan
-        if ($this->isSuperAdmin($current)) {
-            if (! in_array($petuga->role, [User::ROLE_ADMIN, User::ROLE_MANAGER, User::ROLE_PETUGAS])) {
+        if ($current->isSuperAdmin() || $current->hasAdminPrivileges()) {
+            if (! in_array($petuga->role, [User::ROLE_MANAGER, User::ROLE_PETUGAS], true)) {
                 abort(404);
             }
+
             return;
         }
 
-        // Petugas admin / manajer hanya boleh mengelola petugas user
         if ($petuga->role !== User::ROLE_PETUGAS) {
             abort(404);
         }
@@ -323,24 +323,17 @@ class PetugasController extends Controller
     {
         $user = Auth::user();
 
-        // Super admin: semua petugas yayasan
-        if ($this->isSuperAdmin($user)) {
-            return User::petugasYayasan();
+        if ($user?->isSuperAdmin() || $user?->hasAdminPrivileges()) {
+            return User::whereIn('role', [User::ROLE_MANAGER, User::ROLE_PETUGAS]);
         }
 
-        // Petugas admin / manajer: hanya petugas user
         return User::where('role', User::ROLE_PETUGAS);
-    }
-
-    private function isSuperAdmin(?User $user): bool
-    {
-        return $user && $user->isAdmin() && $user->email === 'admin@gmail.com';
     }
 
     private function ensureAdminOrManager(): void
     {
         $user = Auth::user();
-        if (! $user || (! $user->isAdmin() && ! $user->isManager())) {
+        if (! $user || ! $user->hasManagerPrivileges()) {
             abort(403);
         }
     }

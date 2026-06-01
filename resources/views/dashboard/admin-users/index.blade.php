@@ -10,16 +10,16 @@
     <div class="admin-account-header">
         <div class="admin-account-header-text">
             <div class="admin-account-title-row">
-                <h2 class="admin-account-title">Manajemen Akun Petugas</h2>
+                <h2 class="admin-account-title">Manajemen Akun</h2>
                 @if(isset($isSuperAdmin) && $isSuperAdmin)
                     <span class="admin-account-badge-super">Super Admin</span>
                 @endif
             </div>
             <p class="admin-account-desc">
                 @if(isset($isSuperAdmin) && $isSuperAdmin)
-                    Kelola akun login petugas (email, password, role) untuk Petugas User dan Petugas Admin yang dapat mengakses dashboard.
+                    Kelola akun Super Admin, Admin, dan Manajer (email, password, role).
                 @else
-                    Kelola akun login (email, password) untuk Petugas User yang dapat mengakses sistem rehabilitasi.
+                    Kelola akun Manajer (email, password, role).
                 @endif
             </p>
         </div>
@@ -45,8 +45,9 @@
                         <label for="role">Role</label>
                         <select id="role" name="role">
                             <option value="">Semua role</option>
-                            <option value="{{ \App\Models\User::ROLE_PETUGAS }}" {{ ($activeRoleFilter ?? '') === \App\Models\User::ROLE_PETUGAS ? 'selected' : '' }}>Petugas User</option>
-                            <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ ($activeRoleFilter ?? '') === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Petugas Admin</option>
+                            <option value="{{ \App\Models\User::ROLE_SUPER_ADMIN }}" {{ ($activeRoleFilter ?? '') === \App\Models\User::ROLE_SUPER_ADMIN ? 'selected' : '' }}>Super Admin</option>
+                            <option value="{{ \App\Models\User::ROLE_ADMIN }}" {{ ($activeRoleFilter ?? '') === \App\Models\User::ROLE_ADMIN ? 'selected' : '' }}>Admin</option>
+                            <option value="{{ \App\Models\User::ROLE_MANAGER }}" {{ ($activeRoleFilter ?? '') === \App\Models\User::ROLE_MANAGER ? 'selected' : '' }}>Manajer</option>
                         </select>
                     </div>
                 @endif

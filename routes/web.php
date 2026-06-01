@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DonationController;
@@ -57,9 +58,17 @@ Route::domain(config('app.admin_domain'))->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
-        Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
-        Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+        Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->name('password.request');
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])
+            ->middleware('throttle:6,1')
+            ->name('password.email');
+        Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+        Route::post('/reset-password', [NewPasswordController::class, 'store'])
+            ->middleware('throttle:6,1')
+            ->name('password.update');
     });
+
+    Route::redirect('/register', '/login', 301);
 
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
