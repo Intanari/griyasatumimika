@@ -309,10 +309,11 @@ Route::domain($mainDomain)->group(function () {
     Route::get('/donasi', [DonationController::class, 'showForm'])->name('donation.form');
     Route::post('/donasi', [DonationController::class, 'store'])->name('donation.store');
     Route::get('/donasi/{donation}/bayar', [DonationController::class, 'showPayment'])->name('donation.payment');
-    Route::get('/donasi/{donation}/status', [DonationController::class, 'checkStatus'])->name('donation.check');
+    Route::get('/donasi/{donation}/qr/download', [DonationController::class, 'downloadQr'])->name('donation.qr.download');
+    Route::match(['get', 'post'], '/donasi/{donation}/status', [DonationController::class, 'checkStatus'])->name('donation.check');
     Route::get('/donasi/{donation}/sukses', [DonationController::class, 'success'])->name('donation.success');
 
-    // Midtrans callback (webhook dari Midtrans)
+    // Callback notifikasi pembayaran Midtrans (CSRF dikecualikan di bootstrap/app.php)
     Route::post('/donasi/callback', [DonationController::class, 'callback'])->name('donation.callback');
 
     Route::get('/transparansi-donasi', [TransparansiDonasiController::class, 'index'])->name('transparansi.donasi');

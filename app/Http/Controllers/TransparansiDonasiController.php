@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class TransparansiDonasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $donationsAll = Donation::all();
         $expensesAll = DonationExpense::all();
@@ -22,8 +22,29 @@ class TransparansiDonasiController extends Controller
         $pengeluaran = $expensesAll->sum('jumlah');
         $sisaDonasi = $danaTerkumpul - $pengeluaran;
 
-        $donations = Donation::orderByDesc('created_at')->paginate(7, ['*'], 'donations_page');
-        $expenses = DonationExpense::orderByDesc('tanggal_pengeluaran')->orderByDesc('created_at')->paginate(7, ['*'], 'expenses_page');
+        $status = (string) $request->query('status', '');
+        $search = trim((string) $request->query('search', ''));
+
+        $donationsQuery = Donation::query()->orderByDesc('created_at');
+
+        if ($status !== '' && $status !== 'all') {
+            $donationsQuery->where('status', $status);
+        }
+
+        if ($search !== '') {
+            $donationsQuery->where(function ($query) use ($search) {
+                $query->where('donor_name', 'like', '%' . $search . '%')
+                    ->orWhere('donor_email', 'like', '%' . $search . '%');
+            });
+        }
+
+        $donations = $donationsQuery
+            ->paginate(7, ['*'], 'donations_page')
+            ->appends($request->only(['status', 'search']));
+
+        $expenses = DonationExpense::orderByDesc('tanggal_pengeluaran')
+            ->orderByDesc('created_at')
+            ->paginate(7, ['*'], 'expenses_page');
 
         return view('public.transparan.index', compact(
             'donations',
@@ -34,7 +55,9 @@ class TransparansiDonasiController extends Controller
             'gagal',
             'danaTerkumpul',
             'pengeluaran',
-            'sisaDonasi'
+            'sisaDonasi',
+            'status',
+            'search',
         ));
     }
 

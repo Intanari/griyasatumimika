@@ -1,8 +1,7 @@
 <nav class="navbar">
     <div class="nav-inner">
         <a href="{{ route('welcome') }}" class="nav-logo">
-            <!-- <div class="nav-logo-icon">🧠</div> -->
-            Sahabat Jiwa
+            <x-yayasan-logo variant="nav" />
         </a>
         <div class="nav-links">
             <a href="{{ route('welcome') }}" class="nav-link">Beranda</a>

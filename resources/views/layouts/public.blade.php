@@ -124,14 +124,14 @@
 
         @media (max-width: 768px) { .nav-links { display: none; } }
     </style>
+    @include('partials.yayasan-logo-styles')
     @stack('styles')
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-inner">
             <a href="{{ url('/') }}" class="nav-logo">
-                <div class="nav-logo-icon">🧠</div>
-                PeduliJiwa
+                <x-yayasan-logo variant="nav" />
             </a>
             @hasSection('nav-links')
                 <div class="nav-links">@yield('nav-links')</div>

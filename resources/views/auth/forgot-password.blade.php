@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     @include('auth.partials.guest-styles')
+    @include('partials.yayasan-logo-styles')
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-inner">
             <a href="{{ route('welcome') }}" class="nav-logo">
-                <div class="nav-logo-icon">🧠</div>
-                <span class="nav-logo-text">PeduliJiwa</span>
+                <x-yayasan-logo variant="auth" />
             </a>
             <span class="nav-badge">🔒 <span class="badge-label">Area Petugas</span></span>
         </div>

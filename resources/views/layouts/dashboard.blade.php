@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Dashboard') - PeduliJiwa</title>
+    <link rel="icon" href="{{ asset('images/logo-yayasan.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
     <style>
@@ -1100,14 +1101,14 @@
         }
     </style>
     @stack('styles')
+    @include('partials.yayasan-logo-styles')
 </head>
 <body>
 
 <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" tabindex="-1"></div>
 <div class="sidebar" id="sidebar">
     <a href="{{ route('dashboard') }}" class="sidebar-logo">
-        <div class="sidebar-logo-icon">🧠</div>
-        PeduliJiwa
+        <x-yayasan-logo variant="sidebar" />
     </a>
     <nav class="sidebar-nav">
         @php

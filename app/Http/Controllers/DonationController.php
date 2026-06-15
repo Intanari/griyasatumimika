@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\DonationThankYou;
 use App\Models\Donation;
+use App\Services\DonationPaymentSyncService;
+use App\Services\DonationQrisCardService;
+use App\Services\MidtransService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Midtrans\Config;
-use Midtrans\CoreApi;
-use Midtrans\Notification;
+use Symfony\Component\HttpFoundation\Response;
 
 class DonationController extends Controller
 {
-    public function __construct()
-    {
-        Config::$serverKey    = config('services.midtrans.server_key');
-        Config::$isProduction = config('services.midtrans.is_production', false);
-        Config::$isSanitized  = true;
-        Config::$is3ds        = true;
-    }
+    public function __construct(
+        private MidtransService $midtrans,
+        private DonationPaymentSyncService $paymentSync,
+    ) {}
 
     private array $programs = [
         'rawat-inap'       => 'Biaya Rawat Inap & Obat ODGJ',
@@ -47,7 +45,7 @@ class DonationController extends Controller
             'donor_name'  => 'required|string|max:100',
             'donor_email' => 'required|email|max:150',
             'donor_phone' => 'required|string|max:20',
-            'amount'      => 'required|integer|min:10000',
+            'amount'      => 'required|integer|min:1000',
             'message'     => 'nullable|string|max:500',
         ], [
             'donor_name.required'  => 'Nama lengkap wajib diisi.',
@@ -55,7 +53,7 @@ class DonationController extends Controller
             'donor_email.email'    => 'Format email tidak valid.',
             'donor_phone.required' => 'Nomor telepon wajib diisi.',
             'amount.required'      => 'Jumlah donasi wajib diisi.',
-            'amount.min'           => 'Jumlah donasi minimal Rp 10.000.',
+            'amount.min'           => 'Jumlah donasi minimal Rp 1.000.',
         ]);
 
         $donation = Donation::create([
@@ -69,39 +67,7 @@ class DonationController extends Controller
             'status'      => 'pending',
         ]);
 
-        try {
-            $params = [
-                'payment_type' => 'qris',
-                'transaction_details' => [
-                    'order_id'     => $donation->order_id,
-                    'gross_amount' => $donation->amount,
-                ],
-                'customer_details' => [
-                    'first_name' => $donation->donor_name,
-                    'email'      => $donation->donor_email,
-                    'phone'      => $donation->donor_phone,
-                ],
-                'item_details' => [[
-                    'id'       => $donation->program,
-                    'price'    => $donation->amount,
-                    'quantity' => 1,
-                    'name'     => $this->programs[$donation->program] ?? 'Donasi PeduliJiwa',
-                ]],
-                'qris' => ['acquirer' => 'gopay'],
-            ];
-
-            $response = CoreApi::charge($params);
-
-            $donation->update([
-                'transaction_id' => $response->transaction_id ?? null,
-                'qr_code_url'    => $response->actions[0]->url ?? null,
-                'qr_string'      => $response->qr_string ?? null,
-            ]);
-        } catch (\Exception $e) {
-            $donation->update([
-                'transaction_id' => 'DEMO-' . $donation->order_id,
-            ]);
-        }
+        $this->initializePayment($donation);
 
         return redirect()->route('donation.payment', $donation->id);
     }
@@ -112,68 +78,59 @@ class DonationController extends Controller
             return redirect()->route('donation.success', $donation->id);
         }
 
-        return view('public.donation.payment', compact('donation'));
+        if (! $donation->transaction_id && ! $donation->qr_string) {
+            $this->initializePayment($donation);
+            $donation = $donation->fresh();
+        }
+
+        return view('public.donation.payment', [
+            'donation'   => $donation,
+            'qrImageUrl' => $this->qrImageUrl($donation),
+        ]);
     }
 
-    public function checkStatus(Donation $donation)
+    public function checkStatus(Request $request, Donation $donation)
     {
-        if (!config('services.midtrans.server_key')) {
-            return response()->json(['status' => $donation->status]);
+        $gatewayStatus = null;
+
+        if ($request->boolean('sync')
+            && $donation->order_id
+            && ! str_starts_with((string) $donation->transaction_id, 'DEMO-')) {
+            $result = $this->paymentSync->syncDonation($donation);
+            $gatewayStatus = $result['gateway_status'];
         }
 
-        try {
-            $status = \Midtrans\Transaction::status($donation->order_id);
+        $donation = $donation->fresh();
 
-            if (in_array($status->transaction_status, ['settlement', 'capture'])) {
-                $alreadyPaid = $donation->status === 'paid';
-                $donation->update([
-                    'status'  => 'paid',
-                    'paid_at' => now(),
-                ]);
-
-                // Send thank-you email only once
-                if (!$alreadyPaid) {
-                    $this->sendThankYouEmail($donation->fresh());
-                }
-            } elseif (in_array($status->transaction_status, ['cancel', 'deny', 'expire'])) {
-                $donation->update(['status' => 'failed']);
-            }
-        } catch (\Exception $e) {
-            // Silently ignore errors from Midtrans status check
-        }
-
-        return response()->json(['status' => $donation->status]);
+        return response()
+            ->json([
+                'status'          => $donation->status,
+                'gateway_status'  => $gatewayStatus ?? $donation->status,
+                'payment_gateway' => $donation->payment_gateway,
+                'transaction_id'  => $donation->transaction_id,
+                'total_amount'    => $donation->payable_amount,
+                'expired_at'      => $donation->expired_at?->toIso8601String(),
+            ])
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate');
     }
 
     public function callback(Request $request)
     {
         try {
-            $notification  = new Notification();
-            $orderId       = $notification->order_id;
-            $txStatus      = $notification->transaction_status;
-            $fraudStatus   = $notification->fraud_status;
+            $notification = $this->midtrans->parseNotification();
 
-            $donation = Donation::where('order_id', $orderId)->first();
-            if (!$donation) {
-                return response()->json(['message' => 'Not found'], 404);
-            }
+            $result = $this->paymentSync->processCallback(
+                (string) $notification->order_id,
+                (string) $notification->transaction_status,
+                $notification->fraud_status ?? null,
+            );
 
-            if (in_array($txStatus, ['settlement', 'capture'])
-                && ($fraudStatus === 'accept' || $fraudStatus === null))
-            {
-                $alreadyPaid = $donation->status === 'paid';
-                $donation->update([
-                    'status'  => 'paid',
-                    'paid_at' => now(),
-                ]);
-
-                if (!$alreadyPaid) {
-                    $this->sendThankYouEmail($donation->fresh());
-                }
-            } elseif (in_array($txStatus, ['cancel', 'deny', 'expire'])) {
-                $donation->update(['status' => 'failed']);
+            if (! $result['handled']) {
+                return response()->json(['message' => $result['message'] ?? 'Gagal'], $result['status'] ?? 422);
             }
         } catch (\Exception $e) {
+            Log::error('Midtrans callback gagal: ' . $e->getMessage());
+
             return response()->json(['message' => $e->getMessage()], 500);
         }
 
@@ -185,14 +142,74 @@ class DonationController extends Controller
         return view('public.donation.success', compact('donation'));
     }
 
-    private function sendThankYouEmail(Donation $donation): void
+    public function downloadQr(Donation $donation, DonationQrisCardService $qrisCard): Response
     {
+        $url = $this->qrImageUrl($donation);
+
+        if (! $url) {
+            abort(404, 'QR Code belum tersedia.');
+        }
+
+        $response = Http::timeout(20)->get($url);
+
+        if (! $response->successful()) {
+            abort(502, 'Gagal mengambil gambar QR Code.');
+        }
+
+        $programLabel = $this->programs[$donation->program] ?? 'Donasi Griya Satu Mimika';
+
         try {
-            Mail::to($donation->donor_email, $donation->donor_name)
-                ->send(new DonationThankYou($donation));
+            $png = $qrisCard->generate($donation, $response->body(), $programLabel);
         } catch (\Exception $e) {
-            // Log silently — don't break the payment flow
-            \Illuminate\Support\Facades\Log::error('Failed to send donation thank-you email: ' . $e->getMessage());
+            Log::error('Gagal membuat kartu QRIS: ' . $e->getMessage(), [
+                'donation_id' => $donation->id,
+            ]);
+
+            abort(502, 'Gagal membuat gambar pembayaran QRIS.');
+        }
+
+        $filename = $qrisCard->buildFilename($donation);
+
+        return response($png, 200, [
+            'Content-Type'        => 'image/png',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
+    private function qrImageUrl(Donation $donation): ?string
+    {
+        if ($donation->qr_code_url) {
+            return $donation->qr_code_url;
+        }
+
+        if ($donation->qr_string) {
+            return $this->midtrans->buildQrImageUrl($donation->qr_string);
+        }
+
+        return null;
+    }
+
+    private function initializePayment(Donation $donation): void
+    {
+        if (! $this->midtrans->isConfigured()) {
+            Log::warning('Midtrans belum dikonfigurasi, donasi tanpa QR', [
+                'donation_id' => $donation->id,
+                'order_id'    => $donation->order_id,
+            ]);
+
+            return;
+        }
+
+        try {
+            $programLabel = $this->programs[$donation->program] ?? 'Donasi Griya Satu Mimika';
+            $response = $this->midtrans->chargeQris($donation, $programLabel);
+
+            $donation->update($this->midtrans->mapChargeResponse($response, $donation));
+        } catch (\Exception $e) {
+            Log::error('Midtrans charge QRIS gagal: ' . $e->getMessage(), [
+                'donation_id' => $donation->id,
+                'order_id'    => $donation->order_id,
+            ]);
         }
     }
 }

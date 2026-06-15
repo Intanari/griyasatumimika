@@ -6,6 +6,7 @@
     <title>@yield('title', 'Griya Satu Mimika') - Donasi Rehabilitasi ODGJ</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
+    <link rel="icon" href="{{ asset('images/logo-yayasan.png') }}" type="image/png">
     @include('components.landing.styles')
     @include('partials.public-web-settings-dynamic')
     @stack('styles')

@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="footer-grid footer-grid-simple">
         <div class="footer-brand">
-            <div class="footer-logo"><div class="footer-logo-icon">🧠</div> Griya Satu Mimika</div>
+            <div class="footer-logo"><x-yayasan-logo variant="footer" /></div>
             <div class="footer-desc">Merawat, mendampingi, dan memberdayakan ODGJ di Mimika, Papua Tengah.</div>
         </div>
         <div><div class="footer-col-title">Menu</div><div class="footer-links"><a href="{{ route('welcome') }}">Beranda</a><a href="{{ route('pages.profil') }}">Profil</a><a href="{{ route('welcome') }}#layanan">Layanan</a><a href="{{ route('welcome') }}#galeri">Galeri</a><a href="{{ route('donation.form') }}">Donasi</a><a href="{{ route('odgj-report.form') }}">Laporan ODGJ</a><a href="{{ route('welcome') }}#kontak">Kontak</a></div></div>

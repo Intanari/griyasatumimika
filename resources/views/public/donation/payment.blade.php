@@ -49,9 +49,31 @@
     .card-body { padding: 2rem; background: transparent; }
     .qris-label { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 600; color: #e0f2ff; margin-bottom: 1.25rem; }
     .qris-badge { background: linear-gradient(135deg, #e4253b, #cc1e32); color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-    .qr-container { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+    .qr-container { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .btn-download-qris {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #ffffff;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-download-qris:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        color: #ffffff;
+    }
     .qr-frame { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border: 3px solid rgba(37,99,235,0.8); border-radius: 20px; padding: 1rem; position: relative; }
-    .qr-frame img { width: 200px; height: 200px; display: block; border-radius: 8px; }
+    .qr-frame img, .qr-frame canvas { width: 200px; height: 200px; display: block; border-radius: 8px; background: #ffffff; }
     .qr-demo-placeholder { width: 200px; height: 200px; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 1rem; border: 1px solid rgba(255,255,255,0.2); }
     .qr-demo-placeholder .qr-icon { font-size: 3rem; }
     .qr-demo-placeholder .qr-text { font-size: 0.78rem; color: rgba(255,255,255,0.85); line-height: 1.4; }
@@ -138,16 +160,29 @@
                             <div class="qr-corner qr-corner-tr"></div>
                             <div class="qr-corner qr-corner-bl"></div>
                             <div class="qr-corner qr-corner-br"></div>
-                            @if($donation->qr_code_url)
-                                <img src="{{ $donation->qr_code_url }}" alt="QRIS Code">
+                            @if($qrImageUrl)
+                                <img src="{{ $qrImageUrl }}" alt="QRIS Code" id="qrisImage">
                             @else
                                 <div class="qr-demo-placeholder">
                                     <div class="qr-icon">📱</div>
-                                    <div class="qr-text"><strong style="color:#ffffff">QR Code QRIS</strong><br>akan muncul di sini setelah Midtrans dikonfigurasi</div>
+                                    <div class="qr-text"><strong style="color:#ffffff">QR Code QRIS</strong><br>sedang diproses, muat ulang halaman jika belum muncul</div>
                                 </div>
                             @endif
                         </div>
+                        @if($qrImageUrl)
+                            <a href="{{ route('donation.qr.download', $donation) }}" class="btn-download-qris" download>
+                                <span aria-hidden="true">⬇️</span> Download QRIS
+                            </a>
+                        @endif
                     </div>
+                    @if($donation->total_amount && $donation->total_amount !== $donation->amount)
+                        <div class="how-to" style="margin-bottom:1rem;">
+                            <div class="how-to-title">⚠️ Nominal pembayaran</div>
+                            <div class="how-to-step" style="font-size:0.82rem;color:rgba(255,255,255,0.9);">
+                                Bayar tepat <strong>{{ $donation->formatted_amount }}</strong> agar transaksi terdeteksi otomatis.
+                            </div>
+                        </div>
+                    @endif
                     <div class="timer-wrap">
                         <div class="timer-label">Batas waktu pembayaran</div>
                         <div class="timer-display" id="timer">15:00</div>
@@ -183,7 +218,16 @@
                     </div>
                     <div class="status-pending" id="statusLabel">
                         <div class="order-id-wrap">
-                            <div class="status-dot"></div> Menunggu pembayaran…
+                            <div class="status-dot"></div>
+                            @if($donation->status === 'paid')
+                                ✅ Pembayaran berhasil.
+                            @elseif($donation->status === 'expired')
+                                ⚠️ Pembayaran expired.
+                            @elseif($donation->status === 'failed')
+                                ❌ Pembayaran gagal.
+                            @else
+                                Menunggu pembayaran…
+                            @endif
                         </div> 
                     </div>
                 </div>
@@ -194,47 +238,133 @@
 
 @push('scripts')
 <script>
-    let totalSeconds = 15 * 60;
+    const donationId = @json($donation->id);
+    const expiredAtMs = @json($donation->expired_at ? $donation->expired_at->timestamp * 1000 : null);
+    const pollIntervalMs = @json((int) config('services.donation.poll_interval_ms', 400));
+    const syncIntervalMs = @json((int) config('services.donation.sync_interval_ms', 12000));
+    const initialStatus = @json($donation->status);
+
     const timerEl = document.getElementById('timer');
+    const statusLabelEl = document.getElementById('statusLabel');
+    let timerInterval = null;
+    let pollTimer = null;
+    let lastSyncAt = 0;
+    let redirecting = false;
+
+    function setStatusLabel(html) {
+        if (!statusLabelEl) return;
+        statusLabelEl.innerHTML = html;
+    }
+
+    function getRemainingSeconds() {
+        if (expiredAtMs) {
+            return Math.max(0, Math.floor((expiredAtMs - Date.now()) / 1000));
+        }
+        return 15 * 60;
+    }
+
     function updateTimer() {
+        const totalSeconds = getRemainingSeconds();
         const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
         const s = (totalSeconds % 60).toString().padStart(2, '0');
         timerEl.textContent = `${m}:${s}`;
-        if (totalSeconds <= 60) timerEl.className = 'timer-display danger';
-        else if (totalSeconds <= 300) timerEl.className = 'timer-display warning';
-        if (totalSeconds <= 0) {
-            clearInterval(timerInterval);
+        timerEl.className = 'timer-display'
+            + (totalSeconds <= 60 ? ' danger' : (totalSeconds <= 300 ? ' warning' : ''));
+
+        if (totalSeconds <= 0 && !redirecting) {
+            if (timerInterval) clearInterval(timerInterval);
             timerEl.textContent = '00:00';
-            document.getElementById('statusLabel').innerHTML = '<span style="color:#ef4444">⚠️ Waktu pembayaran habis. Silakan buat donasi baru.</span>';
+            setStatusLabel('<span style="color:#f59e0b">⚠️ Waktu pembayaran habis. Menunggu konfirmasi terakhir...</span>');
         }
-        totalSeconds--;
     }
+
     updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
+    timerInterval = setInterval(updateTimer, 1000);
 
     const checkUrl = '{{ route('donation.check', $donation->id) }}';
     const successUrl = '{{ route('donation.success', $donation->id) }}';
-    async function checkPaymentStatus() {
-        try {
-            const res = await fetch(checkUrl);
-            const data = await res.json();
-            if (data.status === 'paid') {
-                clearInterval(timerInterval);
-                clearInterval(statusInterval);
-                document.getElementById('statusLabel').innerHTML = '<span style="color:#10b981">✅ Pembayaran berhasil! Mengarahkan...</span>';
-                setTimeout(() => { window.location.href = successUrl; }, 1500);
-            }
-        } catch (e) {}
-    }
-    const statusInterval = setInterval(checkPaymentStatus, 5000);
 
-    function copyOrderId() {
-        const text = document.getElementById('orderId').textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = document.querySelector('.copy-btn');
-            btn.textContent = '✓ Tersalin';
-            setTimeout(() => { btn.textContent = 'Salin'; }, 2000);
-        });
+    function stopPolling() {
+        if (timerInterval) clearInterval(timerInterval);
+        if (pollTimer) clearTimeout(pollTimer);
+        timerInterval = null;
+        pollTimer = null;
+    }
+
+    function handlePaidStatus() {
+        if (redirecting) return;
+        redirecting = true;
+        stopPolling();
+        setStatusLabel('<span style="color:#10b981">✅ Pembayaran berhasil! Mengarahkan...</span>');
+        window.location.replace(successUrl);
+    }
+
+    function scheduleNextPoll() {
+        if (redirecting) return;
+        pollTimer = setTimeout(pollPaymentStatus, pollIntervalMs);
+    }
+
+    async function pollPaymentStatus() {
+        if (redirecting || initialStatus === 'paid') return;
+
+        const shouldSync = Date.now() - lastSyncAt >= syncIntervalMs;
+        const url = shouldSync ? `${checkUrl}?sync=1` : checkUrl;
+        if (shouldSync) lastSyncAt = Date.now();
+
+        try {
+            const res = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                cache: 'no-store',
+            });
+
+            if (!res.ok) {
+                scheduleNextPoll();
+                return;
+            }
+
+            const data = await res.json();
+            const status = data.status || 'pending';
+            const gatewayStatus = (data.gateway_status || status || '').toLowerCase();
+
+            if (status === 'paid' || gatewayStatus === 'settlement' || gatewayStatus === 'capture' || gatewayStatus === 'paid') {
+                handlePaidStatus();
+                return;
+            }
+
+            if (status === 'expired' || gatewayStatus === 'expire') {
+                stopPolling();
+                setStatusLabel('<span style="color:#f59e0b">⚠️ Pembayaran expired. Silakan buat donasi baru.</span>');
+                return;
+            }
+
+            if (status === 'failed' || ['cancel', 'deny', 'failure'].includes(gatewayStatus)) {
+                stopPolling();
+                setStatusLabel('<span style="color:#ef4444">❌ Pembayaran gagal. Silakan coba lagi.</span>');
+                return;
+            }
+
+            setStatusLabel('<div class="status-dot"></div> Menunggu pembayaran…');
+            scheduleNextPoll();
+        } catch (e) {
+            scheduleNextPoll();
+        }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !redirecting) {
+            pollPaymentStatus();
+        }
+    });
+
+    if (initialStatus === 'paid') {
+        handlePaidStatus();
+    } else {
+        lastSyncAt = Date.now();
+        pollPaymentStatus();
     }
 </script>
 @endpush

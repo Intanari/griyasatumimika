@@ -38,55 +38,63 @@
         color: rgba(255,255,255,0.9);
     }
 
-    .struktur-main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+    .struktur-main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
     .org-leadership { margin-bottom: 4rem; opacity: 0; transform: translateY(20px); transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .org-leadership.animate-visible { opacity: 1; transform: translateY(0); }
     .org-leadership-title {
-        font-size: 1.6rem; font-weight: 800;
-        background: linear-gradient(135deg, var(--primary-dark), var(--accent));
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text; margin-bottom: 2rem;
+        font-size: clamp(1.35rem, 3vw, 1.6rem);
+        font-weight: 800;
+        color: #ffffff;
+        text-shadow: 0 2px 14px rgba(15, 23, 42, 0.45);
+        margin-bottom: 2.25rem;
+        letter-spacing: -0.02em;
     }
     .org-tree { display: flex; flex-direction: column; align-items: center; }
-    .org-lead-row { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
-    .org-lead-row.children, .org-lead-row.grandchildren { margin-top: 0.75rem; gap: 2rem; }
+    .org-lead-row { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .org-lead-row.children, .org-lead-row.grandchildren { margin-top: 0.75rem; gap: 1.5rem; }
     .org-lead-card {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(226,232,240,0.9);
-        box-shadow: 0 10px 40px rgba(15,23,42,0.08);
-        padding: 2rem 1.75rem;
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.12);
+        padding: 1.75rem 1.5rem 1.5rem;
         text-align: center;
-        max-width: 300px;
+        width: 100%;
+        max-width: 280px;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .org-lead-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 20px 50px rgba(30,64,175,0.15);
     }
-    .org-lead-card.ketua { order: -1; }
+    .org-lead-card.ketua { order: -1; max-width: 300px; }
     .org-connector-down {
         width: 2px; height: 32px;
         background: linear-gradient(to bottom, var(--primary-light), var(--accent));
         margin: 0.75rem auto; border-radius: 2px;
     }
-    .org-avatar-wrap { position: relative; display: inline-block; margin-bottom: 1.25rem; }
+    .org-avatar-wrap { position: relative; display: inline-block; margin-bottom: 1rem; }
     .org-avatar {
-        width: 110px; height: 110px; border-radius: var(--radius-md);
+        width: 96px; height: 96px; border-radius: var(--radius-md);
         object-fit: cover;
-        border: 4px solid rgba(255,255,255,0.9);
-        box-shadow: 0 12px 32px rgba(30,64,175,0.3);
+        border: 3px solid rgba(255,255,255,0.9);
+        box-shadow: 0 8px 24px rgba(30,64,175,0.22);
     }
     .org-avatar-initials {
-        width: 110px; height: 110px; border-radius: var(--radius-md);
+        width: 96px; height: 96px; border-radius: var(--radius-md);
         display: flex; align-items: center; justify-content: center;
         background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
-        color: var(--primary-dark); font-size: 2.2rem; font-weight: 700;
-        margin: 0 auto 1.25rem;
-        box-shadow: 0 12px 32px rgba(30,64,175,0.25);
+        color: var(--primary-dark); font-size: 1.65rem; font-weight: 700;
+        margin: 0 auto;
+        box-shadow: 0 8px 24px rgba(30,64,175,0.2);
         border: 3px solid rgba(255,255,255,0.9);
+        letter-spacing: 0.04em;
     }
     .org-badge-check {
         position: absolute; bottom: 4px; right: 4px;
@@ -95,14 +103,38 @@
         color: white; display: flex; align-items: center; justify-content: center;
         font-size: 0.8rem; box-shadow: 0 4px 12px rgba(30,64,175,0.4);
     }
-    .org-lead-name { font-size: 1.1rem; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.4rem; }
     .org-lead-role {
-        font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
-        background: linear-gradient(135deg, var(--primary-dark), var(--accent));
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text; margin-bottom: 0.75rem;
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #1d4ed8;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        padding: 0.3rem 0.75rem;
+        margin-bottom: 0.65rem;
+        line-height: 1.2;
     }
-    .org-lead-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+    .org-lead-name {
+        font-size: clamp(0.88rem, 2.2vw, 0.98rem);
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.45;
+        letter-spacing: 0.01em;
+        margin-bottom: 0.65rem;
+        word-break: break-word;
+        hyphens: auto;
+        max-width: 100%;
+    }
+    .org-lead-desc {
+        font-size: 0.8rem;
+        color: #475569;
+        line-height: 1.65;
+        margin: 0;
+        flex: 1;
+    }
 
     .org-petugas-section { margin-top: 4rem; opacity: 0; transform: translateY(20px); transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .org-petugas-section.animate-visible { opacity: 1; transform: translateY(0); }
@@ -111,19 +143,25 @@
         width: 5px; height: 40px; border-radius: 4px;
         background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
     }
-    .org-petugas-title { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
-    .org-petugas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .org-petugas-title {
+        font-size: clamp(1.35rem, 3vw, 1.6rem);
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 14px rgba(15, 23, 42, 0.45);
+    }
+    .org-petugas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
     .org-petugas-card {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-radius: 18px;
-        border: 1px solid rgba(226,232,240,0.9);
-        padding: 1.75rem 1.5rem;
-        box-shadow: 0 4px 20px rgba(15,23,42,0.06);
+        border: 1px solid rgba(226, 232, 240, 0.95);
+        padding: 1.35rem 1.25rem;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
         transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative; overflow: hidden;
-        display: flex; flex-direction: row; align-items: flex-start; gap: 1.25rem;
+        display: flex; flex-direction: row; align-items: flex-start; gap: 1rem;
         min-height: 100px;
     }
     .org-petugas-card::before {
@@ -138,27 +176,50 @@
     }
     .org-petugas-card:hover::before { opacity: 1; }
     .org-petugas-card-foto { flex-shrink: 0; }
-    .org-petugas-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .org-petugas-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem; }
     .org-petugas-icon {
-        width: 110px; height: 110px; border-radius: var(--radius-md);
+        width: 80px; height: 80px; border-radius: var(--radius-md);
         background: linear-gradient(145deg, var(--primary) 0%, var(--accent) 100%);
         color: #fff; display: flex; align-items: center; justify-content: center;
-        font-size: 2.2rem; font-weight: 700;
-        box-shadow: 0 12px 32px rgba(30,64,175,0.3);
+        font-size: 1.5rem; font-weight: 700;
+        box-shadow: 0 8px 24px rgba(30,64,175,0.22);
+        flex-shrink: 0;
     }
-    .org-petugas-name { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0; }
-    .org-petugas-sub { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 0.5rem; }
-    .org-petugas-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; margin: 0; flex: 1; }
+    .org-petugas-sub {
+        display: inline-block;
+        align-self: flex-start;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #1d4ed8;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 999px;
+        padding: 0.25rem 0.6rem;
+        line-height: 1.2;
+    }
+    .org-petugas-name {
+        font-size: clamp(0.88rem, 2vw, 0.95rem);
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.4;
+        margin-bottom: 0;
+        word-break: break-word;
+    }
+    .org-petugas-desc { font-size: 0.8rem; color: #475569; line-height: 1.6; margin: 0; flex: 1; }
     .org-petugas-avatar {
-        width: 110px; height: 110px; border-radius: var(--radius-md);
+        width: 80px; height: 80px; border-radius: var(--radius-md);
         overflow: hidden;
         background: linear-gradient(145deg, var(--primary) 0%, var(--accent) 100%);
+        flex-shrink: 0;
     }
     .org-petugas-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .org-petugas-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 2rem; }
+    .org-petugas-empty { grid-column: 1 / -1; text-align: center; color: rgba(255, 255, 255, 0.9); padding: 2rem; text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35); }
 
     @media (max-width: 768px) {
         .org-lead-row { flex-direction: column; align-items: center; }
+        .org-lead-card, .org-lead-card.ketua { max-width: 100%; }
         .org-petugas-grid { grid-template-columns: 1fr; }
         .org-petugas-card { flex-direction: row; }
     }
@@ -201,8 +262,8 @@
                         <div class="org-avatar-initials">{{ $pembina ? $pembina->avatar_initials : 'PB' }}</div>
                     @endif
                 </div>
+                <div class="org-lead-role">{{ strtoupper(optional($pembina)->status ?? 'PEMBINA') }}</div>
                 <div class="org-lead-name">{{ optional($pembina)->nama ?? 'Pembina' }}</div>
-                <div class="org-lead-role">PEMBINA</div>
                 <p class="org-lead-desc">{{ optional($pembina)->keterangan ?? '' }}</p>
             </div>
             <div class="org-connector-down" aria-hidden="true"></div>
@@ -215,8 +276,8 @@
                     @else
                         <div class="org-avatar-initials">{{ $ketuaYayasan ? $ketuaYayasan->avatar_initials : 'KY' }}</div>
                     @endif
-                    <div class="org-lead-name">{{ optional($ketuaYayasan)->nama ?? 'Ketua Yayasan' }}</div>
                     <div class="org-lead-role">{{ strtoupper(optional($ketuaYayasan)->status ?? 'KETUA YAYASAN') }}</div>
+                    <div class="org-lead-name">{{ optional($ketuaYayasan)->nama ?? 'Ketua Yayasan' }}</div>
                     <p class="org-lead-desc">{{ optional($ketuaYayasan)->keterangan ?? '' }}</p>
                 </div>
                 <div class="org-lead-card">
@@ -225,8 +286,8 @@
                     @else
                         <div class="org-avatar-initials">{{ $ketuaPengawas ? $ketuaPengawas->avatar_initials : 'KP' }}</div>
                     @endif
-                    <div class="org-lead-name">{{ optional($ketuaPengawas)->nama ?? 'Ketua Pengawas' }}</div>
                     <div class="org-lead-role">{{ strtoupper(optional($ketuaPengawas)->status ?? 'KETUA PENGAWAS') }}</div>
+                    <div class="org-lead-name">{{ optional($ketuaPengawas)->nama ?? 'Ketua Pengawas' }}</div>
                     <p class="org-lead-desc">{{ optional($ketuaPengawas)->keterangan ?? '' }}</p>
                 </div>
             </div>
@@ -240,8 +301,8 @@
                     @else
                         <div class="org-avatar-initials">{{ $sekretaris ? $sekretaris->avatar_initials : 'SK' }}</div>
                     @endif
-                    <div class="org-lead-name">{{ optional($sekretaris)->nama ?? 'Sekretaris' }}</div>
                     <div class="org-lead-role">{{ strtoupper(optional($sekretaris)->status ?? 'SEKRETARIS') }}</div>
+                    <div class="org-lead-name">{{ optional($sekretaris)->nama ?? 'Sekretaris' }}</div>
                     <p class="org-lead-desc">{{ optional($sekretaris)->keterangan ?? '' }}</p>
                 </div>
                 <div class="org-lead-card">
@@ -250,8 +311,8 @@
                     @else
                         <div class="org-avatar-initials">{{ $bendahara ? $bendahara->avatar_initials : 'BD' }}</div>
                     @endif
-                    <div class="org-lead-name">{{ optional($bendahara)->nama ?? 'Bendahara' }}</div>
                     <div class="org-lead-role">{{ strtoupper(optional($bendahara)->status ?? 'BENDAHARA') }}</div>
+                    <div class="org-lead-name">{{ optional($bendahara)->nama ?? 'Bendahara' }}</div>
                     <p class="org-lead-desc">{{ optional($bendahara)->keterangan ?? '' }}</p>
                 </div>
                 <div class="org-lead-card">
@@ -260,8 +321,8 @@
                     @else
                         <div class="org-avatar-initials">{{ $pengawas ? $pengawas->avatar_initials : 'PW' }}</div>
                     @endif
-                    <div class="org-lead-name">{{ optional($pengawas)->nama ?? 'Pengawas' }}</div>
                     <div class="org-lead-role">{{ strtoupper(optional($pengawas)->status ?? 'PENGAWAS') }}</div>
+                    <div class="org-lead-name">{{ optional($pengawas)->nama ?? 'Pengawas' }}</div>
                     <p class="org-lead-desc">{{ optional($pengawas)->keterangan ?? '' }}</p>
                 </div>
             </div>
@@ -284,10 +345,10 @@
                         @endif
                     </div>
                     <div class="org-petugas-card-body">
-                        <div class="org-petugas-name">{{ $p->nama }}</div>
                         @if($p->status)
                             <div class="org-petugas-sub">{{ $p->status }}</div>
                         @endif
+                        <div class="org-petugas-name">{{ $p->nama }}</div>
                         @if($p->keterangan)
                             <p class="org-petugas-desc">{{ $p->keterangan }}</p>
                         @else

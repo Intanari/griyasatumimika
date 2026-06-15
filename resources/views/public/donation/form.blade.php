@@ -133,6 +133,8 @@
                     <div class="form-group">
                         <label class="form-label">Pilih Nominal <span class="req">*</span></label>
                         <div class="amount-presets">
+                            <button type="button" class="preset-btn" data-amount="1000">Rp 1.000</button>
+                            <button type="button" class="preset-btn" data-amount="5000">Rp 5.000</button>
                             <button type="button" class="preset-btn" data-amount="25000">Rp 25.000</button>
                             <button type="button" class="preset-btn" data-amount="50000">Rp 50.000</button>
                             <button type="button" class="preset-btn" data-amount="100000">Rp 100.000</button>
@@ -144,10 +146,9 @@
                         </div>
                         <div class="amount-input-wrap">
                       
-                            <input type="number" id="amount" name="amount" class="form-input {{ $errors->has('amount') ? 'is-invalid' : '' }}" placeholder="10000" min="10000" step="1000" value="{{ old('amount') }}">
+                            <input type="number" id="amount" name="amount" class="form-input {{ $errors->has('amount') ? 'is-invalid' : '' }}" placeholder="1000" min="1000" step="1000" value="{{ old('amount') }}">
                         </div>
                         @error('amount')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        <div style="font-size:0.78rem;color:rgba(255,255,255,0.85);margin-top:6px;">Minimal donasi Rp 10.000. Setiap rupiah sangat berarti! 🙏</div>
                     </div>
                     <div class="section-divider" style="margin-top:0.5rem;">Pesan / Doa (Opsional)</div>
                     <div class="form-group" style="margin-bottom:0">

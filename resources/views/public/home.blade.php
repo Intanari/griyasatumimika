@@ -126,7 +126,7 @@
         <section class="cta-section">
             <div class="section-inner anim-scale">
                 <h2>Satu Langkah Kecilmu, Perubahan Besar Baginya</h2>
-                <p>Bergabung dengan 15.000+ donatur. Mulai dari Rp 10.000.</p>
+                <p>Bergabung dengan 15.000+ donatur. Mulai dari Rp 1.000.</p>
                 <div class="cta-btns">
                     <a href="{{ route('donation.form', ['program' => 'umum']) }}" class="btn-cta-primary">Donasi Sekarang</a>
                     <a href="{{ route('odgj-report.form') }}" class="btn-cta-secondary">Laporan ODGJ</a>

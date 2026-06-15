@@ -46,13 +46,14 @@
     }
     .layanan-block:last-child { margin-bottom: 0; }
     .layanan-block-title {
-        font-size: 1.5rem;
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
         font-weight: 800;
         color: #ffffff;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         display: flex;
         align-items: center;
         gap: 0.65rem;
+        text-shadow: 0 2px 12px rgba(15, 23, 42, 0.4);
     }
     .layanan-block-title .icon {
         width: 44px;
@@ -66,11 +67,12 @@
         font-size: 1.25rem;
     }
     .layanan-block-desc {
-        font-size: 0.95rem;
-        color: rgba(255,255,255,0.85);
-        line-height: 1.75;
-        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.92);
+        line-height: 1.7;
+        margin-bottom: 1.75rem;
         padding-left: 3.25rem;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
     @media (max-width: 640px) {
         .layanan-block-desc { padding-left: 0; }
@@ -90,19 +92,20 @@
         .laporan-flow { grid-template-columns: 1fr; }
     }
     .laporan-flow-card {
-        background: transparent;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: 16px;
-        padding: 1.5rem;
-        border: 1px solid rgba(255,255,255,0.25);
+        padding: 1.35rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
         box-shadow: none;
         transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        height: 100%;
     }
     .laporan-flow-card:hover {
         transform: translateY(-4px);
-        border-color: rgba(147,197,253,0.6);
-        box-shadow: 0 12px 36px rgba(37,99,235,0.15);
+        border-color: rgba(147, 197, 253, 0.65);
+        box-shadow: 0 12px 36px rgba(37, 99, 235, 0.15);
     }
     .laporan-flow-num {
         width: 40px;
@@ -119,15 +122,19 @@
         box-shadow: 0 4px 14px rgba(37,99,235,0.35);
     }
     .laporan-flow-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 700;
         color: #ffffff;
         margin-bottom: 0.5rem;
+        line-height: 1.4;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
     .laporan-flow-desc {
-        font-size: 0.85rem;
-        color: rgba(255,255,255,0.85);
-        line-height: 1.6;
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.65;
+        margin: 0;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
     }
 
     /* Tahapan Rehabilitasi - Timeline */
@@ -157,18 +164,18 @@
         .rehab-step { padding-left: 3rem; }
     }
     .rehab-step-card {
-        background: transparent;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: 16px;
-        padding: 1.5rem 1.75rem;
-        border: 1px solid rgba(255,255,255,0.25);
+        padding: 1.35rem 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
         box-shadow: none;
         transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .rehab-step-card:hover {
-        border-color: rgba(147,197,253,0.6);
-        box-shadow: 0 8px 32px rgba(37,99,235,0.12);
+        border-color: rgba(147, 197, 253, 0.65);
+        box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
     }
     .rehab-step-dot {
         position: absolute;
@@ -193,50 +200,112 @@
     }
     .rehab-step-tag {
         display: inline-block;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         padding: 0.3rem 0.75rem;
-        background: rgba(37,99,235,0.25);
+        background: rgba(37, 99, 235, 0.25);
         color: #e0f2ff;
+        border: 1px solid rgba(147, 197, 253, 0.45);
         border-radius: 999px;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.55rem;
     }
     .rehab-step-title {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         color: #ffffff;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.55rem;
+        line-height: 1.4;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
     .rehab-step-desc {
-        font-size: 0.9rem;
-        color: rgba(255,255,255,0.85);
-        line-height: 1.7;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.65;
+        margin: 0;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
+    }
+
+    /* Persyaratan Penerimaan */
+    .persyaratan-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    @media (max-width: 900px) {
+        .persyaratan-grid { grid-template-columns: 1fr; }
+    }
+    .persyaratan-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 16px;
+        padding: 1.35rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        height: 100%;
+        transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .persyaratan-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(147, 197, 253, 0.65);
+    }
+    .persyaratan-card-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.85rem;
+        line-height: 1.4;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
+    }
+    .persyaratan-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        list-style: disc;
+    }
+    .persyaratan-list li {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.65;
+        margin-bottom: 0.55rem;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
+    }
+    .persyaratan-list li:last-child { margin-bottom: 0; }
+    .persyaratan-note {
+        margin-top: 0.85rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.6;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
     }
 
     /* CTA */
     .layanan-cta {
         margin-top: 3rem;
         text-align: center;
-        padding: 2.5rem 2rem;
-        background: transparent;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        padding: 2rem 1.75rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: 20px;
-        border: 1px solid rgba(255,255,255,0.25);
+        border: 1px solid rgba(255, 255, 255, 0.28);
         box-shadow: none;
     }
     .layanan-cta h3 {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: #ffffff;
         margin-bottom: 0.5rem;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
     .layanan-cta p {
-        font-size: 0.95rem;
-        color: rgba(255,255,255,0.9);
-        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1.25rem;
+        line-height: 1.65;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
     }
     .btn-laporan {
         display: inline-flex;
@@ -322,6 +391,42 @@
             @else
             <p class="layanan-block-desc" style="padding-left: 0;">Konten tahapan rehabilitasi dikelola dari dashboard admin.</p>
             @endif
+        </div>
+
+        {{-- Persyaratan Penerimaan ODGJ --}}
+        <div class="layanan-block anim-fade-up">
+            <h2 class="layanan-block-title"><span class="icon">📄</span>Persyaratan Penerimaan ODGJ</h2>
+            <p class="layanan-block-desc">
+                Berikut dokumen, ketentuan, dan informasi biaya yang perlu dipersiapkan sebelum penerima manfaat diterima di Rumah Singgah Griya Satu Mimika.
+            </p>
+            <div class="persyaratan-grid">
+                <div class="persyaratan-card anim-fade-up anim-delay-1">
+                    <h3 class="persyaratan-card-title">1. Dokumen yang Wajib Dibawa</h3>
+                    <ul class="persyaratan-list">
+                        <li>Fotokopi KTP pasien dan keluarga/penanggung jawab.</li>
+                        <li>Surat rujukan dari Rumah Sakit atau Puskesmas (jika ada).</li>
+                        <li>Surat pernyataan keluarga sebagai penanggung jawab.</li>
+                    </ul>
+                </div>
+                <div class="persyaratan-card anim-fade-up anim-delay-2">
+                    <h3 class="persyaratan-card-title">2. Ketentuan</h3>
+                    <ul class="persyaratan-list">
+                        <li>Pasien wajib mematuhi seluruh peraturan dan tata tertib di Rumah Singgah.</li>
+                        <li>Pasien bersedia mengikuti program rehabilitasi sesuai arahan tim yayasan.</li>
+                        <li>Keluarga atau penanggung jawab bersedia mendukung proses rehabilitasi.</li>
+                    </ul>
+                </div>
+                <div class="persyaratan-card anim-fade-up anim-delay-3">
+                    <h3 class="persyaratan-card-title">3. Kontribusi Biaya</h3>
+                    <ul class="persyaratan-list">
+                        <li>Biaya kontribusi bulanan ditetapkan sesuai kebijakan yayasan.</li>
+                        <li>Biaya mencakup makan, penginapan, dan layanan rehabilitasi dasar.</li>
+                    </ul>
+                    <p class="persyaratan-note">
+                        Pengurangan biaya dapat diajukan melalui surat permohonan khusus kepada pengurus yayasan.
+                    </p>
+                </div>
+            </div>
         </div>
 
         {{-- CTA Laporan ODGJ --}}
