@@ -31,7 +31,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.75rem;
-        min-height: 68px;
+        min-height: 80px;
         height: auto;
         padding: 0.65rem 0;
     }

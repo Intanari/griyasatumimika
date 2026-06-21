@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terima Kasih – PeduliJiwa</title>
+    <title>Terima Kasih – Yayasan Griya Satu Mimika</title>
     <!--[if mso]>
     <noscript>
         <xml>
@@ -36,22 +36,12 @@
                 <!-- ===== HEADER LOGO ===== -->
                 <tr>
                     <td align="center" style="padding-bottom: 24px;">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td style="
-                                    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-                                    border-radius: 14px;
-                                    width: 48px;
-                                    height: 48px;
-                                    text-align: center;
-                                    vertical-align: middle;
-                                    font-size: 24px;
-                                    line-height: 48px;
-                                    padding: 0 12px;
-                                ">🧠</td>
-                                <td style="padding-left: 12px; font-size: 22px; font-weight: 700; color: #4f46e5;">PeduliJiwa</td>
-                            </tr>
-                        </table>
+                        <img
+                            src="{{ asset('images/logo-yayasan.png') }}"
+                            alt="Yayasan Griya Satu Mimika"
+                            width="240"
+                            style="display: block; margin: 0 auto; max-width: 240px; height: auto;"
+                        >
                     </td>
                 </tr>
 
@@ -131,7 +121,7 @@
                                     'rawat-inap'       => 'Biaya Rawat Inap & Obat ODGJ',
                                     'pelatihan-vokasi' => 'Pelatihan Vokasi Pasca-Rehabilitasi',
                                     'rumah-singgah'    => 'Rumah Singgah ODGJ Terlantar',
-                                    'umum'             => 'Donasi Umum PeduliJiwa',
+                                    'umum'             => 'Donasi Umum Yayasan Griya Satu Mimika',
                                 ];
                                 $programLabel = $programs[$donation->program] ?? $donation->program;
                             @endphp
@@ -312,7 +302,7 @@
                                     <p style="font-size: 15px; color: rgba(255,255,255,0.9); line-height: 1.7; font-style: italic; margin-bottom: 10px;">
                                         "Setiap tetes kebaikanmu adalah cahaya harapan bagi jiwa-jiwa yang sedang berjuang kembali ke dunia mereka."
                                     </p>
-                                    <p style="font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 600;">— Tim PeduliJiwa</p>
+                                    <p style="font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 600;">— Tim Yayasan Griya Satu Mimika</p>
                                 </td>
                             </tr>
                         </table>
@@ -331,7 +321,7 @@
                                         font-weight: 700;
                                         text-decoration: none;
                                         box-shadow: 0 4px 20px rgba(79,70,229,0.35);
-                                    ">🏠 Kembali ke PeduliJiwa</a>
+                                    ">🏠 Kunjungi Website Kami</a>
                                 </td>
                             </tr>
                         </table>
@@ -355,7 +345,7 @@
                         <table align="center" cellpadding="0" cellspacing="0" border="0">
                             <tr>
                                 <td style="padding: 0 6px;">
-                                    <a href="https://wa.me/?text=Saya+baru+berdonasi+untuk+PeduliJiwa%21+Yuk+ikut+berdonasi+di+{{ urlencode(config('app.url')) }}" style="
+                                    <a href="https://wa.me/?text=Saya+baru+berdonasi+untuk+Yayasan+Griya+Satu+Mimika%21+Yuk+ikut+berdonasi+di+{{ urlencode(config('app.url')) }}" style="
                                         display: inline-block;
                                         background: #dcfce7;
                                         color: #16a34a;
@@ -379,7 +369,7 @@
                                     ">📘 Facebook</a>
                                 </td>
                                 <td style="padding: 0 6px;">
-                                    <a href="https://twitter.com/intent/tweet?text=Saya+baru+berdonasi+untuk+PeduliJiwa%21&url={{ urlencode(config('app.url')) }}" style="
+                                    <a href="https://twitter.com/intent/tweet?text=Saya+baru+berdonasi+untuk+Yayasan+Griya+Satu+Mimika%21&url={{ urlencode(config('app.url')) }}" style="
                                         display: inline-block;
                                         background: #e0f2fe;
                                         color: #0369a1;
@@ -399,13 +389,13 @@
                 <tr>
                     <td style="padding: 24px 0; text-align: center;">
                         <p style="font-size: 12px; color: #aaa; margin-bottom: 6px;">
-                            Email ini dikirim otomatis oleh sistem PeduliJiwa. Harap tidak membalas email ini.
+                            Email ini dikirim otomatis oleh sistem Yayasan Griya Satu Mimika. Harap tidak membalas email ini.
                         </p>
                         <p style="font-size: 12px; color: #aaa; margin-bottom: 6px;">
                             📧 info@griyasatumimika.web.id &nbsp;|&nbsp; 🌐 <a href="{{ config('app.url') }}" style="color: #4f46e5;">griyasatumimika.web.id</a>
                         </p>
                         <p style="font-size: 11px; color: #ccc; margin-top: 8px;">
-                            © {{ date('Y') }} PeduliJiwa. Semua hak dilindungi.
+                            © {{ date('Y') }} Yayasan Griya Satu Mimika. Semua hak dilindungi.
                         </p>
                     </td>
                 </tr>

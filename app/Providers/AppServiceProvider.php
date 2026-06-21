@@ -15,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         View::composer('layouts.app', function ($view) {
             $view->with('webSettings', WebSetting::getAllForPublic());
         });
@@ -22,10 +26,15 @@ class AppServiceProvider extends ServiceProvider
         View::composer('components.navbar', function ($view) {
             $view->with('patients', \App\Models\Patient::orderBy('nama_lengkap')->get());
             $current = \Illuminate\Support\Facades\Route::current();
-            $currentPatientId = $current && $current->getName() === 'public.pasien.show' && $current->parameter('patient')
+            $routeName = $current?->getName();
+            $currentPatientId = $routeName === 'public.pasien.show' && $current->parameter('patient')
                 ? $current->parameter('patient')->id
                 : null;
-            $view->with('currentPatientId', $currentPatientId);
+            $isPasienIndexActive = $routeName === 'public.pasien.index';
+            $view->with([
+                'currentPatientId' => $currentPatientId,
+                'isPasienIndexActive' => $isPasienIndexActive,
+            ]);
         });
     }
 }

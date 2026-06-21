@@ -312,27 +312,30 @@
         align-items: center;
         gap: 0.5rem;
         padding: 1rem 2rem;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
         color: white;
         font-size: 1rem;
         font-weight: 700;
         border-radius: 14px;
-        border: none;
         cursor: pointer;
         text-decoration: none;
-        box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+        box-shadow: none;
         transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .btn-laporan:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(37,99,235,0.5);
+        background: rgba(255,255,255,0.16);
+        border-color: rgba(255,255,255,0.9);
     }
 </style>
 @endpush
 
 @section('content')
 {{-- Hero --}}
-<section class="section layanan-hero" style="padding-top: calc(5.25rem + 72px);">
+<section class="section layanan-hero">
     <div class="section-inner">
         <div class="section-header-center anim-fade-down">
             <div class="section-tag">Layanan Rehabilitasi</div>

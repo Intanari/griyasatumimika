@@ -31,12 +31,20 @@
     .profile-section .profile-body { margin-left: auto; margin-right: auto; width: 100%; }
     .profile-meta-card h2 { margin-bottom: 1rem; font-size: 1.15rem; }
     .profile-meta-card .profile-meta-content { font-size: 0.95rem; line-height: 1.75; color: var(--text-muted, rgba(255,255,255,0.78)); }
+    @media (max-width: 768px) {
+        .page-hero .section-title { font-size: 1.65rem; }
+        .page-hero .section-desc { font-size: 0.88rem; }
+        .profile-meta-card { padding: 1.25rem 1.35rem; }
+    }
+    @media (max-width: 480px) {
+        .page-hero .section-title { font-size: 1.4rem; }
+    }
 </style>
 @endpush
 
 @section('content')
     {{-- Page hero --}}
-    <section class="section page-hero" style="padding-top: calc(5.25rem + 72px);">
+    <section class="section page-hero">
         <div class="section-inner">
             <div class="section-header-center anim-fade-down">
                 <div class="section-tag">Visi & Misi</div>

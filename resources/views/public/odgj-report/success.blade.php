@@ -81,7 +81,10 @@
     .btn-home {
         display: block;
         padding: 0.9rem;
-        background: linear-gradient(135deg, #2563eb, #38bdf8);
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
         border-radius: 14px;
         color: white;
         font-size: 0.95rem;
@@ -89,24 +92,26 @@
         text-decoration: none;
         text-align: center;
         transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+        box-shadow: none;
     }
-    .btn-home:hover { transform: translateY(-2px); color: white; box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
+    .btn-home:hover { transform: translateY(-2px); color: white; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
     .btn-form {
         display: block;
         padding: 0.9rem;
-        border: 2px solid rgba(255,255,255,0.5);
+        border: 1.5px solid rgba(255,255,255,0.65);
         border-radius: 12px;
         color: #ffffff;
         font-size: 0.95rem;
         font-weight: 600;
         text-align: center;
-        background: rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         text-decoration: none;
         font-family: inherit;
         transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .btn-form:hover { border-color: #ffffff; background: rgba(255,255,255,0.2); color: #ffffff; }
+    .btn-form:hover { border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.16); color: #ffffff; }
     .share-label { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 0.75rem; font-weight: 600; }
     .share-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
     .btn-share {
@@ -120,16 +125,17 @@
         color: white;
         text-decoration: none;
         transition: all 0.2s ease;
-        border: none;
+        border: 1.5px solid rgba(255,255,255,0.65);
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         cursor: pointer;
         font-family: inherit;
+        box-shadow: none;
     }
-    .btn-share-wa { background: #25D366; box-shadow: 0 4px 12px rgba(37,211,102,0.4); }
-    .btn-share-wa:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,211,102,0.5); color: white; }
-    .btn-share-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); box-shadow: 0 4px 12px rgba(220,39,67,0.4); }
-    .btn-share-ig:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(220,39,67,0.5); color: white; }
-    .btn-share-fb { background: #1877F2; box-shadow: 0 4px 12px rgba(24,119,242,0.4); }
-    .btn-share-fb:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(24,119,242,0.5); color: white; }
+    .btn-share-wa:hover,
+    .btn-share-ig:hover,
+    .btn-share-fb:hover { transform: translateY(-2px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); color: white; }
     @media (max-width: 600px) {
         .odgj-success-inner { padding: 0 1rem 3rem; }
         .success-title { font-size: 1.4rem; }
@@ -139,7 +145,7 @@
 @endpush
 
 @section('content')
-    <section class="page-hero" style="padding-top: calc(5.25rem + 72px);">
+    <section class="page-hero">
         <div class="section-inner">
             <div class="section-header-center anim-fade-up">
                 <div class="section-tag">Laporan ODGJ</div>

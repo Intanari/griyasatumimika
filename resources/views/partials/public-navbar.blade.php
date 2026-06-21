@@ -13,11 +13,14 @@
                     </svg>
                 </button>
                 <div class="nav-dropdown" role="menu" aria-label="Profil">
-                    <ul class="nav-dropdown-list">
+                    <div class="nav-dropdown-panel">
+                        <div class="nav-dropdown-blur" aria-hidden="true"></div>
+                        <ul class="nav-dropdown-list">
                         <li><a href="{{ route('profil.yayasan') }}" class="nav-dropdown-link" role="menuitem"><span>Profil Yayasan</span></a></li>
                         <li><a href="{{ route('profil.visi-misi') }}" class="nav-dropdown-link" role="menuitem"><span>Visi &amp; Misi</span></a></li>
                         <li><a href="{{ route('profil.struktur') }}" class="nav-dropdown-link" role="menuitem"><span>Struktur Organisasi</span></a></li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <a href="{{ route('pages.layanan') }}" class="nav-link">Layanan</a>

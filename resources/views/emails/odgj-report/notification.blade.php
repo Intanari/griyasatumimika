@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan ODGJ Baru – PeduliJiwa</title>
+    <title>Laporan ODGJ Baru – {{ config('app.name') }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f0f0ff; color: #1a1a2e; }
@@ -18,13 +18,8 @@
             <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; width:100%;">
 
                 <tr>
-                    <td align="center" style="padding-bottom: 24px;">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 14px; width: 48px; height: 48px; text-align: center; vertical-align: middle; font-size: 24px; line-height: 48px;">🧠</td>
-                                <td style="padding-left: 12px; font-size: 22px; font-weight: 700; color: #4f46e5;">PeduliJiwa</td>
-                            </tr>
-                        </table>
+                    <td align="center" style="padding-bottom: 24px; font-size: 18px; font-weight: 700; color: #4f46e5; letter-spacing: 0.04em;">
+                        {{ config('app.name') }}
                     </td>
                 </tr>
 
@@ -96,7 +91,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 28px;">
                             <tr>
                                 <td align="center">
-                                    <a href="https://{{ config('app.admin_domain') }}/dashboard" style="display: inline-block; padding: 14px 36px; background: linear-gradient(135deg, #3b82f6, #0ea5e9); border-radius: 12px; color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(59,130,246,0.35);">📋 Buka Dashboard Laporan</a>
+                                    <a href="{{ route('dashboard.laporan') }}" style="display: inline-block; padding: 14px 36px; background: linear-gradient(135deg, #3b82f6, #0ea5e9); border-radius: 12px; color: #ffffff; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(59,130,246,0.35);">📋 Buka Dashboard Laporan</a>
                                 </td>
                             </tr>
                         </table>
@@ -106,8 +101,8 @@
 
                 <tr>
                     <td style="padding: 24px 0; text-align: center;">
-                        <p style="font-size: 12px; color: #aaa;">Email notifikasi otomatis dari sistem PeduliJiwa.</p>
-                        <p style="font-size: 11px; color: #ccc; margin-top: 8px;">© {{ date('Y') }} PeduliJiwa.</p>
+                        <p style="font-size: 12px; color: #aaa;">Email notifikasi otomatis dari sistem {{ config('app.name') }}.</p>
+                        <p style="font-size: 11px; color: #ccc; margin-top: 8px;">© {{ date('Y') }} {{ config('app.name') }}.</p>
                     </td>
                 </tr>
 

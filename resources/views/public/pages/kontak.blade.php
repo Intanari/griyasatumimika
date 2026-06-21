@@ -4,7 +4,6 @@
 
 @push('styles')
 <style>
-    /* --- Hero & Section --- */
     .page-hero.page-hero-contact {
         background: transparent !important;
         color: #ffffff;
@@ -39,13 +38,8 @@
         gap: 2rem;
         margin-top: -2rem;
         padding: 0;
-        background: transparent !important;
-        border: none;
-        box-shadow: none;
         align-items: start;
     }
-
-    /* --- Kolom Info & Form (glass) --- */
     .section-contact-page .contact-info-column,
     .section-contact-page .contact-form-column {
         background: rgba(255,255,255,0.08) !important;
@@ -67,11 +61,10 @@
         line-height: 1.6;
         margin-bottom: 0;
     }
-    .section-contact-page .contact-info-header {
+    .section-contact-page .contact-info-header,
+    .section-contact-page .contact-form-header {
         margin-bottom: 1.5rem;
     }
-
-    /* --- Grid Kartu Kontak --- */
     .section-contact-page .contact-card-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -86,9 +79,7 @@
         border-radius: 12px;
         background: rgba(255,255,255,0.08) !important;
         backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255,255,255,0.2);
-        transition: background 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .section-contact-page .contact-card-body h3 {
         color: #ffffff;
@@ -102,19 +93,8 @@
         font-size: 0.85rem;
         line-height: 1.55;
     }
-    .section-contact-page .contact-card-body a {
-        color: #93c5fd;
-    }
-    .section-contact-page .contact-card-body a:hover {
-        color: #bfdbfe;
-    }
-    .section-contact-page .contact-card:hover {
-        background: rgba(255,255,255,0.12) !important;
-        border-color: rgba(255,255,255,0.3);
-        box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-    }
-
-    /* --- Lokasi Kami --- */
+    .section-contact-page .contact-card-body a { color: #93c5fd; }
+    .section-contact-page .contact-card-body a:hover { color: #bfdbfe; }
     .section-contact-page .contact-location-highlight {
         display: flex;
         align-items: flex-start;
@@ -122,30 +102,39 @@
         padding: 1rem 1.1rem;
         border-radius: 12px;
         background: rgba(255,255,255,0.08) !important;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(255,255,255,0.2);
-        color: #ffffff;
-    }
-    .section-contact-page .contact-location-highlight .contact-card-icon { flex-shrink: 0; }
-    .section-contact-page .contact-location-highlight .contact-card-body h3 { color: #ffffff; }
-    .section-contact-page .contact-location-highlight .contact-card-body p { color: rgba(255,255,255,0.85); }
-
-    /* --- Formulir --- */
-    .section-contact-page .contact-form-header {
-        margin-bottom: 1.5rem;
     }
     .section-contact-page .contact-pill-label {
+        display: inline-block;
         background: rgba(255,255,255,0.15);
         color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        margin-bottom: 0.5rem;
     }
-    .section-contact-page .contact-form .form-row label { color: #ffffff; }
+    .section-contact-page .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+    }
+    .section-contact-page .contact-form .form-row label {
+        display: block;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+    }
     .section-contact-page .contact-form .form-row input,
     .section-contact-page .contact-form .form-row textarea {
+        width: 100%;
         background: rgba(255,255,255,0.1);
         border: 1px solid rgba(255,255,255,0.25);
         color: #ffffff;
         border-radius: 10px;
+        padding: 0.65rem 0.85rem;
+        font: inherit;
     }
     .section-contact-page .contact-form .form-row input::placeholder,
     .section-contact-page .contact-form .form-row textarea::placeholder {
@@ -153,30 +142,63 @@
     }
     .section-contact-page .contact-form .form-row input:focus,
     .section-contact-page .contact-form .form-row textarea:focus {
+        outline: none;
         background: rgba(255,255,255,0.15);
         border-color: rgba(255,255,255,0.4);
         box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
     }
-    .section-contact-page .contact-form {
-        display: flex;
-        flex-direction: column;
+    .section-contact-page .form-row-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 0.9rem;
+    }
+    .section-contact-page .form-error {
+        color: #fecaca;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+    }
+    .section-contact-page .contact-alert {
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+    .section-contact-page .contact-alert-success {
+        background: rgba(34, 197, 94, 0.2);
+        border: 1px solid rgba(34, 197, 94, 0.45);
+        color: #dcfce7;
+    }
+    .section-contact-page .contact-alert-error {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.45);
+        color: #fee2e2;
     }
     .section-contact-page .contact-form-note {
         color: rgba(255,255,255,0.75);
         font-size: 0.8rem;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
     }
     .section-contact-page .btn-primary.btn-full {
-        background: linear-gradient(135deg, rgba(37,99,235,0.9), rgba(59,130,246,0.9));
-        border: 1px solid rgba(255,255,255,0.3);
+        width: 100%;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
+        color: #fff;
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: none;
     }
-
+    .section-contact-page .btn-primary.btn-full:hover {
+        background: rgba(255,255,255,0.16);
+        border-color: rgba(255,255,255,0.9);
+    }
     @media (max-width: 900px) {
-        .section-contact-page .contact-layout {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
+        .section-contact-page .contact-layout,
+        .section-contact-page .form-row-grid,
         .section-contact-page .contact-card-grid {
             grid-template-columns: 1fr;
         }
@@ -185,7 +207,7 @@
 @endpush
 
 @section('content')
-    <section class="section page-hero page-hero-contact" style="padding-top: calc(5.25rem + 72px);">
+    <section class="section page-hero page-hero-contact">
         <div class="section-inner">
             <div class="section-header-center anim-fade-down">
                 <div class="section-tag">Kontak</div>
@@ -201,7 +223,6 @@
     <section class="section section-contact-page">
         <div class="section-inner">
             <div class="contact-layout">
-                {{-- Kolom Info Kontak --}}
                 <div class="contact-info-column anim-fade-right">
                     <header class="contact-info-header">
                         <h2 class="contact-heading">Informasi Kontak</h2>
@@ -212,39 +233,34 @@
                     </header>
 
                     <div class="contact-card-grid">
-                        <div class="contact-card contact-card--address">
+                        <div class="contact-card">
                             <div class="contact-card-icon">📍</div>
                             <div class="contact-card-body">
                                 <h3>Alamat</h3>
                                 <p>Jl. Rehabilitasi Jiwa No. 12<br>Timika, Kabupaten Mimika<br>Papua Tengah</p>
                             </div>
                         </div>
-
-                        <div class="contact-card contact-card--phone">
+                        <div class="contact-card">
                             <div class="contact-card-icon">📞</div>
                             <div class="contact-card-body">
                                 <h3>Telepon</h3>
                                 <p>
-                                    <a href="tel:082198595245">+62 821-9859-5245</a>
-                                    <br>
+                                    <a href="tel:082198595245">+62 821-9859-5245</a><br>
                                     <span class="contact-note">Telepon dan WhatsApp layanan informasi</span>
                                 </p>
                             </div>
                         </div>
-
-                        <div class="contact-card contact-card--email">
+                        <div class="contact-card">
                             <div class="contact-card-icon">✉️</div>
                             <div class="contact-card-body">
                                 <h3>Email</h3>
                                 <p>
-                                    <a href="mailto:info@griyasatumimika.web.id">info@griyasatumimika.web.id</a>
-                                    <br>
+                                    <a href="mailto:info@griyasatumimika.web.id">info@griyasatumimika.web.id</a><br>
                                     <span class="contact-note">Balasan maksimal 1×24 jam kerja</span>
                                 </p>
                             </div>
                         </div>
-
-                        <div class="contact-card contact-card--hours">
+                        <div class="contact-card">
                             <div class="contact-card-icon">🕒</div>
                             <div class="contact-card-body">
                                 <h3>Jam Layanan</h3>
@@ -266,7 +282,6 @@
                     </aside>
                 </div>
 
-                {{-- Kolom Formulir --}}
                 <div class="contact-form-column anim-fade-left anim-delay-2">
                     <div class="contact-form-header">
                         <span class="contact-pill-label">Formulir Online</span>
@@ -274,32 +289,48 @@
                         <p class="contact-desc">Isi formulir singkat di bawah ini. Tim kami akan merespons secepat mungkin melalui email atau WhatsApp yang Anda cantumkan.</p>
                     </div>
 
-                    <form class="contact-form" method="post" action="mailto:info@griyasatumimika.web.id">
+                    @if(session('success'))
+                        <div class="contact-alert contact-alert-success">{{ session('success') }}</div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="contact-alert contact-alert-error">
+                            Periksa kembali data yang Anda isi.
+                        </div>
+                    @endif
+
+                    <form class="contact-form" method="post" action="{{ route('pages.kontak.store') }}" autocomplete="on">
+                        @csrf
                         <div class="form-row-grid">
                             <div class="form-row">
                                 <label for="nama">Nama Lengkap</label>
-                                <input id="nama" name="nama" type="text" placeholder="Tulis nama Anda" required>
+                                <input id="nama" name="nama" type="text" value="{{ old('nama') }}" placeholder="Tulis nama Anda" autocomplete="name" required>
+                                @error('nama')<div class="form-error">{{ $message }}</div>@enderror
                             </div>
                             <div class="form-row">
                                 <label for="email">Email</label>
-                                <input id="email" name="email" type="email" placeholder="email@contoh.com" required>
+                                <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="email@contoh.com" autocomplete="email" required>
+                                @error('email')<div class="form-error">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="form-row-grid">
                             <div class="form-row">
                                 <label for="subjek">Subjek</label>
-                                <input id="subjek" name="subjek" type="text" placeholder="Contoh: Konsultasi layanan rehabilitasi">
+                                <input id="subjek" name="subjek" type="text" value="{{ old('subjek') }}" placeholder="Contoh: Konsultasi layanan rehabilitasi" autocomplete="off">
+                                @error('subjek')<div class="form-error">{{ $message }}</div>@enderror
                             </div>
                             <div class="form-row">
                                 <label for="telepon">No. WhatsApp (opsional)</label>
-                                <input id="telepon" name="telepon" type="tel" placeholder="Contoh: 0821xxxxxxx">
+                                <input id="telepon" name="telepon" type="tel" value="{{ old('telepon') }}" placeholder="Contoh: 0821xxxxxxx" autocomplete="tel">
+                                @error('telepon')<div class="form-error">{{ $message }}</div>@enderror
                             </div>
                         </div>
 
                         <div class="form-row">
                             <label for="pesan">Pesan</label>
-                            <textarea id="pesan" name="pesan" rows="5" placeholder="Tulis pesan atau pertanyaan Anda di sini" required></textarea>
+                            <textarea id="pesan" name="pesan" rows="5" placeholder="Tulis pesan atau pertanyaan Anda di sini" required>{{ old('pesan') }}</textarea>
+                            @error('pesan')<div class="form-error">{{ $message }}</div>@enderror
                         </div>
 
                         <button type="submit" class="btn-primary btn-full">Kirim Pesan</button>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DonationExpenseController;
 use App\Http\Controllers\JadwalPetugasController;
@@ -27,33 +28,25 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\ProsesLaporanOdgjController;
 use App\Http\Controllers\TahapanRehabilitasiController;
 use App\Http\Controllers\PublicPatientController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// ============================================================
-// Domain Utama (griyasatumimika.web.id) - Halaman Publik
-// ============================================================
-$mainDomain = config('app.main_domain');
-Route::domain($mainDomain)->group(function () {
-    Route::get('/', function () {
-        return view('public.home');
-    })->name('welcome');
+// Redirect subdomain admin lama — selalu ke domain utama
+Route::domain('admin.griyasatumimika.web.id')->group(function () {
+    Route::any('/{path?}', function (?string $path = null) {
+        $suffix = $path ? '/' . ltrim($path, '/') : '/';
+        return redirect()->away('https://' . config('app.main_domain') . $suffix, 301);
+    })->where('path', '.*');
 });
 
 // ============================================================
-// Domain Admin (admin.griyasatumimika.web.id) - Login & Dashboard
-// Wajib login sebelum akses dashboard
+// Halaman Publik, Login & Dashboard — satu domain
+// https://griyasatumimika.web.id/
 // ============================================================
-Route::domain(config('app.admin_domain'))->group(function () {
-    // Root admin: redirect ke login atau dashboard
-    Route::get('/', function () {
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
-        return redirect()->route('login');
-    });
+Route::get('/', function () {
+    return view('public.home');
+})->name('welcome');
 
-    // Auth Routes (Guest Only)
+// Auth Routes (Guest Only)
     Route::middleware('guest')->group(function () {
         Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [LoginController::class, 'login'])->name('login.post');
@@ -259,13 +252,8 @@ Route::domain(config('app.admin_domain'))->group(function () {
         Route::put('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}', [TahapanRehabilitasiController::class, 'update'])->name('dashboard.layanan.tahapan-rehabilitasi.update');
         Route::delete('/dashboard/layanan/tahapan-rehabilitasi/{tahapanRehabilitasi}', [TahapanRehabilitasiController::class, 'destroy'])->name('dashboard.layanan.tahapan-rehabilitasi.destroy');
     });
-});
 
-// ============================================================
-// Domain Utama - Routes Publik (profil, donasi, laporan)
-// ============================================================
-Route::domain($mainDomain)->group(function () {
-    Route::redirect('/tentang', '/profil', 301);
+Route::redirect('/tentang', '/profil', 301);
     Route::get('/profil', fn () => view('public.pages.profil'))->name('pages.profil');
     Route::get('/layanan', function () {
         $prosesLaporanOdgj = \App\Models\ProsesLaporanOdgj::orderBy('no_urut')->orderBy('id')->get();
@@ -278,9 +266,20 @@ Route::domain($mainDomain)->group(function () {
             ->where('image', '!=', '')
             ->orderByDesc('tanggal')
             ->get();
-        return view('public.pages.galeri', compact('activities'));
+
+        $staticGalleryItems = collect(config('galeri-kegiatan.items', []))
+            ->filter(fn ($item) => is_file(public_path('images/galeri/' . $item['file'])))
+            ->map(fn ($item) => [
+                'url' => asset('images/galeri/' . $item['file']),
+                'name' => $item['name'],
+                'description' => $item['description'] ?? '',
+            ])
+            ->values();
+
+        return view('public.pages.galeri', compact('activities', 'staticGalleryItems'));
     })->name('pages.galeri');
-    Route::get('/kontak', fn () => view('public.pages.kontak'))->name('pages.kontak');
+    Route::get('/kontak', [ContactController::class, 'show'])->name('pages.kontak');
+    Route::post('/kontak', [ContactController::class, 'store'])->name('pages.kontak.store');
     Route::get('/cara-donasi', fn () => view('public.pages.cara-donasi'))->name('pages.cara-donasi');
     Route::get('/mitra', fn () => view('public.pages.mitra'))->name('pages.mitra');
     Route::get('/faq', fn () => view('public.pages.faq'))->name('pages.faq');
@@ -320,6 +319,5 @@ Route::domain($mainDomain)->group(function () {
     Route::get('/transparansi-donasi/pdf/donasi', [TransparansiDonasiController::class, 'pdfDonations'])->name('transparansi.donasi.pdf.donations');
     Route::get('/transparansi-donasi/pdf/pengeluaran', [TransparansiDonasiController::class, 'pdfExpenses'])->name('transparansi.donasi.pdf.expenses');
 
-    Route::get('/pasien', [PublicPatientController::class, 'index'])->name('public.pasien.index');
-    Route::get('/pasien/{patient}', [PublicPatientController::class, 'show'])->name('public.pasien.show');
-});
+Route::get('/pasien', [PublicPatientController::class, 'index'])->name('public.pasien.index');
+Route::get('/pasien/{patient}', [PublicPatientController::class, 'show'])->name('public.pasien.show');

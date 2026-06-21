@@ -18,7 +18,7 @@ class OdgjReportNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🚨 Laporan ODGJ Baru Masuk – ' . $this->report->kategori_label . ' – PeduliJiwa',
+            subject: '🚨 Laporan ODGJ Baru Masuk – ' . $this->report->kategori_label . ' – ' . config('app.name'),
         );
     }
 

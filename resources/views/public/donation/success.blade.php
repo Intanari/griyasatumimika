@@ -62,10 +62,10 @@
     .message-label { font-size: 0.75rem; font-weight: 600; color: #fcd34d; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
     .message-text { font-size: 0.9rem; color: rgba(255,255,255,0.95); line-height: 1.6; font-style: italic; }
     .donation-actions { display: flex; flex-direction: column; gap: 12px; }
-    .btn-home { display: block; padding: 0.9rem; background: linear-gradient(135deg, #2563eb, #38bdf8); border-radius: 14px; color: white; font-size: 0.95rem; font-weight: 700; text-decoration: none; text-align: center; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: 0 4px 16px rgba(37,99,235,0.35); }
-    .btn-home:hover { transform: translateY(-2px); color: white; }
-    .btn-share { display: block; padding: 0.9rem; border: 2px solid rgba(255,255,255,0.5); border-radius: 12px; color: #ffffff; font-size: 0.95rem; font-weight: 600; text-align: center; background: rgba(255,255,255,0.1); cursor: pointer; font-family: inherit; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-    .btn-share:hover { border-color: #ffffff; background: rgba(255,255,255,0.2); color: #ffffff; }
+    .btn-home { display: block; padding: 0.9rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.65); border-radius: 14px; color: white; font-size: 0.95rem; font-weight: 700; text-decoration: none; text-align: center; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: none; }
+    .btn-home:hover { transform: translateY(-2px); color: white; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
+    .btn-share { display: block; padding: 0.9rem; border: 1.5px solid rgba(255,255,255,0.65); border-radius: 12px; color: #ffffff; font-size: 0.95rem; font-weight: 600; text-align: center; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); cursor: pointer; font-family: inherit; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: none; }
+    .btn-share:hover { border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.16); color: #ffffff; }
     .impact-note { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.5rem; margin-top: 2rem; text-align: center; }
     .impact-note-icon { font-size: 2rem; margin-bottom: 0.5rem; }
     .impact-note-text { font-size: 0.88rem; color: rgba(255,255,255,0.95); line-height: 1.65; }
@@ -102,13 +102,16 @@
     .modal-actions { display: flex; justify-content: flex-end; }
     .modal-actions .btn {
         min-width: 100px; padding: 0.6rem 1.25rem; font-size: 0.875rem; font-weight: 600;
-        border-radius: 10px; border: none;
-        background: linear-gradient(135deg, #2563eb, #38bdf8);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
         color: white; font-family: inherit; cursor: pointer;
         min-height: 44px; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        box-shadow: none;
     }
-    .modal-actions .btn:hover { filter: brightness(1.06); }
+    .modal-actions .btn:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
     @media (max-width: 600px) {
         .donation-page-inner { padding: 0 1rem 3rem; }
         .success-title { font-size: 1.4rem; }

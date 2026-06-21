@@ -53,12 +53,12 @@
     .org-lead-row { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
     .org-lead-row.children, .org-lead-row.grandchildren { margin-top: 0.75rem; gap: 1.5rem; }
     .org-lead-card {
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(226, 232, 240, 0.95);
-        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: none;
         padding: 1.75rem 1.5rem 1.5rem;
         text-align: center;
         width: 100%;
@@ -67,41 +67,50 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        gap: 0.5rem;
+        transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .org-lead-card:hover {
         transform: translateY(-6px);
-        box-shadow: 0 20px 50px rgba(30,64,175,0.15);
+        border-color: rgba(255, 255, 255, 0.45);
     }
     .org-lead-card.ketua { order: -1; max-width: 300px; }
     .org-connector-down {
         width: 2px; height: 32px;
-        background: linear-gradient(to bottom, var(--primary-light), var(--accent));
+        background: rgba(255, 255, 255, 0.4);
         margin: 0.75rem auto; border-radius: 2px;
     }
-    .org-avatar-wrap { position: relative; display: inline-block; margin-bottom: 1rem; }
+    .org-avatar-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 0.35rem;
+    }
     .org-avatar {
         width: 96px; height: 96px; border-radius: var(--radius-md);
         object-fit: cover;
-        border: 3px solid rgba(255,255,255,0.9);
-        box-shadow: 0 8px 24px rgba(30,64,175,0.22);
+        border: 2px solid rgba(255,255,255,0.35);
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.2);
     }
     .org-avatar-initials {
         width: 96px; height: 96px; border-radius: var(--radius-md);
         display: flex; align-items: center; justify-content: center;
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
-        color: var(--primary-dark); font-size: 1.65rem; font-weight: 700;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #ffffff; font-size: 1.65rem; font-weight: 700;
         margin: 0 auto;
-        box-shadow: 0 8px 24px rgba(30,64,175,0.2);
-        border: 3px solid rgba(255,255,255,0.9);
+        border: 2px solid rgba(255,255,255,0.3);
         letter-spacing: 0.04em;
     }
     .org-badge-check {
         position: absolute; bottom: 4px; right: 4px;
         width: 32px; height: 32px; border-radius: 8px;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: white; display: flex; align-items: center; justify-content: center;
-        font-size: 0.8rem; box-shadow: 0 4px 12px rgba(30,64,175,0.4);
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #ffffff; display: flex; align-items: center; justify-content: center;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
     .org-lead-role {
         display: inline-block;
@@ -109,31 +118,33 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        color: #1d4ed8;
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
+        color: #e0f2ff;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.28);
         border-radius: 999px;
         padding: 0.3rem 0.75rem;
-        margin-bottom: 0.65rem;
+        margin-bottom: 0;
         line-height: 1.2;
     }
     .org-lead-name {
         font-size: clamp(0.88rem, 2.2vw, 0.98rem);
         font-weight: 700;
-        color: #0f172a;
+        color: #ffffff;
         line-height: 1.45;
         letter-spacing: 0.01em;
-        margin-bottom: 0.65rem;
+        margin-bottom: 0;
         word-break: break-word;
         hyphens: auto;
         max-width: 100%;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
     .org-lead-desc {
         font-size: 0.8rem;
-        color: #475569;
+        color: rgba(255, 255, 255, 0.88);
         line-height: 1.65;
         margin: 0;
         flex: 1;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
     }
 
     .org-petugas-section { margin-top: 4rem; opacity: 0; transform: translateY(20px); transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
@@ -141,7 +152,7 @@
     .org-petugas-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
     .org-petugas-bar {
         width: 5px; height: 40px; border-radius: 4px;
-        background: linear-gradient(180deg, var(--primary) 0%, var(--accent) 100%);
+        background: rgba(255, 255, 255, 0.4);
     }
     .org-petugas-title {
         font-size: clamp(1.35rem, 3vw, 1.6rem);
@@ -152,37 +163,39 @@
     }
     .org-petugas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
     .org-petugas-card {
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         border-radius: 18px;
-        border: 1px solid rgba(226, 232, 240, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.28);
         padding: 1.35rem 1.25rem;
-        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
-        transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: none;
+        transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative; overflow: hidden;
         display: flex; flex-direction: row; align-items: flex-start; gap: 1rem;
         min-height: 100px;
     }
-    .org-petugas-card::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-        background: linear-gradient(90deg, var(--primary), var(--accent));
-        opacity: 0; transition: opacity 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
     .org-petugas-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 16px 40px rgba(30,64,175,0.12);
-        border-color: rgba(59,130,246,0.2);
+        border-color: rgba(255, 255, 255, 0.45);
     }
-    .org-petugas-card:hover::before { opacity: 1; }
     .org-petugas-card-foto { flex-shrink: 0; }
-    .org-petugas-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem; }
+    .org-petugas-card-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        padding-top: 0;
+    }
     .org-petugas-icon {
         width: 80px; height: 80px; border-radius: var(--radius-md);
-        background: linear-gradient(145deg, var(--primary) 0%, var(--accent) 100%);
-        color: #fff; display: flex; align-items: center; justify-content: center;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        color: #ffffff; display: flex; align-items: center; justify-content: center;
         font-size: 1.5rem; font-weight: 700;
-        box-shadow: 0 8px 24px rgba(30,64,175,0.22);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         flex-shrink: 0;
     }
     .org-petugas-sub {
@@ -192,9 +205,9 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #1d4ed8;
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
+        color: #e0f2ff;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.28);
         border-radius: 999px;
         padding: 0.25rem 0.6rem;
         line-height: 1.2;
@@ -202,16 +215,24 @@
     .org-petugas-name {
         font-size: clamp(0.88rem, 2vw, 0.95rem);
         font-weight: 700;
-        color: #0f172a;
+        color: #ffffff;
         line-height: 1.4;
         margin-bottom: 0;
         word-break: break-word;
+        text-shadow: 0 1px 8px rgba(15, 23, 42, 0.35);
     }
-    .org-petugas-desc { font-size: 0.8rem; color: #475569; line-height: 1.6; margin: 0; flex: 1; }
+    .org-petugas-desc {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.6;
+        margin: 0;
+        flex: 1;
+        text-shadow: 0 1px 6px rgba(15, 23, 42, 0.3);
+    }
     .org-petugas-avatar {
         width: 80px; height: 80px; border-radius: var(--radius-md);
         overflow: hidden;
-        background: linear-gradient(145deg, var(--primary) 0%, var(--accent) 100%);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         flex-shrink: 0;
     }
     .org-petugas-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -227,7 +248,7 @@
 @endpush
 
 @section('content')
-<section class="section page-hero struktur-main-wrap" style="padding-top: calc(5.25rem + 72px);">
+<section class="section page-hero struktur-main-wrap">
     <div class="section-inner">
         <div class="section-header-center anim-fade-down">
             <div class="section-tag">Struktur Organisasi</div>

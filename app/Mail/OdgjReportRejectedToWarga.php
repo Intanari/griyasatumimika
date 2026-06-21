@@ -18,7 +18,7 @@ class OdgjReportRejectedToWarga extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Update Laporan ODGJ – PeduliJiwa',
+            subject: 'Update Laporan ODGJ – ' . config('app.name'),
         );
     }
 

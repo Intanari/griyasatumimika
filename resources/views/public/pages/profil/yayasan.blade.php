@@ -4,6 +4,13 @@
 
 @push('styles')
 <style>
+    .page-profil-yayasan { overflow-x: clip; max-width: 100%; }
+    .page-profil-yayasan .section.page-hero {
+        padding: clamp(5.5rem, 14vw, calc(5.25rem + 84px)) 1.5rem 2rem !important;
+    }
+    .page-profil-yayasan .section.profile-section {
+        padding: 2rem 1.5rem 4rem !important;
+    }
     .page-hero { background: transparent !important; }
     .page-hero .section-header-center { max-width: 720px; margin: 0 auto; text-align: center; }
     .page-hero .section-tag {
@@ -16,29 +23,75 @@
         color: #e0f2ff;
     }
     .page-hero .section-title {
-        font-size: 2rem;
-        line-height: 1.3;
+        font-size: clamp(1.35rem, 4.5vw, 2rem);
+        line-height: 1.35;
         margin-bottom: 0.6rem;
         color: #ffffff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
     .page-hero .section-desc {
-        font-size: 0.95rem;
+        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
         line-height: 1.75;
         color: rgba(255,255,255,0.9);
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
     .profile-section { background: transparent !important; }
-    .yayasan-layout { max-width: 960px; margin: 0 auto; }
-    .yayasan-layout .profile-body { margin-left: auto; margin-right: auto; width: 100%; }
+    .yayasan-layout {
+        max-width: 960px;
+        margin: 0 auto;
+        width: 100%;
+        min-width: 0;
+    }
+    .yayasan-layout .profile-body {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    .page-profil-yayasan .profile-meta-card {
+        max-width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        box-sizing: border-box;
+    }
     .yayasan-grid { display: grid; grid-template-columns: 1fr; gap: 1.75rem; }
     @media (min-width: 768px) {
         .yayasan-grid--two { grid-template-columns: 1fr 1fr; }
     }
-    .profile-meta-card h2 { margin-bottom: 1rem; font-size: 1.15rem; }
-    .profile-meta-card h3 { margin: 1.25rem 0 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem; }
+    .profile-meta-card h2 {
+        margin-bottom: 1rem;
+        font-size: clamp(1rem, 3.5vw, 1.15rem);
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .profile-meta-card h3 {
+        margin: 1.25rem 0 0.5rem;
+        font-size: 1rem;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
     .profile-meta-card ul { margin: 0; padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
-    .profile-meta-card p { margin: 0 0 0.75rem; font-size: 0.9rem; line-height: 1.75; color: var(--text-muted); }
+    .profile-meta-card p { margin: 0 0 0.75rem; font-size: 0.9rem; line-height: 1.75; color: var(--text-muted); overflow-wrap: anywhere; word-break: break-word; }
     .profile-meta-card p:last-of-type { margin-bottom: 0; }
-    .profile-meta-card .profile-meta-content { font-size: 0.9rem; line-height: 1.75; color: var(--text-muted); }
+    .profile-meta-card .profile-meta-content {
+        font-size: 0.9rem;
+        line-height: 1.75;
+        color: var(--text-muted);
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        max-width: 100%;
+    }
     .profile-meta-card .profile-meta-content br + * { margin-top: 0.75rem; }
     .yayasan-cta {
         display: flex; flex-direction: column; gap: 0.35rem;
@@ -62,12 +115,45 @@
     .yayasan-contact-value { font-size: 0.9rem; color: var(--text); line-height: 1.5; }
     .yayasan-contact-value a { color: var(--primary-dark); font-weight: 500; }
     .yayasan-contact-value a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+        .page-profil-yayasan .section.page-hero {
+            padding: calc(4.5rem + 64px) 1rem 1.5rem !important;
+        }
+        .page-profil-yayasan .section.profile-section {
+            padding: 1.5rem 1rem 3rem !important;
+        }
+        .page-profil-yayasan .profile-meta-card {
+            padding: 1.25rem 1.15rem;
+            border-radius: 14px;
+        }
+        .yayasan-layout .profile-body { gap: 1rem; }
+        .yayasan-contact { grid-template-columns: 1fr; }
+        .yayasan-cta { padding: 1rem 1.15rem; }
+    }
+
+    @media (max-width: 480px) {
+        .page-profil-yayasan .section.page-hero {
+            padding: calc(4rem + 64px) 0.875rem 1.25rem !important;
+        }
+        .page-profil-yayasan .section.profile-section {
+            padding: 1.25rem 0.875rem 2.5rem !important;
+        }
+        .page-hero .section-tag {
+            font-size: 0.72rem;
+            padding-inline: 0.75rem;
+        }
+        .profile-meta-card ul { padding-left: 1rem; font-size: 0.85rem; }
+        .yayasan-contact-item { padding: 0.85rem; gap: 0.75rem; }
+        .yayasan-contact-icon { width: 36px; height: 36px; font-size: 1.1rem; }
+    }
 </style>
 @endpush
 
 @section('content')
+<div class="public-page page-profil-yayasan">
     {{-- Hero --}}
-    <section class="section page-hero" style="padding-top: calc(5.25rem + 72px);">
+    <section class="section page-hero">
         <div class="section-inner yayasan-layout">
             <div class="section-header-center anim-fade-down">
                 <div class="section-tag">Profil Yayasan</div>
@@ -97,5 +183,6 @@
             </div>
         </div>
     </section>
+</div>
 @endsection
 

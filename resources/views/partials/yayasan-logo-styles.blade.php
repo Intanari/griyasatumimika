@@ -5,26 +5,26 @@
         object-fit: contain;
     }
     .yayasan-logo--nav {
-        height: 44px;
-        max-width: min(210px, 48vw);
+        height: 60px;
+        max-width: min(280px, 52vw);
     }
     .yayasan-logo--footer {
-        height: 56px;
-        max-width: 240px;
+        height: 76px;
+        max-width: 320px;
         margin: 0 auto 0.75rem;
     }
     .yayasan-logo--sidebar {
-        height: 38px;
-        max-width: 170px;
+        height: 56px;
+        max-width: 240px;
     }
     .yayasan-logo--auth {
-        height: 42px;
-        max-width: 210px;
+        height: 56px;
+        max-width: 280px;
     }
     @media (max-width: 480px) {
         .yayasan-logo--nav {
-            height: 38px;
-            max-width: min(180px, 52vw);
+            height: 52px;
+            max-width: min(220px, 58vw);
         }
     }
 </style>

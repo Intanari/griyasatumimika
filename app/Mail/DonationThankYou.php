@@ -18,7 +18,7 @@ class DonationThankYou extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🙏 Terima Kasih atas Donasi Anda – PeduliJiwa',
+            subject: '🙏 Terima Kasih atas Donasi Anda – Yayasan Griya Satu Mimika',
         );
     }
 

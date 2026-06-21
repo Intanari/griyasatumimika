@@ -175,12 +175,10 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
     {
-        $resetUrl = sprintf(
-            'https://%s/reset-password/%s?%s',
-            config('app.admin_domain'),
-            $token,
-            http_build_query(['email' => $this->getEmailForPasswordReset()])
-        );
+        $resetUrl = route('password.reset', [
+            'token' => $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ]);
 
         Mail::to($this->email)->send(new ResetPasswordMail($this, $resetUrl));
     }

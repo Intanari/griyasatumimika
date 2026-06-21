@@ -3,7 +3,7 @@
 @section('title', 'Laporan ODGJ')
 
 @section('content')
-    <section class="section page-hero" style="padding-top: calc(5.25rem + 72px);">
+    <section class="section page-hero">
         <div class="section-inner">
             <div class="section-header-center anim-fade-down">
                 <div class="section-tag">Laporan ODGJ</div>
@@ -219,8 +219,8 @@
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
     }
-    .kategori-option:hover { border-color: rgba(59,130,246,0.8); background: rgba(37,99,235,0.2); }
-    .kategori-option.selected { border-color: var(--primary); background: rgba(37,99,235,0.25); }
+    .kategori-option:hover { border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.16); }
+    .kategori-option.selected { border-color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.16); }
     .kategori-option input { display: none; }
     .kategori-icon { font-size: 1.5rem; }
     .kategori-text { font-size: 0.95rem; font-weight: 600; color: #ffffff; }
@@ -229,8 +229,10 @@
     .lokasi-row .form-input { flex: 1; }
     .btn-serlok {
         padding: 0.75rem 1.5rem;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        border: none;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
         border-radius: var(--radius-sm);
         color: white;
         font-size: 0.9rem;
@@ -241,9 +243,9 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        box-shadow: none;
     }
-    .btn-serlok:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.4); }
+    .btn-serlok:hover { transform: translateY(-1px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
     .btn-serlok:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .file-input-wrap { position: relative; }
@@ -252,11 +254,11 @@
         flex: 1;
         min-width: 140px;
         padding: 0.65rem 1rem;
-        border: 2px solid rgba(255,255,255,0.35);
+        border: 1.5px solid rgba(255,255,255,0.65);
         border-radius: var(--radius-sm);
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         font-size: 0.9rem;
         font-weight: 600;
         color: #ffffff;
@@ -267,10 +269,9 @@
         justify-content: center;
         gap: 8px;
     }
-    .btn-upload:hover { border-color: rgba(59,130,246,0.8); color: #e0f2ff; background: rgba(37,99,235,0.2); }
-    .btn-upload.camera { border-color: var(--primary); color: #e0f2ff; background: rgba(37,99,235,0.25); }
-    .btn-upload.camera:hover { background: rgba(37,99,235,0.35); }
-    .btn-upload.camera:hover { background: rgba(37,99,235,0.12); }
+    .btn-upload:hover { border-color: rgba(255,255,255,0.9); color: #ffffff; background: rgba(255,255,255,0.16); }
+    .btn-upload.camera { border-color: rgba(255,255,255,0.65); color: #ffffff; background: rgba(255,255,255,0.08); }
+    .btn-upload.camera:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
     .file-preview {
         margin-top: 1rem;
         max-width: 280px;
@@ -302,8 +303,10 @@
     .btn-submit.odgj-btn-submit {
         width: 100%;
         padding: 1rem;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        border: none;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1.5px solid rgba(255,255,255,0.65);
         border-radius: var(--radius-md);
         color: white;
         font-size: 1rem;
@@ -311,7 +314,7 @@
         font-family: inherit;
         cursor: pointer;
         transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 0 4px 20px rgba(37,99,235,0.35);
+        box-shadow: none;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -320,7 +323,8 @@
     }
     .btn-submit.odgj-btn-submit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(37,99,235,0.45);
+        background: rgba(255,255,255,0.16);
+        border-color: rgba(255,255,255,0.9);
     }
     .alert-success {
         max-width: 680px;

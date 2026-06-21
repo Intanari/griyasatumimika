@@ -9,6 +9,7 @@
         * { box-sizing: border-box; }
         body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 9px; color: #1e293b; padding: 12px; margin: 0; }
         h1 { font-size: 14px; margin: 0 0 2px 0; color: #0f172a; }
+        .pdf-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .meta { color: #64748b; margin-bottom: 8px; font-size: 9px; }
         @media print {
             body { padding: 0; font-size: 8px; }
@@ -38,8 +39,13 @@
     </style>
 </head>
 <body>
-    <h1>Jadwal Petugas — Yayasan Rehabilitasi</h1>
-    <p class="meta">Periode: {{ $monthStart->translatedFormat('F Y') }} (1 – {{ $monthEnd->format('d') }}) — Dicetak: {{ now()->translatedFormat('d F Y H:i') }} — Total: {{ $jadwals->count() }} jadwal</p>
+    <div class="pdf-header">
+        @include('partials.yayasan-logo-export', ['height' => 56, 'forPdf' => true])
+        <div>
+            <h1>Jadwal Petugas — Yayasan Griya Satu Mimika</h1>
+            <p class="meta">Periode: {{ $monthStart->translatedFormat('F Y') }} (1 – {{ $monthEnd->format('d') }}) — Dicetak: {{ now()->translatedFormat('d F Y H:i') }} — Total: {{ $jadwals->count() }} jadwal</p>
+        </div>
+    </div>
 
     <div class="cal-container">
         @foreach ($weeks as $weekDates)

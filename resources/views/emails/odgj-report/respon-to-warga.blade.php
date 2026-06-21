@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Respon Laporan ODGJ – PeduliJiwa</title>
+    <title>Respon Laporan ODGJ – {{ config('app.name') }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #eff6ff; color: #1a1a2e; }
@@ -17,13 +17,8 @@
         <td align="center">
             <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; width:100%;">
                 <tr>
-                    <td align="center" style="padding-bottom: 24px;">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                                <td style="background: linear-gradient(135deg, #3b82f6, #0ea5e9); border-radius: 14px; width: 48px; height: 48px; text-align: center; vertical-align: middle; font-size: 24px; line-height: 48px;">🧠</td>
-                                <td style="padding-left: 12px; font-size: 22px; font-weight: 700; color: #2563eb;">PeduliJiwa</td>
-                            </tr>
-                        </table>
+                    <td align="center" style="padding-bottom: 24px; font-size: 18px; font-weight: 700; color: #2563eb; letter-spacing: 0.04em;">
+                        {{ config('app.name') }}
                     </td>
                 </tr>
 
@@ -34,7 +29,7 @@
                                 <td align="center" style="padding: 36px 32px;">
                                     <div style="display: inline-block; width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 50%; text-align: center; line-height: 64px; font-size: 32px; margin-bottom: 16px;">📩</div>
                                     <p style="font-size: 12px; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-bottom: 8px;">Respon Laporan</p>
-                                    <h1 style="font-size: 24px; font-weight: 700; color: #ffffff; line-height: 1.25;">Pesan dari Admin PeduliJiwa</h1>
+                                    <h1 style="font-size: 24px; font-weight: 700; color: #ffffff; line-height: 1.25;">Pesan dari Admin {{ config('app.name') }}</h1>
                                     <p style="font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 8px;">No. Laporan: <strong>{{ $report->nomor_laporan }}</strong></p>
                                 </td>
                             </tr>
@@ -48,13 +43,13 @@
                         <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 20px 24px; border-radius: 0 12px 12px 0; margin-bottom: 24px;">
                             <p style="font-size: 15px; color: #1a1a2e; line-height: 1.7; white-space: pre-wrap;">{{ $pesanRespon }}</p>
                         </div>
-                        <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Terima kasih atas kepedulian Anda. Salam hangat dari tim PeduliJiwa.</p>
+                        <p style="font-size: 14px; color: #64748b; line-height: 1.6;">Terima kasih atas kepedulian Anda. Salam hangat dari tim {{ config('app.name') }}.</p>
                     </td>
                 </tr>
 
                 <tr>
                     <td style="padding: 24px 0; text-align: center;">
-                        <p style="font-size: 12px; color: #94a3b8;">© {{ date('Y') }} PeduliJiwa</p>
+                        <p style="font-size: 12px; color: #94a3b8;">© {{ date('Y') }} {{ config('app.name') }}</p>
                     </td>
                 </tr>
             </table>

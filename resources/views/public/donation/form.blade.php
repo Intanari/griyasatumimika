@@ -54,13 +54,13 @@
     .form-card-donation .form-row label { color: #ffffff !important; }
     textarea.form-input { resize: vertical; min-height: 100px; }
     .amount-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
-    .preset-btn { padding: 0.55rem 0.5rem; border: 1.5px solid rgba(255,255,255,0.35); border-radius: 9px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); font-size: 0.82rem; font-weight: 600; color: #ffffff; cursor: pointer; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-align: center; }
-    .preset-btn:hover, .preset-btn.active { border-color: #2563eb; color: #e0f2ff; background: rgba(37,99,235,0.25); }
+    .preset-btn { padding: 0.55rem 0.5rem; border: 1.5px solid rgba(255,255,255,0.65); border-radius: 9px; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); font-size: 0.82rem; font-weight: 600; color: #ffffff; cursor: pointer; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); text-align: center; }
+    .preset-btn:hover, .preset-btn.active { border-color: rgba(255,255,255,0.9); color: #ffffff; background: rgba(255,255,255,0.16); }
     .amount-input-wrap { position: relative; }
     .amount-prefix { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-weight: 600; color: rgba(255,255,255,0.9); font-size: 0.95rem; pointer-events: none; }
     .amount-input-wrap .form-input { padding-left: 3rem; }
-    .btn-submit { width: 100%; padding: 1rem; background: linear-gradient(135deg, #2563eb, #38bdf8); border: none; border-radius: 14px; color: white; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: 0 4px 20px rgba(37,99,235,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.75rem; }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.45); }
+    .btn-submit { width: 100%; padding: 1rem; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.65); border-radius: 14px; color: white; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); box-shadow: none; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.75rem; }
+    .btn-submit:hover { transform: translateY(-2px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
     .trust-row { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
     .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: rgba(255,255,255,0.9); }
     @media (max-width: 600px) {
@@ -82,7 +82,7 @@
 @endpush
 
 @section('content')
-    <section class="section page-hero" style="padding-top: calc(5.25rem + 72px);">
+    <section class="section page-hero">
         <div class="section-inner">
             <div class="section-header-center anim-fade-down">
                 <div class="section-tag">Donasi</div>

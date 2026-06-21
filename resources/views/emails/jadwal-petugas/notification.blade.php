@@ -106,7 +106,7 @@
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
                             <tr>
                                 <td align="center">
-                                    <a href="https://{{ config('app.admin_domain') }}/dashboard/jadwal-petugas"
+                                    <a href="{{ route('dashboard.jadwal-petugas.index') }}"
                                         style="display:inline-block; padding:14px 36px; background:linear-gradient(135deg,#3b82f6,#0ea5e9); border-radius:12px; color:#ffffff; font-size:15px; font-weight:700; text-decoration:none; box-shadow:0 4px 20px rgba(59,130,246,0.35);">
                                         📅 Buka Jadwal Petugas
                                     </a>

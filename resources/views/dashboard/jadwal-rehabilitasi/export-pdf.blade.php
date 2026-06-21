@@ -13,7 +13,6 @@
         @media print { body { padding: 0; } .cal-day { break-inside: avoid; } }
 
         .header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #e2e8f0; }
-        .header-logo { width: 44px; height: 44px; background: linear-gradient(135deg, #2563eb, #0ea5e9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .header-title { flex: 1; }
         .header-title h1 { margin: 0 0 2px 0; }
         .header-title .meta { margin: 0; }
@@ -34,7 +33,7 @@
 </head>
 <body>
     <div class="header-row">
-        <div class="header-logo">🧠</div>
+        @include('partials.yayasan-logo-export', ['height' => 60, 'forPdf' => true])
         <div class="header-title">
             <h1>Jadwal Rehabilitasi Mingguan</h1>
             <p class="meta">{{ config('app.name') }} — Dicetak: {{ now()->locale('id')->translatedFormat('d F Y H:i') }} — Total {{ $jadwals->count() }} kegiatan</p>

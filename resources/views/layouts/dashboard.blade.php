@@ -2,8 +2,8 @@
 <html lang="id" id="html-theme">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Dashboard') - PeduliJiwa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>@yield('title', 'Dashboard') - Yayasam Griya Satu Mimik</title>
     <link rel="icon" href="{{ asset('images/logo-yayasan.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
@@ -1100,6 +1100,7 @@
             }
         }
     </style>
+    @include('partials.responsive-dashboard')
     @stack('styles')
     @include('partials.yayasan-logo-styles')
 </head>

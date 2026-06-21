@@ -92,9 +92,6 @@
         min-height: 0;
         margin-bottom: 1rem;
     }
-    .gallery-lightbox-header {
-        display: none;
-    }
     .gallery-lightbox-image-wrap {
         position: relative;
         flex: 1 1 auto;
@@ -120,9 +117,9 @@
     .gallery-lightbox-prev,
     .gallery-lightbox-next {
         position: absolute;
-        border: none;
-        background: rgba(15, 23, 42, 0.9);
-        color: #e5e7eb;
+        border: 1.5px solid rgba(255,255,255,0.65);
+        background: rgba(255,255,255,0.08);
+        color: #ffffff;
         border-radius: 999px;
         padding: 0.5rem 0.85rem;
         cursor: pointer;
@@ -130,21 +127,28 @@
         align-items: center;
         justify-content: center;
         font-size: 1rem;
-        backdrop-filter: blur(8px);
-        transition: background 0.2s ease, transform 0.2s ease;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        box-shadow: none;
     }
     .gallery-lightbox-close:hover,
     .gallery-lightbox-prev:hover,
     .gallery-lightbox-next:hover {
-        background: rgba(15, 23, 42, 0.98);
+        background: rgba(255,255,255,0.16);
+        border-color: rgba(255,255,255,0.9);
         transform: translateY(-1px);
     }
     .gallery-lightbox-close {
-        position: relative;
-        top: 0;
-        right: 0;
-        font-size: 1.25rem;
-        padding: 0.5rem 1rem;
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 62;
+        font-size: 1.35rem;
+        line-height: 1;
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
     }
     .gallery-lightbox-prev,
     .gallery-lightbox-next {
@@ -229,8 +233,18 @@
 
 @php
     $activities = $activities ?? collect();
+    $staticGalleryItems = $staticGalleryItems ?? collect();
     $galleryItems = [];
     $seenUrls = [];
+
+    foreach ($staticGalleryItems as $item) {
+        if (isset($seenUrls[$item['url']])) {
+            continue;
+        }
+        $seenUrls[$item['url']] = true;
+        $galleryItems[] = $item;
+    }
+
     if ($activities->isNotEmpty()) {
         foreach ($activities as $a) {
             $name = $a->patient ? $a->patient->nama_lengkap : '–';
@@ -248,12 +262,12 @@
 @endphp
 
 @section('content')
-<section class="section gallery-section" style="padding-top: calc(5.25rem + 72px);">
+<section class="section gallery-section">
     <div class="section-inner">
         <div class="section-header-center anim-fade-up">
-            <div class="section-tag">Galeri Kegiatan Pasien</div>
+            <div class="section-tag">Galeri Kegiatan</div>
             <h2 class="section-title">Setiap Langkah, Setiap Senyum</h2>
-            <p class="section-desc">Setiap foto bercerita, setiap momen menginspirasi—ikuti perjalanan pasien kami di sini.</p>
+            <p class="section-desc">Setiap foto bercerita tentang pendampingan, kebersamaan, dan perjalanan pemulihan penerima manfaat kami.</p>
         </div>
         <div class="gallery-grid">
             @forelse($galleryItems as $i => $item)
@@ -263,14 +277,12 @@
                 </a>
             </div>
             @empty
-            <p class="gallery-empty">Belum ada foto aktivitas pasien. Galeri akan terisi dari data aktivitas pasien.</p>
+            <p class="gallery-empty">Belum ada foto kegiatan. Galeri akan segera diisi.</p>
             @endforelse
         </div>
         <div class="gallery-lightbox" id="galleryLightbox" aria-hidden="true" role="dialog" aria-label="Pratinjau galeri">
+            <button type="button" class="gallery-lightbox-close" aria-label="Tutup pratinjau">&times;</button>
             <div class="gallery-lightbox-inner">
-                <div class="gallery-lightbox-header">
-                    <button type="button" class="gallery-lightbox-close" aria-label="Tutup pratinjau">&times;</button>
-                </div>
                 <div class="gallery-lightbox-image-wrap">
                     <button type="button" class="gallery-lightbox-prev" aria-label="Lihat foto sebelumnya">&#10094;</button>
                     <img src="" alt="Foto galeri" class="gallery-lightbox-image">

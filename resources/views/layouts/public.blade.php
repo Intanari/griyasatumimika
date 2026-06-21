@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('title', 'PeduliJiwa') - Donasi Rehabilitasi ODGJ</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800" rel="stylesheet" />
@@ -20,8 +20,18 @@
             --bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0f2fe 100%);
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; line-height: 1.6; }
+        html { -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
         a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; height: auto; }
 
         .navbar {
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -29,7 +39,7 @@
             border-bottom: 1px solid var(--border);
             padding: 0 1.5rem;
         }
-        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 84px; }
         .nav-logo {
             display: flex; align-items: center; gap: 12px;
             font-size: 1.25rem; font-weight: 800; color: var(--primary-dark);
@@ -47,19 +57,22 @@
         .nav-links a:hover { color: var(--primary-dark); }
         .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
         .btn-outline {
-            padding: 0.5rem 1.25rem; border: 2px solid var(--primary);
-            border-radius: 10px; color: var(--primary); font-size: 0.9rem; font-weight: 600;
+            padding: 0.5rem 1.25rem; border: 1.5px solid rgba(255,255,255,0.65);
+            border-radius: 10px; color: #ffffff; font-size: 0.9rem; font-weight: 600;
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             transition: all 0.2s;
         }
-        .btn-outline:hover { background: var(--primary); color: white; }
+        .btn-outline:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); color: white; }
         .btn-primary {
             padding: 0.55rem 1.35rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.65);
             border-radius: 10px; color: white; font-size: 0.9rem; font-weight: 600;
-            box-shadow: 0 4px 16px rgba(99,102,241,0.35);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: none;
+            transition: transform 0.2s, background 0.2s, border-color 0.2s;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(59,130,246,0.4); }
+        .btn-primary:hover { transform: translateY(-2px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
         .nav-back { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
         .nav-back:hover { color: var(--primary-dark); }
 
@@ -104,14 +117,16 @@
         textarea.form-input { resize: vertical; min-height: 120px; }
         .btn-submit {
             width: 100%; padding: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border: none; border-radius: 14px; color: white;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.65);
+            border-radius: 14px; color: white;
             font-size: 1rem; font-weight: 700; font-family: inherit;
             cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(59,130,246,0.35);
+            box-shadow: none;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 1.75rem;
         }
-        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,130,246,0.45); }
+        .btn-submit:hover { transform: translateY(-2px); background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.9); }
         .alert-success {
             background: linear-gradient(135deg, #ecfdf5, #d1fae5);
             border: 1px solid #86efac; border-radius: 14px;
@@ -122,7 +137,29 @@
         .trust-row { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
         .trust-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
 
-        @media (max-width: 768px) { .nav-links { display: none; } }
+        @media (max-width: 1024px) {
+            .page-wrapper { padding: 3.5rem 1.25rem 4rem; }
+            .form-title { font-size: 1.65rem; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-inner { height: auto; min-height: 72px; padding: 0.5rem 0; flex-wrap: wrap; gap: 0.5rem; }
+            .navbar { padding: 0 1rem; }
+            .page-wrapper { padding: 3rem 1rem 3.5rem; }
+            .form-header { margin-bottom: 1.75rem; }
+            .form-title { font-size: 1.45rem; }
+            .form-subtitle { font-size: 0.88rem; }
+            .form-card { padding: 1.5rem; border-radius: 18px; }
+            .trust-row { flex-direction: column; align-items: center; gap: 0.65rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-inner { min-height: 64px; }
+            .page-wrapper { padding: 2.5rem 0.875rem 3rem; }
+            .form-title { font-size: 1.3rem; }
+            .form-card { padding: 1.25rem; }
+            .btn-submit { min-height: 48px; }
+            .breadcrumb { flex-wrap: wrap; font-size: 0.8rem; }
+        }
     </style>
     @include('partials.yayasan-logo-styles')
     @stack('styles')

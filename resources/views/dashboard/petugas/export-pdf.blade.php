@@ -7,6 +7,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 12px; color: #1e293b; padding: 24px; }
         h1 { font-size: 18px; margin-bottom: 8px; color: #0f172a; }
+        .pdf-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .meta { color: #64748b; margin-bottom: 20px; font-size: 11px; }
         table { width: 100%; border-collapse: collapse; margin-top: 12px; }
         th, td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
@@ -21,8 +22,13 @@
     <div class="no-print">
         <button type="button" class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
     </div>
-    <h1>Data Petugas — Yayasan Rehabilitasi</h1>
-    <p class="meta">Dicetak: {{ now()->translatedFormat('d F Y H:i') }} — Total: {{ $petugas->count() }} petugas</p>
+    <div class="pdf-header">
+        @include('partials.yayasan-logo-export', ['height' => 60, 'forPdf' => false])
+        <div>
+            <h1>Data Petugas — Yayasan Griya Satu Mimika</h1>
+            <p class="meta">Dicetak: {{ now()->translatedFormat('d F Y H:i') }} — Total: {{ $petugas->count() }} petugas</p>
+        </div>
+    </div>
     <table>
         <thead>
             <tr>

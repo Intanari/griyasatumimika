@@ -3,7 +3,7 @@
 @section('title', 'Profil')
 
 @section('content')
-<section class="section profile-section" style="padding-top: calc(5.25rem + 72px);">
+<section class="section profile-section">
     <div class="section-inner">
         <div class="section-header-center anim-fade-up" style="margin-bottom:2.5rem;">
             <div class="section-tag">Profil</div>

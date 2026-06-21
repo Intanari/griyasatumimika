@@ -1,22 +1,53 @@
 <script>
     (function() {
         var toggle = document.getElementById('navMobileToggle');
-        var menu = document.getElementById('navMobileMenu');
+        var drawer = document.getElementById('navDrawer');
+        var overlay = document.getElementById('navDrawerOverlay');
+        var closeBtn = document.getElementById('navDrawerClose');
         var navbar = document.querySelector('.navbar');
-        if (toggle && menu) {
+
+        function openDrawer() {
+            if (!drawer || !overlay || !toggle) return;
+            drawer.classList.add('is-open');
+            overlay.classList.add('is-open');
+            toggle.classList.add('is-active');
+            toggle.setAttribute('aria-expanded', 'true');
+            toggle.setAttribute('aria-label', 'Tutup menu navigasi');
+            drawer.setAttribute('aria-hidden', 'false');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('nav-drawer-open');
+        }
+
+        function closeDrawer() {
+            if (!drawer || !overlay || !toggle) return;
+            drawer.classList.remove('is-open');
+            overlay.classList.remove('is-open');
+            toggle.classList.remove('is-active');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.setAttribute('aria-label', 'Buka menu navigasi');
+            drawer.setAttribute('aria-hidden', 'true');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('nav-drawer-open');
+        }
+
+        if (toggle && drawer && overlay) {
             toggle.addEventListener('click', function() {
-                menu.classList.toggle('open');
-                toggle.setAttribute('aria-label', menu.classList.contains('open') ? 'Tutup menu' : 'Menu');
-                toggle.innerHTML = menu.classList.contains('open') ? '✕' : '☰';
+                if (drawer.classList.contains('is-open')) closeDrawer();
+                else openDrawer();
             });
-            document.querySelectorAll('.mobile-nav-close').forEach(function(a) {
-                a.addEventListener('click', function() {
-                    menu.classList.remove('open');
-                    toggle.innerHTML = '☰';
-                    toggle.setAttribute('aria-label', 'Menu');
-                });
+            if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+            overlay.addEventListener('click', closeDrawer);
+            document.querySelectorAll('.mobile-nav-close').forEach(function(link) {
+                link.addEventListener('click', closeDrawer);
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+            });
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 1024 && drawer.classList.contains('is-open')) closeDrawer();
             });
         }
+
         if (navbar) {
             var onScroll = function() {
                 if (window.scrollY > 16) navbar.classList.add('scrolled');
@@ -160,7 +191,10 @@
             }
 
             lightbox.addEventListener('click', function(e) {
-                if (e.target === lightbox) hideLightbox();
+                var keepOpen = e.target.closest('.gallery-lightbox-image') ||
+                    e.target.closest('.gallery-lightbox-prev') ||
+                    e.target.closest('.gallery-lightbox-next');
+                if (!keepOpen) hideLightbox();
             });
 
             document.addEventListener('keydown', function(e) {

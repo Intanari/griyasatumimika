@@ -21,7 +21,7 @@ class OdgjReportResponToWarga extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Respon Laporan ODGJ No. ' . $this->report->nomor_laporan . ' – PeduliJiwa',
+            subject: 'Respon Laporan ODGJ No. ' . $this->report->nomor_laporan . ' – ' . config('app.name'),
         );
     }
 

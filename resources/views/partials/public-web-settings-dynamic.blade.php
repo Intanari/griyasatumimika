@@ -83,13 +83,16 @@
     }
     @endif
     @endforeach
-    /* Tombol tanpa class */
+    /* Tombol tanpa class — default buram tanpa warna solid */
     body.public-layout .public-main button:not([class]),
     body.public-layout .public-main a:not([class])[role="button"] {
-        background: {{ $buttonColor }} !important;
+        background: rgba(255,255,255,0.08) !important;
         background-image: none !important;
-        border-color: {{ $buttonColor }} !important;
+        border: 1.5px solid rgba(255,255,255,0.65) !important;
         color: {{ $buttonTextColor }} !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: none !important;
     }
     /* Warna link (a) tanpa class */
     body.public-layout .public-main a:not([class]),
@@ -104,22 +107,27 @@
     /* Warna div tanpa class */
     body.public-layout .public-main div:not([class]),
     body.public-layout .public-main .public-page div:not([class]) { color: {{ $divColor }} !important; }
-    /* Warna tombol per class */
+    /* Warna tombol per class — tetap buram, hanya teks yang bisa dikustom */
     @foreach(($ws['button_colors'] ?? []) as $bc)
     @if(!empty($bc['class']))
-    @php $btnClr = $bc['color'] ?? '#2563eb'; $btnTextClr = $bc['text_color'] ?? '#ffffff'; @endphp
+    @php $btnTextClr = $bc['text_color'] ?? '#ffffff'; @endphp
     body.public-layout .public-main .{{ $bc['class'] }},
     body.public-layout .public-main a.{{ $bc['class'] }},
     body.public-layout .public-main button.{{ $bc['class'] }} {
-        background: {{ $btnClr }} !important;
+        background: rgba(255,255,255,0.08) !important;
         background-image: none !important;
-        border-color: {{ $btnClr }} !important;
+        border: 1.5px solid rgba(255,255,255,0.65) !important;
         color: {{ $btnTextClr }} !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: none !important;
     }
     body.public-layout .public-main .{{ $bc['class'] }}:hover,
     body.public-layout .public-main a.{{ $bc['class'] }}:hover,
     body.public-layout .public-main button.{{ $bc['class'] }}:hover {
-        filter: brightness(1.1);
+        background: rgba(255,255,255,0.16) !important;
+        border-color: rgba(255,255,255,0.9) !important;
+        filter: none;
     }
     @endif
     @endforeach

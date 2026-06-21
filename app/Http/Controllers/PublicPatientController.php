@@ -3,20 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
-use Illuminate\Http\Request;
 
 class PublicPatientController extends Controller
 {
     /**
-     * Redirect ke pasien pertama atau halaman kosong.
+     * Tampilkan daftar semua pasien untuk halaman publik.
      */
     public function index()
     {
-        $first = Patient::orderBy('nama_lengkap')->first();
-        if ($first) {
-            return redirect()->route('public.pasien.show', $first);
-        }
-        return redirect()->route('welcome')->with('info', 'Belum ada data pasien.');
+        $patients = Patient::orderBy('nama_lengkap')->get();
+
+        return view('public.pasien.index', compact('patients'));
     }
 
     /**

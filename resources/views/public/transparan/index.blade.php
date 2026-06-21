@@ -585,18 +585,26 @@
     transition: background 0.2s, border-color 0.2s;
 }
 .transparan-filter-btn-primary {
-    background: rgba(37, 99, 235, 0.55);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255,255,255,0.65);
     color: #ffffff;
 }
 .transparan-filter-btn-primary:hover {
-    background: rgba(37, 99, 235, 0.75);
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.9);
 }
 .transparan-filter-btn-reset {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(255,255,255,0.65);
     color: #ffffff;
 }
 .transparan-filter-btn-reset:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.9);
 }
 .transparan-table-scroll {
     position: relative;

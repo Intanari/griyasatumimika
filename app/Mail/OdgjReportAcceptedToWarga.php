@@ -18,7 +18,7 @@ class OdgjReportAcceptedToWarga extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Laporan ODGJ Diterima – Petugas Akan Segera Menindaklanjuti – PeduliJiwa',
+            subject: 'Laporan ODGJ Diterima – Petugas Akan Segera Menindaklanjuti – ' . config('app.name'),
         );
     }
 

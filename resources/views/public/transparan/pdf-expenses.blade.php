@@ -5,7 +5,8 @@
     <title>Laporan Pengeluaran Donasi</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; font-size: 10px; }
-        h1 { font-size: 16px; margin-bottom: 12px; }
+        h1 { font-size: 16px; margin-bottom: 4px; }
+        .pdf-header { margin-bottom: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 8px; }
         th, td { border: 1px solid #333; padding: 6px 8px; text-align: left; }
         th { background: #e2e8f0; font-weight: bold; }
@@ -14,6 +15,9 @@
     </style>
 </head>
 <body>
+    <div class="pdf-header">
+        @include('partials.yayasan-logo-export', ['height' => 64, 'forPdf' => true])
+    </div>
     <h1>Laporan Pengeluaran Donasi</h1>
     <p class="meta">Dicetak: {{ now()->translatedFormat('d F Y H:i') }} — Yayasan Griya Satu Mimika</p>
     <table>
