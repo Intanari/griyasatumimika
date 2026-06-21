@@ -1,0 +1,16 @@
+[
+    {
+        "id": 2,
+        "judul": "VISI",
+        "keterangan": "MEMANUSIAKAN MANUSIA",
+        "created_at": "2026-06-10 12:17:35",
+        "updated_at": "2026-06-10 12:17:35"
+    },
+    {
+        "id": 3,
+        "judul": "MISI",
+        "keterangan": "1.ORGANISASI\r\nMengokohkan tata kelola organisasi yang mandiri, inovatif dan berdaya\r\n\r\n2.SUMBER DAYA\r\nMembangun kolaborasi antara Pemerintah, Swasta dan Masyarakat\r\n\r\n3.DAMPAK\r\nMengembangkan program dengan mengoptimalkan sumber daya masyarakat untuk mendorong kemandirian",
+        "created_at": "2026-06-10 12:18:56",
+        "updated_at": "2026-06-10 12:18:56"
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "key": "background_images",
+        "value": "{\"home\":\"web-settings\\/4MJlxeilAHJ39VGvkQLzZwJLnVQcXbuCiMJCSql7.png\",\"donasi\":\"web-settings\\/QYuVLA7DM3XHfdM5aNbb1mz3uP7wloWQQZISvrUU.png\",\"donasi-bayar\":\"web-settings\\/WuPGf3tPW5gmnklVvrazuFv0n8ixMCoPDJDWWNXz.png\",\"donasi-sukses\":\"web-settings\\/cvYcrUvD96NrzopC8cCkJoYP7vg44OqwmkBopwJp.png\",\"laporan-odgj\":\"web-settings\\/eYUr6pVMkZNIQ0OHidiCYmFnkGDweLa4NtFkCUeK.png\",\"laporan-odgj-sukses\":\"web-settings\\/fkfGRHsUpSIHcKbLlXHJQwyHReUfiZSHQZLGNYHf.png\",\"profil\":\"web-settings\\/nPbAkt1dhgZfyz7eQPQX5E0uwmJwuCRNYHN0EoA8.png\",\"profil-struktur\":\"web-settings\\/oypYmCftRGwuzMlK8rGtiqqUoIly5kQdAp3jRY1v.png\",\"profil-visi-misi\":\"web-settings\\/qKo4TcXntLSjmDbEGIKl9cH2kCWfgTQcF1e2dUOE.png\",\"profil-yayasan\":\"web-settings\\/sWbrUDE7OVUF3PjSHeu1Rn800FBtx1vGvFMlsDJg.png\",\"galeri\":\"web-settings\\/yucXmCJsmK3ymNMKPQ8WFOLH0kELWDqoqMHPmz9c.png\",\"kontak\":\"web-settings\\/zClMu2I5Phfjg92TYpEMn5mhJ66RgGYJvVrBSg8I.png\",\"layanan\":\"web-settings\\/4MJlxeilAHJ39VGvkQLzZwJLnVQcXbuCiMJCSql7.png\",\"cara-donasi\":\"web-settings\\/QYuVLA7DM3XHfdM5aNbb1mz3uP7wloWQQZISvrUU.png\",\"mitra\":\"web-settings\\/WuPGf3tPW5gmnklVvrazuFv0n8ixMCoPDJDWWNXz.png\",\"faq\":\"web-settings\\/cvYcrUvD96NrzopC8cCkJoYP7vg44OqwmkBopwJp.png\",\"transparansi-donasi\":\"web-settings\\/eYUr6pVMkZNIQ0OHidiCYmFnkGDweLa4NtFkCUeK.png\",\"pasien\":\"web-settings\\/fkfGRHsUpSIHcKbLlXHJQwyHReUfiZSHQZLGNYHf.png\"}",
+        "created_at": "2026-05-22 18:25:26",
+        "updated_at": "2026-05-22 18:25:26"
+    },
+    {
+        "id": 2,
+        "key": "background_image_mode",
+        "value": "per_page",
+        "created_at": "2026-05-22 18:25:26",
+        "updated_at": "2026-05-22 18:25:26"
+    },
+    {
+        "id": 3,
+        "key": "background_type",
+        "value": "gambar",
+        "created_at": "2026-05-22 18:25:26",
+        "updated_at": "2026-05-22 18:25:26"
+    }
+]

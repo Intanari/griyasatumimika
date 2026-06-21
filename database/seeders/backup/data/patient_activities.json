@@ -1,0 +1,18 @@
+[
+    {
+        "id": "019ed850-f270-72ff-b28d-c50f2b3221ed",
+        "patient_id": "019ed84e-a8db-73ab-86df-6647edffb787",
+        "tanggal": "2026-06-18 00:00:00",
+        "jenis_aktivitas": "lainnya",
+        "deskripsi": "MASAKKK",
+        "waktu_mulai": "10:20:44",
+        "waktu_selesai": null,
+        "durasi_menit": null,
+        "tempat": null,
+        "created_at": "2026-06-18 10:20:44",
+        "updated_at": "2026-06-18 10:20:44",
+        "hasil_evaluasi": null,
+        "image": "[\"patient-activities\\/9Yv4u1FWeEIBNb66GzE456vyUvD3vykxI9LmfpVY.jpg\"]",
+        "batch_uuid": "d8f60252-ee1d-4e02-a0d8-18b32e816b71"
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "id": "019e4fa8-9f97-70f6-9bef-e1fd8c856ae0",
+        "nama": "beras",
+        "jumlah": 2,
+        "harga": 50000,
+        "gambar": "stock-supplies/rcjNSq4IR7zIqvoft3JUYyZlp6DLHmD4vqZEYcbD.webp",
+        "created_at": "2026-05-22 21:28:31",
+        "updated_at": "2026-05-22 21:35:11",
+        "satuan": "karung"
+    },
+    {
+        "id": "019e4fc7-4627-732b-9670-807173c7702e",
+        "nama": "beras",
+        "jumlah": 3,
+        "harga": 59999.99,
+        "gambar": "stock-supplies/b3OjsQsj20Kp8NxY7bQZwjgslr8VWUQ2HlGnfe2T.webp",
+        "created_at": "2026-05-22 22:02:00",
+        "updated_at": "2026-05-22 22:02:00",
+        "satuan": "kg"
+    },
+    {
+        "id": "019e4fcb-1d62-7031-a78b-3c5f387c1589",
+        "nama": "AIR",
+        "jumlah": 10,
+        "harga": 1000000,
+        "gambar": "stock-supplies/tu1ucli6ZjFRJbfKdUXa2unSgeHeRKLjWIvixOfH.webp",
+        "created_at": "2026-05-22 22:06:11",
+        "updated_at": "2026-05-22 22:06:11",
+        "satuan": "KARTON"
+    }
+]

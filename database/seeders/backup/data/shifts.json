@@ -1,0 +1,26 @@
+[
+    {
+        "id": "100bdb8b-6f50-46ab-aca5-3633aaf8f702",
+        "nama": "Siang",
+        "jam_mulai": "14:00",
+        "jam_selesai": "21:00",
+        "created_at": "2026-05-22 18:06:26",
+        "updated_at": "2026-05-22 18:06:26"
+    },
+    {
+        "id": "52f79e93-f4f5-4f4d-8956-d64e090fadd3",
+        "nama": "Malam",
+        "jam_mulai": "21:00",
+        "jam_selesai": "07:00",
+        "created_at": "2026-05-22 18:06:26",
+        "updated_at": "2026-05-22 18:06:26"
+    },
+    {
+        "id": "a9fa9aeb-161d-47ee-b716-81f8c1f57f02",
+        "nama": "Pagi",
+        "jam_mulai": "07:00",
+        "jam_selesai": "14:00",
+        "created_at": "2026-05-22 18:06:26",
+        "updated_at": "2026-05-22 18:06:26"
+    }
+]

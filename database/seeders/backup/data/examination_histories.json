@@ -1,0 +1,13 @@
+[
+    {
+        "id": "019ed850-367b-714c-b144-fb2a8dacab52",
+        "patient_id": "019ed84e-a8db-73ab-86df-6647edffb787",
+        "tanggal_pemeriksaan": "0006-02-12 00:00:00",
+        "tempat_pemeriksaan": "PUSKESMAS WANIA",
+        "keluhan": "DSSGDS",
+        "hasil_pemeriksaan": "DGSGDYS",
+        "tindakan_obat": "GFYR6",
+        "created_at": "2026-06-18 10:19:56",
+        "updated_at": "2026-06-18 10:19:56"
+    }
+]

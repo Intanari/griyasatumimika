@@ -1,0 +1,56 @@
+[
+    {
+        "id": 2,
+        "no_urut": 1,
+        "status": "Penjangkauan",
+        "judul": "Tanggap Laporan dan Survei Lapangan",
+        "keterangan": "Tim menerima laporan dari warga, keluarga, atau mitra, melakukan klarifikasi dan kunjungan awal untuk memastikan keamanan serta memetakan kebutuhan mendesak penerima manfaat.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    },
+    {
+        "id": 3,
+        "no_urut": 2,
+        "status": "Asesmen Awal",
+        "judul": "Penilaian Kondisi Klinis dan Sosial",
+        "keterangan": "Tenaga profesional melakukan asesmen singkat mengenai kesehatan jiwa, status fisik, dukungan keluarga, dan risiko. Hasil asesmen menjadi dasar rencana penanganan awal.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    },
+    {
+        "id": 4,
+        "no_urut": 3,
+        "status": "Rujukan & Perawatan",
+        "judul": "Fasilitasi Akses ke Fasilitas Kesehatan Jiwa",
+        "keterangan": "Penerima manfaat dirujuk ke RSJ atau layanan kesehatan terdekat bila perlu. Tim membantu administrasi, koordinasi dengan tenaga medis, dan memastikan keluarga memahami rencana terapi.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    },
+    {
+        "id": 5,
+        "no_urut": 4,
+        "status": "Pendampingan Rehabilitasi",
+        "judul": "Pemantauan Terapi dan Dukungan Keluarga",
+        "keterangan": "Selama rehabilitasi, tim melakukan pemantauan berkala, memastikan terapi sesuai rencana, serta memberikan edukasi kepada keluarga tentang perawatan dan dukungan di rumah.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    },
+    {
+        "id": 6,
+        "no_urut": 5,
+        "status": "Pelatihan Kemandirian",
+        "judul": "Penguatan Keterampilan dan Rutinitas Harian",
+        "keterangan": "Setelah kondisi stabil, penerima manfaat mengikuti pelatihan keterampilan dasar kerja, pengelolaan diri, dan aktivitas produktif sebagai bekal hidup mandiri.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    },
+    {
+        "id": 7,
+        "no_urut": 6,
+        "status": "Reintegrasi Sosial",
+        "judul": "Kembali ke Keluarga dan Komunitas",
+        "keterangan": "Tahap akhir berfokus pada penerimaan kembali di lingkungan. Tim membantu mediasi dengan keluarga dan tetangga, serta menyusun rencana tindak lanjut agar penerima manfaat tetap dipantau.",
+        "created_at": "2026-06-16 07:41:01",
+        "updated_at": "2026-06-16 07:41:01"
+    }
+]
